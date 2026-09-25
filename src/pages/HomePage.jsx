@@ -649,7 +649,7 @@ export default function HomePage({
       </section>
 
       {/* 5. WORKFLOW BUDIDAYA NILA 90 HARI (REACT BITS STACK COMPONENT) */}
-      <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '50px 20px 70px', width: '100%', boxSizing: 'border-box' }}>
+      <section style={{ maxWidth: '1240px', margin: '0 auto', padding: 'clamp(36px, 5vw, 50px) clamp(16px, 4vw, 20px) clamp(48px, 6vw, 70px)', width: '100%', boxSizing: 'border-box', overflow: 'hidden' }}>
         <div style={{ textAlign: 'center', maxWidth: '760px', margin: '0 auto 40px' }}>
           <span style={{ fontSize: '12.5px', fontWeight: 800, color: 'var(--b)', letterSpacing: '2px', textTransform: 'uppercase', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
             <Waves size={15} />
@@ -673,7 +673,7 @@ export default function HomePage({
           }}
         >
           {/* Left: Summary Steps & Guidance */}
-          <div style={{ flex: '1 1 360px', maxWidth: '560px' }}>
+          <div style={{ flex: '1 1 360px', maxWidth: '560px', minWidth: 0 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {workflowSteps.map((st, sIdx) => (
                 <div 
@@ -706,10 +706,10 @@ export default function HomePage({
                   >
                     {st.step}
                   </div>
-                  <div style={{ flex: 1 }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-                      <b style={{ fontSize: '13.5px', color: 'var(--txt)' }}>{st.title}</b>
-                      <span style={{ fontSize: '11px', color: st.accent, fontWeight: 700 }}>{st.timeline}</span>
+                      <b style={{ fontSize: '13.5px', color: 'var(--txt)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{st.title}</b>
+                      <span style={{ fontSize: '11px', color: st.accent, fontWeight: 700, flexShrink: 0 }}>{st.timeline}</span>
                     </div>
                     <p style={{ fontSize: '12px', color: 'var(--mut)', margin: '3px 0 0', lineHeight: 1.4 }}>
                       {st.points[0]}
@@ -744,12 +744,14 @@ export default function HomePage({
           </div>
 
           {/* Right: React Bits Stack Component Deck */}
-          <div style={{ flex: '1 1 360px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ flex: '1 1 360px', minWidth: 0, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <div 
               style={{ 
-                width: 'min(380px, 88vw)', 
-                height: '490px', 
-                position: 'relative'
+                width: 'min(350px, calc(100vw - 32px))', 
+                maxWidth: '100%',
+                height: '480px', 
+                position: 'relative',
+                margin: '0 auto'
               }}
             >
               <Stack
