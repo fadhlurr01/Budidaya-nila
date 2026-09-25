@@ -43,8 +43,9 @@ export default function Navbar({
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 15);
+      setIsScrolled(window.scrollY > 30);
     };
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -59,6 +60,9 @@ export default function Navbar({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Check if navbar should seamlessly merge with Hero section (on home page when at top)
+  const isHeroMerge = (activeSection === 'beranda' || !activeSection) && !isScrolled;
 
   // 5 main multipage views: Beranda, Budidaya, Produk, Artikel, Kontak
   const navItems = [
@@ -89,35 +93,48 @@ export default function Navbar({
     <header
       style={{
         position: 'fixed',
-        top: isScrolled ? '8px' : '14px',
+        top: isHeroMerge ? '0px' : '10px',
         left: 0,
         right: 0,
         margin: '0 auto',
-        width: 'calc(100% - 24px)',
-        maxWidth: '1760px',
+        width: isHeroMerge ? '100%' : 'calc(100% - 24px)',
+        maxWidth: isHeroMerge ? '100%' : '1760px',
         zIndex: 1000,
+        boxSizing: 'border-box',
         transition: 'all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1)'
       }}
     >
-      {/* Floating Navbar Container */}
+      {/* Floating or Seamless Navbar Container */}
       <div 
         className="navbar-main-container"
         style={{
-          background: isDark ? 'rgba(14, 36, 71, 0.92)' : 'rgba(255, 255, 255, 0.94)',
-          backdropFilter: 'blur(24px) saturate(1.8)',
-          WebkitBackdropFilter: 'blur(24px) saturate(1.8)',
-          border: isDark ? '1px solid rgba(144, 202, 249, 0.22)' : '1px solid rgba(255, 255, 255, 0.9)',
-          boxShadow: isDark 
-            ? '0 16px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08)' 
-            : '0 14px 38px rgba(13, 71, 161, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
-          borderRadius: '9999px',
-          padding: isScrolled ? '6px 16px 6px 20px' : '8px 20px 8px 24px',
+          width: '100%',
+          maxWidth: isHeroMerge ? '1760px' : '100%',
+          margin: '0 auto',
+          background: isHeroMerge
+            ? 'transparent'
+            : (isDark ? 'rgba(14, 36, 71, 0.92)' : 'rgba(255, 255, 255, 0.94)'),
+          backdropFilter: isHeroMerge ? 'none' : 'blur(24px) saturate(1.8)',
+          WebkitBackdropFilter: isHeroMerge ? 'none' : 'blur(24px) saturate(1.8)',
+          border: isHeroMerge
+            ? '1px solid transparent'
+            : (isDark ? '1px solid rgba(144, 202, 249, 0.22)' : '1px solid rgba(255, 255, 255, 0.9)'),
+          boxShadow: isHeroMerge
+            ? 'none'
+            : (isDark 
+                ? '0 16px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08)' 
+                : '0 14px 38px rgba(13, 71, 161, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9)'),
+          borderRadius: isHeroMerge ? '0px' : '9999px',
+          padding: isHeroMerge 
+            ? '18px clamp(16px, 3.5vw, 36px) 14px clamp(16px, 3.5vw, 36px)' 
+            : '6px 18px 6px 22px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: '12px',
           position: 'relative',
-          transition: 'all 0.3s ease'
+          boxSizing: 'border-box',
+          transition: 'all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1)'
         }}
       >
         {/* Left Side: Brand Logo + Desktop Menu */}
@@ -232,8 +249,14 @@ export default function Navbar({
             style={{
               padding: '7px 14px',
               borderRadius: '9999px',
-              background: 'var(--card2)',
-              border: '1px solid var(--border)',
+              background: isHeroMerge
+                ? (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.75)')
+                : 'var(--card2)',
+              border: isHeroMerge
+                ? (isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)')
+                : '1px solid var(--border)',
+              backdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
+              WebkitBackdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
               color: 'var(--txt)',
               cursor: 'pointer',
               fontSize: '12px',
@@ -256,8 +279,14 @@ export default function Navbar({
               width: '38px',
               height: '38px',
               borderRadius: '50%',
-              background: 'var(--card2)',
-              border: '1px solid var(--border)',
+              background: isHeroMerge
+                ? (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.75)')
+                : 'var(--card2)',
+              border: isHeroMerge
+                ? (isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)')
+                : '1px solid var(--border)',
+              backdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
+              WebkitBackdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
               color: 'var(--txt)',
               cursor: 'pointer',
               display: 'flex',
@@ -279,8 +308,14 @@ export default function Navbar({
               gap: '6px',
               padding: '7px 16px',
               borderRadius: '9999px',
-              background: 'var(--card2)',
-              border: '1px solid var(--border)',
+              background: isHeroMerge
+                ? (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.75)')
+                : 'var(--card2)',
+              border: isHeroMerge
+                ? (isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)')
+                : '1px solid var(--border)',
+              backdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
+              WebkitBackdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
               color: 'var(--txt)',
               cursor: 'pointer',
               fontSize: '12.5px',
@@ -368,7 +403,14 @@ export default function Navbar({
                 padding: '7px 16px',
                 fontSize: '12.5px',
                 borderRadius: '9999px',
-                border: '1px solid var(--border)'
+                background: isHeroMerge
+                  ? (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.75)')
+                  : 'transparent',
+                border: isHeroMerge
+                  ? (isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)')
+                  : '1px solid var(--border)',
+                backdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
+                WebkitBackdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
               }}
             >
               <User size={14} />
@@ -385,8 +427,14 @@ export default function Navbar({
               width: '38px',
               height: '38px',
               borderRadius: '50%',
-              background: 'var(--card2)',
-              border: '1px solid var(--border)',
+              background: isHeroMerge
+                ? (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.75)')
+                : 'var(--card2)',
+              border: isHeroMerge
+                ? (isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)')
+                : '1px solid var(--border)',
+              backdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
+              WebkitBackdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
               color: 'var(--txt)',
               cursor: 'pointer',
               display: 'flex',
@@ -449,12 +497,19 @@ export default function Navbar({
               width: '38px',
               height: '38px',
               borderRadius: '50%',
-              background: 'var(--card2)',
-              border: '1px solid var(--border)',
+              background: isHeroMerge
+                ? (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.75)')
+                : 'var(--card2)',
+              border: isHeroMerge
+                ? (isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)')
+                : '1px solid var(--border)',
+              backdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
+              WebkitBackdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
               color: 'var(--txt)',
               cursor: 'pointer',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              transition: 'all 0.2s ease'
             }}
           >
             {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
@@ -467,8 +522,11 @@ export default function Navbar({
         <div 
           style={{
             marginTop: '8px',
+            marginRight: isHeroMerge ? '16px' : '0',
+            marginLeft: isHeroMerge ? '16px' : '0',
             background: isDark ? 'rgba(14, 36, 71, 0.95)' : 'rgba(255, 255, 255, 0.95)',
             backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
             border: '1px solid var(--border)',
             borderRadius: '20px',
             padding: '16px',
