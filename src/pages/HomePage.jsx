@@ -676,52 +676,49 @@ export default function HomePage({
             alignItems: 'stretch'
           }}
         >
-          {/* Left Column: Interactive OptionWheel Container */}
+          {/* Left Column: Pure Content without Card Container */}
           <div 
-            className="glass-panel"
             style={{
-              padding: 'clamp(20px, 3vw, 28px)',
-              borderRadius: '28px',
-              border: '1.5px solid var(--border)',
+              padding: 'clamp(8px, 1.5vw, 16px) 4px',
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'space-between',
+              justifyContent: 'center',
               minHeight: '440px',
               position: 'relative',
-              overflow: 'hidden'
+              boxSizing: 'border-box'
             }}
           >
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', flexWrap: 'wrap', gap: '8px' }}>
                 <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--b)', textTransform: 'uppercase', letterSpacing: '1.2px' }}>
                   Pilih Tahapan Alur Kerja
                 </span>
-                <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '9999px', background: 'var(--card2)', border: '1px solid var(--border)', color: 'var(--mut)' }}>
+                <span style={{ fontSize: '11px', padding: '4px 12px', borderRadius: '9999px', background: 'var(--card2)', border: '1px solid var(--border)', color: 'var(--mut)' }}>
                   Drag / Scroll / Klik
                 </span>
               </div>
-              <p style={{ fontSize: '12.5px', color: 'var(--mut)', margin: '0 0 12px', lineHeight: 1.4 }}>
+              <p style={{ fontSize: '13px', color: 'var(--mut)', margin: '0 0 16px', lineHeight: 1.5 }}>
                 Geser roda ke atas atau ke bawah untuk melihat detail tahapan SOP bioflok secara real-time.
               </p>
             </div>
 
-            {/* OptionWheel Component - Ultra lightweight with blur 0 for zero GPU overhead */}
-            <div style={{ height: '300px', width: '100%', position: 'relative', margin: '4px 0' }}>
+            {/* OptionWheel Component - Ultra lightweight with blur 0 for zero GPU overhead, open seamless design */}
+            <div style={{ height: '320px', width: '100%', position: 'relative', overflow: 'hidden', margin: '6px 0' }}>
               <OptionWheel
                 items={workflowSteps.map(st => `${st.step}. ${st.shortTitle}`)}
                 defaultSelected={activeWorkflowStage}
                 textColor="var(--mut)"
                 activeColor="var(--b)"
                 side="left"
-                fontSize={1.75}
-                spacing={1.38}
+                fontSize={1.85}
+                spacing={1.4}
                 curve={0.75}
                 tilt={5}
                 blur={0}
-                fade={0.3}
-                minOpacity={0.15}
+                fade={0.32}
+                minOpacity={0.12}
                 smoothing={150}
-                inset={24}
+                inset={12}
                 loop={false}
                 draggable={true}
                 onChange={(idx) => setActiveWorkflowStage(idx)}
@@ -729,7 +726,7 @@ export default function HomePage({
             </div>
 
             {/* Stage Quick Indicator Pills */}
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '14px' }}>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '16px' }}>
               {workflowSteps.map((st, i) => (
                 <button
                   key={i}
