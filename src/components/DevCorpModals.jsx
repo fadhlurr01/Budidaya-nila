@@ -75,9 +75,9 @@ export default function DevCorpModals({ modalType, onClose, onShowToast }) {
                   <small style={{ color: 'var(--mut)' }}>Mendukung probe pH, DO analog, DS18B20, dan sensor level</small>
                 </div>
                 <button
-                  onClick={() => onShowToast('Firmware v1.9.0 mulai diunduh (demo)', 'ok')}
+                  onClick={() => onShowToast('Firmware v1.9.0 mulai diunduh...', 'ok')}
                   className="btn-primary"
-                  style={{ padding: '7px 12px', fontSize: '12px' }}
+                  style={{ padding: '7px 12px', fontSize: '12px', borderRadius: '9999px' }}
                 >
                   <Download size={13} />
                   <span>Unduh</span>
@@ -90,9 +90,9 @@ export default function DevCorpModals({ modalType, onClose, onShowToast }) {
                   <small style={{ color: 'var(--mut)' }}>Kontrol motor servo sebar pakan dengan jadwal RTC</small>
                 </div>
                 <button
-                  onClick={() => onShowToast('Firmware Auto-Feeder v1.2.0 mulai diunduh (demo)', 'ok')}
+                  onClick={() => onShowToast('Firmware Auto-Feeder v1.2.0 mulai diunduh...', 'ok')}
                   className="btn-primary"
-                  style={{ padding: '7px 12px', fontSize: '12px' }}
+                  style={{ padding: '7px 12px', fontSize: '12px', borderRadius: '9999px' }}
                 >
                   <Download size={13} />
                   <span>Unduh</span>

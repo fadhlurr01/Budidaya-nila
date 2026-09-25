@@ -7,15 +7,15 @@ export default function AuthModal({
   onLoginSuccess, 
   onShowToast 
 }) {
-  const [email, setEmail] = useState('admin@nilafarm.id');
-  const [password, setPassword] = useState('admin123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password !== 'admin123') {
-      if (onShowToast) onShowToast('Password salah. Gunakan: admin123', 'bad');
+    if (email.trim().toLowerCase() !== 'admin@nilafarm.id' || password !== 'admin123') {
+      if (onShowToast) onShowToast('Email atau password admin salah. Silakan periksa kembali.', 'bad');
       return;
     }
 
@@ -27,19 +27,6 @@ export default function AuthModal({
 
     onLoginSuccess(session);
     if (onShowToast) onShowToast('Selamat datang kembali di panel NilaFarm!', 'ok');
-    onClose();
-  };
-
-  const handleQuickDemo = () => {
-    setEmail('admin@nilafarm.id');
-    setPassword('admin123');
-    const session = {
-      email: 'admin@nilafarm.id',
-      name: 'Hamdan Russ',
-      role: 'Farm Owner & Admin'
-    };
-    onLoginSuccess(session);
-    if (onShowToast) onShowToast('Login demo berhasil!', 'ok');
     onClose();
   };
 
@@ -116,13 +103,14 @@ export default function AuthModal({
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
               <label style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--txt)' }}>
-                Kata Sandi (Demo: admin123)
+                Kata Sandi
               </label>
             </div>
             <div style={{ position: 'relative' }}>
               <Lock size={16} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
               <input
                 type="password"
+                placeholder="Masukkan kata sandi admin"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
@@ -146,24 +134,12 @@ export default function AuthModal({
             style={{
               padding: '12px',
               fontSize: '14px',
-              marginTop: '6px'
+              marginTop: '6px',
+              borderRadius: '9999px'
             }}
           >
             <span>Masuk ke Dashboard</span>
             <ArrowRight size={16} />
-          </button>
-
-          <button
-            type="button"
-            onClick={handleQuickDemo}
-            className="btn-ghost"
-            style={{
-              padding: '11px',
-              fontSize: '13px'
-            }}
-          >
-            <ShieldCheck size={16} color="var(--b)" />
-            <span>Masuk Langsung (Akun Demo)</span>
           </button>
         </form>
       </div>

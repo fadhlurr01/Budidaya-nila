@@ -36,7 +36,8 @@ export default function FloatingActionButtons({ isDashboard = false }) {
 
   // Adjust position if in dashboard on mobile (to avoid overlapping mobile bottom dock)
   const bottomOffset = isDashboard ? 'clamp(85px, 12vh, 100px)' : 'clamp(20px, 4vw, 28px)';
-  const rightOffset = 'clamp(16px, 4vw, 24px)';
+  // Do not show anything in dashboard unless user scrolled and needs scroll-to-top
+  if (isDashboard && !showScrollTop) return null;
 
   return (
     <div
@@ -92,7 +93,7 @@ export default function FloatingActionButtons({ isDashboard = false }) {
       </button>
 
       {/* 2. POPUP MENU PILIHAN ADMIN WHATSAPP */}
-      {isWaMenuOpen && (
+      {!isDashboard && isWaMenuOpen && (
         <div
           style={{
             position: 'absolute',
@@ -205,8 +206,9 @@ export default function FloatingActionButtons({ isDashboard = false }) {
         </div>
       )}
 
-      {/* 3. TOMBOL WHATSAPP (Bulat sempurna, tidak terpotong) */}
-      <div style={{ position: 'relative' }}>
+      {/* 3. TOMBOL WHATSAPP (Bulat sempurna, tidak terpotong, disembunyikan di dashboard) */}
+      {!isDashboard && (
+        <div style={{ position: 'relative' }}>
         <button
           onClick={() => setIsWaMenuOpen(!isWaMenuOpen)}
           aria-label="Hubungi WhatsApp NilaFarm"
@@ -268,7 +270,8 @@ export default function FloatingActionButtons({ isDashboard = false }) {
             }}
           />
         </button>
-      </div>
+        </div>
+      )}
     </div>
   );
 }

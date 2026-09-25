@@ -720,41 +720,6 @@ export default function CartDrawer({
                     <UserPlus size={16} />
                     <span>Belum Punya Akun? Buat Akun Baru</span>
                   </button>
-
-                  {/* 1-Click Quick Demo Account Login */}
-                  <button 
-                    type="button" 
-                    onClick={() => {
-                      const demoUser = {
-                        id: 'usr_demo_101',
-                        name: 'H. Ridwan Kosasih',
-                        email: 'ridwan.sumedang@gmail.com',
-                        phone: '081298452311',
-                        address: 'Jl. Mayor Abdurahman No. 45, Kotakaler, Sumedang Utara'
-                      };
-                      if (onCustomerLogin) {
-                        onCustomerLogin(demoUser);
-                      }
-                    }}
-                    style={{
-                      background: 'rgba(245, 158, 11, 0.1)',
-                      border: '1px dashed #f59e0b',
-                      borderRadius: '9999px',
-                      padding: '9px 14px',
-                      fontSize: '12px',
-                      color: '#b45309',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '6px',
-                      marginTop: '4px'
-                    }}
-                  >
-                    <Sparkles size={14} color="#f59e0b" />
-                    <span>⚡ Quick Demo: Masuk 1-Klik sebagai Pelanggan Demo</span>
-                  </button>
                 </div>
 
                 <div style={{ marginTop: '14px', fontSize: '11px', color: 'var(--mut)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}>

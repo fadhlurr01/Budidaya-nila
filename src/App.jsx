@@ -599,7 +599,7 @@ export default function App() {
         onShowToast={showToast}
       />
 
-      {/* Realtime Order Tracking Modal (Pelacakan Status Pembelian) */}
+      {/* Realtime Order Tracking Modal (Pelacakan Status Pembelian & Keterangan Akun) */}
       <OrderTrackingModal 
         isOpen={isOrderTrackingOpen}
         onClose={() => {
@@ -609,6 +609,8 @@ export default function App() {
         orders={orders}
         customerUser={customerUser}
         initialOrderId={trackingOrderId}
+        onOpenCustomerAuth={handleOpenCustomerAuth}
+        onCustomerLogout={handleCustomerLogout}
         onShowToast={showToast}
       />
 

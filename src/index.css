@@ -1121,3 +1121,11 @@ body.dark {
   }
 }
 
+/* Responsive Two-Frame Auth Modal */
+@media (max-width: 768px) {
+  .auth-identity-frame {
+    display: none !important;
+  }
+}
+
+
