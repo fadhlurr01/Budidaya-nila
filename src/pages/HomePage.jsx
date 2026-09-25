@@ -3,7 +3,7 @@ import HeroSection from '../components/HeroSection';
 import FeaturesSection from '../components/FeaturesSection';
 import TestimonialsSection from '../components/TestimonialsSection';
 import AccordionGallery from '../components/AccordionGallery';
-import Stack from '../components/Stack';
+import OptionWheel from '../components/OptionWheel';
 import { 
   Sparkles, 
   ArrowRight, 
@@ -506,6 +506,10 @@ export default function HomePage({
             accentColor="#2196f3"
             overlayColor="#07152b"
             textColor="#ffffff"
+            grayscale={false}
+            duration={0.35}
+            tilt={2}
+            parallax={0.15}
             onSelect={(item) => item?.product && setSelectedGalleryProduct(item.product)}
           />
         </div>
@@ -648,9 +652,9 @@ export default function HomePage({
         </div>
       </section>
 
-      {/* 5. WORKFLOW BUDIDAYA NILA 90 HARI (REACT BITS STACK COMPONENT) */}
-      <section style={{ maxWidth: '1240px', margin: '0 auto', padding: 'clamp(36px, 5vw, 50px) clamp(16px, 4vw, 20px) clamp(48px, 6vw, 70px)', width: '100%', boxSizing: 'border-box', overflow: 'hidden' }}>
-        <div style={{ textAlign: 'center', maxWidth: '760px', margin: '0 auto 40px' }}>
+      {/* 5. WORKFLOW BUDIDAYA NILA 90 HARI (REACT BITS OPTIONWHEEL) */}
+      <section style={{ maxWidth: '1240px', margin: '0 auto', padding: 'clamp(36px, 5vw, 50px) clamp(16px, 4vw, 20px) clamp(48px, 6vw, 70px)', width: '100%', boxSizing: 'border-box' }}>
+        <div style={{ textAlign: 'center', maxWidth: '760px', margin: '0 auto 36px' }}>
           <span style={{ fontSize: '12.5px', fontWeight: 800, color: 'var(--b)', letterSpacing: '2px', textTransform: 'uppercase', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
             <Waves size={15} />
             Roadmap & Workflow Terpadu
@@ -659,258 +663,271 @@ export default function HomePage({
             Workflow Siklus Budidaya Nila 90 Hari
           </h2>
           <p style={{ color: 'var(--mut)', fontSize: '15px', marginTop: '10px', lineHeight: 1.6 }}>
-            Alur kerja terstandarisasi bioflok modern NilaFarm. Tarik ke samping atau klik kartu tumpukan (<i>React Bits Stack</i>) untuk menjelajahi tahapan dari bibit hingga panen raya.
+            Alur kerja terstandarisasi bioflok modern NilaFarm. Putar atau geser roda pilihan (<i>OptionWheel</i>) untuk menavigasi tahapan dari persiapan kolam hingga panen raya secara instan tanpa lag.
           </p>
         </div>
 
+        {/* 2-Column Responsive Layout: OptionWheel on Left, Live Stage Detail on Right */}
         <div 
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '40px',
-            flexWrap: 'wrap'
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
+            gap: '28px',
+            alignItems: 'stretch'
           }}
         >
-          {/* Left: Summary Steps & Guidance */}
-          <div style={{ flex: '1 1 360px', maxWidth: '560px', minWidth: 0 }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {workflowSteps.map((st, sIdx) => (
-                <div 
-                  key={sIdx}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '14px',
-                    padding: '12px 16px',
-                    borderRadius: '18px',
-                    background: 'var(--card2)',
-                    border: '1.5px solid var(--border)',
-                    transition: 'all 0.25s ease'
-                  }}
-                >
-                  <div 
-                    style={{
-                      width: '38px',
-                      height: '38px',
-                      borderRadius: '50%',
-                      background: `${st.accent}1f`,
-                      color: st.accent,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 800,
-                      fontSize: '13px',
-                      flexShrink: 0
-                    }}
-                  >
-                    {st.step}
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-                      <b style={{ fontSize: '13.5px', color: 'var(--txt)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{st.title}</b>
-                      <span style={{ fontSize: '11px', color: st.accent, fontWeight: 700, flexShrink: 0 }}>{st.timeline}</span>
-                    </div>
-                    <p style={{ fontSize: '12px', color: 'var(--mut)', margin: '3px 0 0', lineHeight: 1.4 }}>
-                      {st.points[0]}
-                    </p>
-                  </div>
-                </div>
-              ))}
+          {/* Left Column: Interactive OptionWheel Container */}
+          <div 
+            className="glass-panel"
+            style={{
+              padding: 'clamp(20px, 3vw, 28px)',
+              borderRadius: '28px',
+              border: '1.5px solid var(--border)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              minHeight: '440px',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+          >
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--b)', textTransform: 'uppercase', letterSpacing: '1.2px' }}>
+                  Pilih Tahapan Alur Kerja
+                </span>
+                <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '9999px', background: 'var(--card2)', border: '1px solid var(--border)', color: 'var(--mut)' }}>
+                  Drag / Scroll / Klik
+                </span>
+              </div>
+              <p style={{ fontSize: '12.5px', color: 'var(--mut)', margin: '0 0 12px', lineHeight: 1.4 }}>
+                Geser roda ke atas atau ke bawah untuk melihat detail tahapan SOP bioflok secara real-time.
+              </p>
             </div>
 
-            <div style={{ display: 'flex', gap: '12px', marginTop: '24px', flexWrap: 'wrap' }}>
-              <button
-                type="button"
-                onClick={() => onNavigate('budidaya')}
-                className="btn-primary"
-                style={{ padding: '12px 24px', fontSize: '13.5px', borderRadius: '9999px' }}
-              >
-                <BookOpen size={15} />
-                <span>Buka Panduan SOP Lengkap</span>
-              </button>
-
-              <a
-                href="https://wa.me/6281382570406?text=Halo%20Hamdan%20Russ,%20saya%20ingin%20konsultasi%20mengenai%20workflow%20budidaya%20nila%20bioflok."
-                target="_blank"
-                rel="noreferrer"
-                className="btn-ghost"
-                style={{ padding: '12px 22px', fontSize: '13.5px', borderRadius: '9999px' }}
-              >
-                <MessageCircle size={15} />
-                <span>Konsultasi Teknis WA</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Right: React Bits Stack Component Deck */}
-          <div style={{ flex: '1 1 360px', minWidth: 0, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <div 
-              style={{ 
-                width: 'min(350px, calc(100vw - 32px))', 
-                maxWidth: '100%',
-                height: '480px', 
-                position: 'relative',
-                margin: '0 auto'
-              }}
-            >
-              <Stack
-                randomRotation={true}
-                sensitivity={160}
-                sendToBackOnClick={true}
-                autoplay={false}
-                cards={workflowSteps.map((st, i) => (
-                  <div 
-                    key={i} 
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: '24px',
-                      overflow: 'hidden',
-                      position: 'relative',
-                      background: 'var(--card2)',
-                      border: `2px solid ${st.accent}55`,
-                      boxShadow: `0 20px 45px ${st.accent}25`,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      userSelect: 'none',
-                      boxSizing: 'border-box'
-                    }}
-                  >
-                    {/* Image Header with Badge */}
-                    <div style={{ position: 'relative', height: '210px', width: '100%', flexShrink: 0 }}>
-                      <img 
-                        src={st.img} 
-                        alt={st.title} 
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
-                      />
-                      <div 
-                        style={{ 
-                          position: 'absolute', 
-                          inset: 0, 
-                          background: 'linear-gradient(to top, rgba(7, 21, 43, 0.88) 0%, rgba(7, 21, 43, 0.25) 60%, transparent 100%)' 
-                        }} 
-                      />
-                      <div 
-                        style={{ 
-                          position: 'absolute', 
-                          top: '12px', 
-                          left: '12px', 
-                          right: '12px', 
-                          display: 'flex', 
-                          justifyContent: 'space-between', 
-                          alignItems: 'center' 
-                        }}
-                      >
-                        <span 
-                          style={{ 
-                            background: st.accent, 
-                            color: '#ffffff', 
-                            padding: '4px 14px', 
-                            borderRadius: '9999px', 
-                            fontSize: '11px', 
-                            fontWeight: 800, 
-                            letterSpacing: '0.8px',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
-                          }}
-                        >
-                          TAHAP {st.step}
-                        </span>
-                        <span 
-                          style={{ 
-                            background: 'rgba(0,0,0,0.65)', 
-                            backdropFilter: 'blur(6px)', 
-                            color: '#ffffff', 
-                            padding: '3px 12px', 
-                            borderRadius: '9999px', 
-                            fontSize: '10.5px', 
-                            fontWeight: 600 
-                          }}
-                        >
-                          ⏱️ {st.timeline}
-                        </span>
-                      </div>
-                      <div style={{ position: 'absolute', bottom: '12px', left: '16px', right: '16px' }}>
-                        <span style={{ fontSize: '11px', fontWeight: 700, color: st.accent, textTransform: 'uppercase', letterSpacing: '0.8px', display: 'block' }}>
-                          {st.tag}
-                        </span>
-                        <h3 style={{ fontSize: '16.5px', fontWeight: 800, color: '#ffffff', margin: '2px 0 0', lineHeight: 1.25 }}>
-                          {st.title}
-                        </h3>
-                      </div>
-                    </div>
-
-                    {/* Content Body */}
-                    <div style={{ padding: '16px 18px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1, boxSizing: 'border-box' }}>
-                      <p style={{ fontSize: '12.5px', color: 'var(--mut)', lineHeight: 1.5, margin: 0 }}>
-                        {st.desc}
-                      </p>
-
-                      {/* Target Metric Pills */}
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px', margin: '10px 0' }}>
-                        {st.metrics.map((m, mIdx) => (
-                          <div 
-                            key={mIdx}
-                            style={{
-                              background: 'var(--card)',
-                              padding: '7px 8px',
-                              borderRadius: '10px',
-                              border: '1px solid var(--border)',
-                              textAlign: 'center'
-                            }}
-                          >
-                            <small style={{ color: 'var(--mut)', fontSize: '9.5px', display: 'block' }}>
-                              {m.label}
-                            </small>
-                            <b style={{ fontSize: '11.5px', color: st.accent, fontWeight: 800, marginTop: '2px', display: 'block' }}>
-                              {m.val}
-                            </b>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--border)', paddingTop: '10px' }}>
-                        <span style={{ fontSize: '11px', color: 'var(--mut)', fontWeight: 600 }}>
-                          👆 Geser kartu / klik untuk tahap berikutnya
-                        </span>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onNavigate('budidaya');
-                          }}
-                          className="btn-ghost"
-                          style={{ padding: '5px 12px', fontSize: '11.5px', borderRadius: '9999px', color: st.accent, borderColor: `${st.accent}55` }}
-                        >
-                          <span>SOP Detail</span>
-                          <ArrowRight size={11} />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+            {/* OptionWheel Component - Ultra lightweight with blur 0 for zero GPU overhead */}
+            <div style={{ height: '300px', width: '100%', position: 'relative', margin: '4px 0' }}>
+              <OptionWheel
+                items={workflowSteps.map(st => `${st.step}. ${st.shortTitle}`)}
+                defaultSelected={activeWorkflowStage}
+                textColor="var(--mut)"
+                activeColor="var(--b)"
+                side="left"
+                fontSize={1.75}
+                spacing={1.38}
+                curve={0.75}
+                tilt={5}
+                blur={0}
+                fade={0.3}
+                minOpacity={0.15}
+                smoothing={150}
+                inset={24}
+                loop={false}
+                draggable={true}
+                onChange={(idx) => setActiveWorkflowStage(idx)}
               />
             </div>
 
-            <div 
-              style={{ 
-                display: 'inline-flex', 
-                alignItems: 'center', 
-                gap: '8px', 
-                marginTop: '22px', 
-                padding: '8px 18px', 
-                borderRadius: '9999px', 
-                background: 'var(--card)', 
-                border: '1px solid var(--border)', 
-                fontSize: '12px', 
-                color: 'var(--mut)',
-                boxShadow: 'var(--shadow-sm)'
-              }}
-            >
-              <Sparkles size={14} color="var(--b)" />
-              <span>Tarik kartu ke kiri/kanan atau klik untuk siklus berikutnya</span>
+            {/* Stage Quick Indicator Pills */}
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '14px' }}>
+              {workflowSteps.map((st, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setActiveWorkflowStage(i)}
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: '9999px',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    border: activeWorkflowStage === i ? `1.5px solid ${st.accent}` : '1px solid var(--border)',
+                    background: activeWorkflowStage === i ? `${st.accent}22` : 'var(--card2)',
+                    color: activeWorkflowStage === i ? st.accent : 'var(--mut)'
+                  }}
+                >
+                  Tahap {st.step}
+                </button>
+              ))}
             </div>
           </div>
+
+          {/* Right Column: Live Stage Card & Detailed Visual Content */}
+          {(() => {
+            const currentWorkflow = workflowSteps[activeWorkflowStage] || workflowSteps[0];
+            return (
+              <div 
+                className="glass-panel"
+                style={{
+                  padding: 'clamp(20px, 3vw, 28px)',
+                  borderRadius: '28px',
+                  border: `2px solid ${currentWorkflow.accent}44`,
+                  boxShadow: `0 18px 45px ${currentWorkflow.accent}18`,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  minHeight: '440px',
+                  transition: 'border-color 0.25s ease, box-shadow 0.25s ease'
+                }}
+              >
+                <div>
+                  {/* Header Badges */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '14px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span 
+                        style={{ 
+                          background: currentWorkflow.accent, 
+                          color: '#ffffff', 
+                          padding: '5px 16px', 
+                          borderRadius: '9999px', 
+                          fontSize: '11.5px', 
+                          fontWeight: 800,
+                          letterSpacing: '0.8px',
+                          boxShadow: `0 4px 12px ${currentWorkflow.accent}44`
+                        }}
+                      >
+                        TAHAP {currentWorkflow.step}
+                      </span>
+                      <span style={{ fontSize: '11.5px', fontWeight: 700, color: currentWorkflow.accent, textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+                        {currentWorkflow.tag}
+                      </span>
+                    </div>
+
+                    <span 
+                      style={{ 
+                        background: 'var(--card2)', 
+                        border: '1px solid var(--border)', 
+                        color: 'var(--txt)', 
+                        padding: '4px 14px', 
+                        borderRadius: '9999px', 
+                        fontSize: '11.5px', 
+                        fontWeight: 600,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '5px'
+                      }}
+                    >
+                      ⏱️ {currentWorkflow.timeline}
+                    </span>
+                  </div>
+
+                  {/* Title & Media Preview */}
+                  <h3 style={{ fontSize: 'clamp(18px, 2.2vw, 22px)', fontWeight: 800, color: 'var(--txt)', margin: '0 0 12px', lineHeight: 1.3 }}>
+                    {currentWorkflow.title}
+                  </h3>
+
+                  <div 
+                    style={{ 
+                      position: 'relative', 
+                      height: '170px', 
+                      borderRadius: '18px', 
+                      overflow: 'hidden', 
+                      marginBottom: '14px',
+                      border: '1px solid var(--border)'
+                    }}
+                  >
+                    <img 
+                      src={currentWorkflow.img} 
+                      alt={currentWorkflow.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    />
+                    <div 
+                      style={{ 
+                        position: 'absolute', 
+                        inset: 0, 
+                        background: 'linear-gradient(to top, rgba(7, 21, 43, 0.78) 0%, transparent 60%)' 
+                      }} 
+                    />
+                    <div style={{ position: 'absolute', bottom: '10px', left: '14px', right: '14px' }}>
+                      <p style={{ color: '#ffffff', fontSize: '11.5px', margin: 0, opacity: 0.95, textShadow: '0 2px 4px rgba(0,0,0,0.6)' }}>
+                        💡 {currentWorkflow.expertTip}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p style={{ fontSize: '13px', color: 'var(--mut)', lineHeight: 1.55, margin: '0 0 14px' }}>
+                    {currentWorkflow.desc}
+                  </p>
+
+                  {/* Checklist Points */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '7px', marginBottom: '16px' }}>
+                    {currentWorkflow.points.map((pt, pIdx) => (
+                      <div key={pIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '9px' }}>
+                        <div 
+                          style={{ 
+                            width: '18px', 
+                            height: '18px', 
+                            borderRadius: '50%', 
+                            background: `${currentWorkflow.accent}22`, 
+                            color: currentWorkflow.accent, 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            flexShrink: 0,
+                            marginTop: '2px'
+                          }}
+                        >
+                          <Check size={11} strokeWidth={3} />
+                        </div>
+                        <span style={{ fontSize: '12px', color: 'var(--txt)', lineHeight: 1.4 }}>
+                          {pt}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Target Metric Pills */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '18px' }}>
+                    {currentWorkflow.metrics.map((m, mIdx) => (
+                      <div 
+                        key={mIdx}
+                        style={{
+                          background: 'var(--card2)',
+                          padding: '9px 8px',
+                          borderRadius: '14px',
+                          border: '1px solid var(--border)',
+                          textAlign: 'center'
+                        }}
+                      >
+                        <small style={{ color: 'var(--mut)', fontSize: '9.5px', display: 'block', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                          {m.label}
+                        </small>
+                        <b style={{ fontSize: '12px', color: currentWorkflow.accent, fontWeight: 800, marginTop: '2px', display: 'block' }}>
+                          {m.val}
+                        </b>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', paddingTop: '14px', borderTop: '1px solid var(--border)' }}>
+                  <button
+                    type="button"
+                    onClick={() => onNavigate('budidaya')}
+                    className="btn-primary"
+                    style={{ padding: '9px 20px', fontSize: '12.5px', borderRadius: '9999px' }}
+                  >
+                    <BookOpen size={14} />
+                    <span>Pelajari SOP Tahap Ini</span>
+                  </button>
+
+                  <a
+                    href={`https://wa.me/6281382570406?text=Halo%20Hamdan%20Russ,%20saya%20ingin%20konsultasi%20tahap%20${currentWorkflow.step}%20(${encodeURIComponent(currentWorkflow.shortTitle)})`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-ghost"
+                    style={{ padding: '9px 18px', fontSize: '12.5px', borderRadius: '9999px' }}
+                  >
+                    <MessageCircle size={14} />
+                    <span>Tanya via WhatsApp</span>
+                  </a>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </section>
 
