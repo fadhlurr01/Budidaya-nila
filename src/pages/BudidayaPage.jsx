@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import GallerySection from '../components/GallerySection';
 
-export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'id' }) {
+export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'id', isDark = false }) {
   // Interactive Calculator State
   const [seedCount, setSeedCount] = useState(3000);
   const [targetWeight, setTargetWeight] = useState(600); // grams

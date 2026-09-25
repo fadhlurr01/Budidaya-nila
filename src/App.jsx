@@ -473,6 +473,7 @@ export default function App() {
                       onNavigate={handleNavigate}
                       onOpenConsultation={() => setCorpModal('tentang')}
                       lang={lang}
+                      isDark={isDark}
                     />
                   );
                 case 'produk':
