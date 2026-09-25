@@ -92,6 +92,7 @@ export default function Navbar({
 
   return (
     <header
+      className="navbar-fixed-header"
       style={{
         position: 'fixed',
         top: isHeroMerge ? '0px' : '10px',
@@ -146,7 +147,7 @@ export default function Navbar({
             style={{ 
               display: 'flex', 
               alignItems: 'center', 
-              gap: '12px', 
+              gap: '10px', 
               cursor: 'pointer',
               userSelect: 'none',
               flexShrink: 0
@@ -155,6 +156,7 @@ export default function Navbar({
             <img 
               src="/assets/logo.png" 
               alt="NilaFarm Logo" 
+              className="navbar-brand-logo-img"
               style={{ 
                 height: '38px', 
                 width: 'auto', 
@@ -172,6 +174,7 @@ export default function Navbar({
                 </span>
               </div>
               <span 
+                className="brand-subtitle-desk"
                 style={{ 
                   fontSize: '10px', 
                   fontWeight: 600, 
@@ -243,10 +246,11 @@ export default function Navbar({
 
         {/* Right Controls & CTA Button (Far Right) */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-          {/* Language Toggle */}
+          {/* Language Toggle (Desktop Only) */}
           <button
             onClick={onToggleLang}
             title={lang === 'en' ? 'Ganti ke Bahasa Indonesia' : 'Switch to English'}
+            className="nav-desk-only"
             style={{
               padding: '7px 14px',
               borderRadius: '9999px',
@@ -262,7 +266,6 @@ export default function Navbar({
               cursor: 'pointer',
               fontSize: '12px',
               fontWeight: 700,
-              display: 'flex',
               alignItems: 'center',
               gap: '5px',
               transition: 'all 0.2s ease'
@@ -272,13 +275,14 @@ export default function Navbar({
             <span>{lang.toUpperCase()}</span>
           </button>
 
-          {/* Theme Toggle */}
+          {/* Theme Toggle (Mobile & Desktop) */}
           <button
             onClick={onToggleTheme}
             title={isDark ? 'Mode Terang' : 'Mode Gelap'}
+            className="nav-theme-btn"
             style={{
-              width: '38px',
-              height: '38px',
+              width: '36px',
+              height: '36px',
               borderRadius: '50%',
               background: isHeroMerge
                 ? (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.75)')
@@ -293,18 +297,19 @@ export default function Navbar({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              flexShrink: 0,
               transition: 'all 0.2s ease'
             }}
           >
             {isDark ? <Sun size={16} /> : <Moon size={16} />}
           </button>
 
-          {/* Lacak Pesanan Button */}
+          {/* Lacak Pesanan Button (Desktop Only) */}
           <button
             onClick={onOpenOrderTracking}
             title="Lacak Status Pesanan"
+            className="nav-desk-only"
             style={{
-              display: 'flex',
               alignItems: 'center',
               gap: '6px',
               padding: '7px 16px',
@@ -328,11 +333,11 @@ export default function Navbar({
             <span className="cta-text-desk cta-text-collapse">Lacak Pesanan</span>
           </button>
 
-          {/* Customer Auth / Profile Pill */}
+          {/* Customer Auth / Profile Pill (Desktop Only) */}
           {customerUser ? (
             <div 
+              className="nav-desk-only"
               style={{
-                display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
                 background: 'rgba(33, 150, 243, 0.12)',
@@ -399,7 +404,7 @@ export default function Navbar({
             <button
               onClick={onOpenCustomerAuth}
               title="Masuk atau Daftar Akun Pembeli"
-              className="btn-ghost"
+              className="btn-ghost nav-desk-only"
               style={{
                 padding: '7px 16px',
                 fontSize: '12.5px',
@@ -419,14 +424,15 @@ export default function Navbar({
             </button>
           )}
 
-          {/* Shopping Cart Button */}
+          {/* Shopping Cart Button (Mobile & Desktop) */}
           <button
             onClick={onOpenCart}
             title="Keranjang Belanja"
+            className="nav-cart-btn"
             style={{
               position: 'relative',
-              width: '38px',
-              height: '38px',
+              width: '36px',
+              height: '36px',
               borderRadius: '50%',
               background: isHeroMerge
                 ? (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.75)')
@@ -441,6 +447,7 @@ export default function Navbar({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              flexShrink: 0,
               transition: 'all 0.2s ease'
             }}
           >
@@ -469,7 +476,7 @@ export default function Navbar({
             )}
           </button>
 
-          {/* Konsultasi Kami CTA Button */}
+          {/* Konsultasi Kami CTA Button (Desktop Only) */}
           <button
             onClick={() => {
               if (onOpenCorpModal) {
@@ -478,12 +485,11 @@ export default function Navbar({
                 onNavigate('kontak');
               }
             }}
-            className="btn-primary"
+            className="btn-primary nav-desk-only"
             style={{ 
               padding: '8px 18px', 
               fontSize: '12.5px',
               borderRadius: '9999px',
-              display: 'flex',
               alignItems: 'center',
               gap: '6px',
               background: 'var(--grad)',
@@ -500,10 +506,11 @@ export default function Navbar({
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="mobile-burger-btn"
+            title="Buka Menu"
             style={{
               display: 'none',
-              width: '38px',
-              height: '38px',
+              width: '36px',
+              height: '36px',
               borderRadius: '50%',
               background: isHeroMerge
                 ? (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.75)')
@@ -517,6 +524,7 @@ export default function Navbar({
               cursor: 'pointer',
               alignItems: 'center',
               justifyContent: 'center',
+              flexShrink: 0,
               transition: 'all 0.2s ease'
             }}
           >
@@ -532,18 +540,75 @@ export default function Navbar({
             marginTop: '8px',
             marginRight: isHeroMerge ? '16px' : '0',
             marginLeft: isHeroMerge ? '16px' : '0',
-            background: isDark ? 'rgba(14, 36, 71, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+            background: isDark ? 'rgba(14, 36, 71, 0.98)' : 'rgba(255, 255, 255, 0.98)',
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
             border: '1px solid var(--border)',
             borderRadius: '20px',
             padding: '16px',
+            maxHeight: 'calc(100vh - 85px)',
+            overflowY: 'auto',
+            overscrollBehavior: 'contain',
+            boxSizing: 'border-box',
             boxShadow: 'var(--shadow-lg)',
             display: 'flex',
             flexDirection: 'column',
             gap: '6px'
           }}
         >
+          {/* Mobile Language Switcher Row */}
+          <div 
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'space-between', 
+              padding: '8px 14px', 
+              borderRadius: '9999px', 
+              background: 'var(--card2)', 
+              border: '1px solid var(--border)', 
+              marginBottom: '4px' 
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12.5px', fontWeight: 600, color: 'var(--txt)' }}>
+              <Globe size={15} color="var(--b)" />
+              <span>Bahasa / Language</span>
+            </div>
+            <div style={{ display: 'flex', gap: '4px' }}>
+              <button
+                type="button"
+                onClick={() => lang !== 'id' && onToggleLang()}
+                style={{
+                  padding: '4px 12px',
+                  borderRadius: '9999px',
+                  border: 'none',
+                  background: lang === 'id' ? 'var(--b)' : 'transparent',
+                  color: lang === 'id' ? '#fff' : 'var(--mut)',
+                  fontWeight: 700,
+                  fontSize: '11.5px',
+                  cursor: 'pointer'
+                }}
+              >
+                ID
+              </button>
+              <button
+                type="button"
+                onClick={() => lang !== 'en' && onToggleLang()}
+                style={{
+                  padding: '4px 12px',
+                  borderRadius: '9999px',
+                  border: 'none',
+                  background: lang === 'en' ? 'var(--b)' : 'transparent',
+                  color: lang === 'en' ? '#fff' : 'var(--mut)',
+                  fontWeight: 700,
+                  fontSize: '11.5px',
+                  cursor: 'pointer'
+                }}
+              >
+                EN
+              </button>
+            </div>
+          </div>
+
           {navItems.map((item) => {
             if (item.isDropdown) {
               return (
@@ -735,6 +800,12 @@ export default function Navbar({
           .desktop-floating-menu {
             display: flex !important;
           }
+          .mobile-burger-btn {
+            display: none !important;
+          }
+          .nav-desk-only {
+            display: inline-flex !important;
+          }
         }
         @media (max-width: 1260px) and (min-width: 1024px) {
           .cta-text-collapse {
@@ -742,11 +813,33 @@ export default function Navbar({
           }
         }
         @media (max-width: 1023px) {
+          .desktop-floating-menu {
+            display: none !important;
+          }
+          .nav-desk-only {
+            display: none !important;
+          }
           .mobile-burger-btn {
             display: flex !important;
           }
           .cta-text-desk {
             display: none !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .navbar-fixed-header {
+            width: calc(100% - 16px) !important;
+            top: 8px !important;
+          }
+          .navbar-main-container {
+            padding: 6px 12px !important;
+            gap: 6px !important;
+          }
+          .brand-subtitle-desk {
+            display: none !important;
+          }
+          .navbar-brand-logo-img {
+            height: 32px !important;
           }
         }
       `}</style>

@@ -295,7 +295,7 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
                       fontSize: '13px',
                       fontWeight: 800,
                       padding: '4px 12px',
-                      borderRadius: '8px'
+                      borderRadius: '9999px'
                     }}
                   >
                     TAHAP {item.step}

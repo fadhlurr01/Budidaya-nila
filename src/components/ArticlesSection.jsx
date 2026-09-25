@@ -82,7 +82,7 @@ export default function ArticlesSection({ articles, lang = 'id' }) {
                     backdropFilter: 'blur(6px)',
                     color: '#ffffff',
                     padding: '4px 10px',
-                    borderRadius: '8px',
+                    borderRadius: '9999px',
                     fontSize: '11.5px',
                     fontWeight: 600,
                     display: 'flex',

@@ -160,7 +160,7 @@ export default function ArticleDetailPage({
                 fontSize: '11.5px',
                 fontWeight: 700,
                 padding: '4px 12px',
-                borderRadius: '8px',
+                borderRadius: '9999px',
                 textTransform: 'uppercase',
                 letterSpacing: '0.8px',
                 display: 'inline-flex',
@@ -538,7 +538,7 @@ export default function ArticleDetailPage({
                 color: 'var(--b)',
                 background: 'var(--card2)',
                 padding: '4px 12px',
-                borderRadius: '8px',
+                borderRadius: '9999px',
                 border: '1px solid var(--border)'
               }}
             >
