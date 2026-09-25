@@ -36,6 +36,8 @@ export default function FloatingActionButtons({ isDashboard = false }) {
 
   // Adjust position if in dashboard on mobile (to avoid overlapping mobile bottom dock)
   const bottomOffset = isDashboard ? 'clamp(85px, 12vh, 100px)' : 'clamp(20px, 4vw, 28px)';
+  const rightOffset = 'clamp(16px, 4vw, 24px)';
+
   // Do not show anything in dashboard unless user scrolled and needs scroll-to-top
   if (isDashboard && !showScrollTop) return null;
 
