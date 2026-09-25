@@ -188,26 +188,31 @@ export default function AuthPage({
     if (onNavigate) onNavigate('beranda');
   };
 
-  // IDENTITY FRAME
-  const renderIdentity = () => (
-    <motion.div 
-      key={`identity-${mode}`}
-      initial={{ opacity: 0, x: mode === 'login' ? -30 : 30 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: mode === 'login' ? 30 : -30 }}
-      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-      style={{
-        flex: '1 1 45%',
-        padding: 'clamp(28px, 4vw, 44px)',
-        background: 'linear-gradient(145deg, rgba(33, 150, 243, 0.14) 0%, rgba(13, 71, 161, 0.22) 100%)',
-        display: isMobile ? 'none' : 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        boxSizing: 'border-box',
-        borderRight: mode === 'login' ? '1px solid var(--border)' : 'none',
-        borderLeft: mode === 'register' ? '1px solid var(--border)' : 'none'
-      }}
-    >
+  // IDENTITY FRAME (Desktop only)
+  const renderIdentity = () => {
+    if (isMobile) return null;
+
+    return (
+      <motion.div 
+        key={`identity-${mode}`}
+        className="auth-identity-frame"
+        initial={{ opacity: 0, x: mode === 'login' ? -30 : 30 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: mode === 'login' ? 30 : -30 }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        style={{
+          flex: '1 1 45%',
+          padding: 'clamp(20px, 3vh, 32px) clamp(22px, 2.5vw, 36px)',
+          background: 'linear-gradient(145deg, rgba(33, 150, 243, 0.14) 0%, rgba(13, 71, 161, 0.22) 100%)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          boxSizing: 'border-box',
+          overflowY: 'auto',
+          borderRight: mode === 'login' ? '1px solid var(--border)' : 'none',
+          borderLeft: mode === 'register' ? '1px solid var(--border)' : 'none'
+        }}
+      >
       <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
           <img 
@@ -289,33 +294,61 @@ export default function AuthPage({
       </div>
     </motion.div>
   );
+};
 
   // FORM FRAME
   const renderForm = () => (
     <motion.div 
       key={`form-${mode}`}
+      className="auth-form-frame"
       initial={{ opacity: 0, x: mode === 'login' ? 30 : -30 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: mode === 'login' ? -30 : 30 }}
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
       style={{
-        flex: '1 1 55%',
-        padding: 'clamp(24px, 4vw, 44px)',
+        flex: isMobile ? '1 1 100%' : '1 1 55%',
+        padding: isMobile ? '24px 18px' : 'clamp(18px, 2.6vh, 28px) clamp(22px, 2.6vw, 36px)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
         boxSizing: 'border-box',
+        overflowY: 'auto',
         width: isMobile ? '100%' : 'auto'
       }}
     >
       <div>
+        {/* Mobile Brand Identity Bar */}
+        {isMobile && (
+          <div 
+            onClick={() => onNavigate && onNavigate('beranda')}
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '10px', 
+              marginBottom: '16px', 
+              cursor: 'pointer',
+              userSelect: 'none'
+            }}
+          >
+            <img 
+              src="/assets/logo/logoo.png" 
+              alt="NilaFarm Logo HD" 
+              style={{ width: '32px', height: '32px', objectFit: 'contain' }} 
+            />
+            <div>
+              <b style={{ fontSize: '16px', color: 'var(--txt)', lineHeight: 1.1, display: 'block' }}>NilaFarm</b>
+              <span style={{ fontSize: '10px', color: 'var(--b)', fontWeight: 800, letterSpacing: '0.8px' }}>SMART BIOFLOK IOT</span>
+            </div>
+          </div>
+        )}
+
         {/* Top Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
           <div>
-            <span style={{ fontSize: '11.5px', fontWeight: 800, color: 'var(--b)', textTransform: 'uppercase', letterSpacing: '1.2px' }}>
+            <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--b)', textTransform: 'uppercase', letterSpacing: '1.2px' }}>
               {mode === 'login' ? 'Portal Pelanggan' : 'Pendaftaran Anggota'}
             </span>
-            <h2 style={{ fontSize: 'clamp(22px, 2.8vw, 28px)', fontWeight: 800, color: 'var(--txt)', margin: '4px 0 0' }}>
+            <h2 style={{ fontSize: 'clamp(20px, 2.6vw, 26px)', fontWeight: 800, color: 'var(--txt)', margin: '3px 0 0' }}>
               {mode === 'login' ? 'Masuk ke Akun Anda' : 'Buat Akun NilaFarm'}
             </h2>
           </div>
@@ -771,44 +804,86 @@ export default function AuthPage({
 
   return (
     <div 
+      className="auth-outer-screen"
       style={{
         minHeight: '100vh',
+        height: isMobile ? 'auto' : '100vh',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 'clamp(20px, 4vw, 40px) 16px',
+        padding: isMobile ? '16px' : '20px',
         boxSizing: 'border-box',
-        background: isDark ? 'var(--bg)' : 'linear-gradient(180deg, #f0f6ff 0%, var(--bg) 100%)'
+        background: isDark ? 'var(--bg)' : 'linear-gradient(180deg, #f0f6ff 0%, var(--bg) 100%)',
+        overflow: isMobile ? 'auto' : 'hidden'
       }}
     >
+      <style>{`
+        @media (max-width: 840px) {
+          .auth-identity-frame {
+            display: none !important;
+          }
+          .auth-form-frame {
+            width: 100% !important;
+            max-width: 100% !important;
+            flex: 1 1 100% !important;
+          }
+          .auth-card-wrapper {
+            max-width: 440px !important;
+            height: auto !important;
+            max-height: none !important;
+            margin: auto !important;
+            border-radius: 20px !important;
+          }
+        }
+        @media (min-width: 841px) {
+          .auth-outer-screen {
+            height: 100vh !important;
+            max-height: 100vh !important;
+            overflow: hidden !important;
+          }
+          .auth-card-wrapper {
+            height: min(580px, 92vh) !important;
+            max-height: min(580px, 92vh) !important;
+          }
+        }
+      `}</style>
+
       <div 
+        className="auth-card-wrapper"
         style={{
           width: '100%',
-          maxWidth: '1000px',
+          maxWidth: isMobile ? '440px' : '920px',
+          height: isMobile ? 'auto' : 'min(580px, 92vh)',
           background: 'var(--card)',
-          borderRadius: '28px',
+          borderRadius: isMobile ? '20px' : '24px',
           border: '1.5px solid var(--border)',
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.12)',
-          overflow: 'hidden'
+          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.15)',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column'
         }}
       >
         {/* Elegant Swap Layout:
-            - When mode === 'login': Left = Identity, Right = Form
-            - When mode === 'register': Left = Form, Right = Identity (Reversed)
-            - Animated with AnimatePresence for smooth swap transitions
+            - When desktop & login: Left = Identity, Right = Form
+            - When desktop & register: Left = Form, Right = Identity (Reversed)
+            - When mobile: Exactly 1 Frame (Form Only) for both login and signup
         */}
         <div 
           style={{
             display: 'flex',
             flexDirection: isMobile ? 'column' : 'row',
             alignItems: 'stretch',
-            minHeight: isMobile ? 'auto' : '580px',
+            height: '100%',
             position: 'relative'
           }}
         >
           <AnimatePresence mode="wait">
-            {mode === 'login' ? (
+            {isMobile ? (
+              <React.Fragment key={`mobile-${mode}`}>
+                {renderForm()}
+              </React.Fragment>
+            ) : mode === 'login' ? (
               <React.Fragment key="layout-login">
                 {renderIdentity()}
                 {renderForm()}

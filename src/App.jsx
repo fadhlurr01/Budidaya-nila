@@ -441,23 +441,25 @@ export default function App() {
       {/* VIEW 1: PUBLIC LANDING PAGE */}
       {currentView === 'public' && (
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <Navbar 
-            activeSection={activeSection}
-            onNavigate={handleNavigate}
-            onOpenDashboard={handleOpenDashboard}
-            onOpenCart={() => setIsCartOpen(true)}
-            cartCount={cartItems.reduce((acc, i) => acc + i.qty, 0)}
-            customerUser={customerUser}
-            onOpenCustomerAuth={handleOpenCustomerAuth}
-            onOpenOrderTracking={() => handleOpenOrderTracking()}
-            onCustomerLogout={handleCustomerLogout}
-            isDark={isDark}
-            onToggleTheme={() => setIsDark(!isDark)}
-            lang={lang}
-            onToggleLang={handleToggleLang}
-            onOpenDevModal={setDevModal}
-            onOpenCorpModal={setCorpModal}
-          />
+          {activeSection !== 'auth' && (
+            <Navbar 
+              activeSection={activeSection}
+              onNavigate={handleNavigate}
+              onOpenDashboard={handleOpenDashboard}
+              onOpenCart={() => setIsCartOpen(true)}
+              cartCount={cartItems.reduce((acc, i) => acc + i.qty, 0)}
+              customerUser={customerUser}
+              onOpenCustomerAuth={handleOpenCustomerAuth}
+              onOpenOrderTracking={() => handleOpenOrderTracking()}
+              onCustomerLogout={handleCustomerLogout}
+              isDark={isDark}
+              onToggleTheme={() => setIsDark(!isDark)}
+              lang={lang}
+              onToggleLang={handleToggleLang}
+              onOpenDevModal={setDevModal}
+              onOpenCorpModal={setCorpModal}
+            />
+          )}
 
           <main style={{ flex: 1 }}>
             {/* Multipage Dynamic Routing */}
@@ -538,12 +540,14 @@ export default function App() {
             })()}
           </main>
 
-          <Footer 
-            onNavigate={handleNavigate}
-            onOpenDashboard={handleOpenDashboard}
-            onOpenDevModal={setDevModal}
-            onOpenCorpModal={setCorpModal}
-          />
+          {activeSection !== 'auth' && (
+            <Footer 
+              onNavigate={handleNavigate}
+              onOpenDashboard={handleOpenDashboard}
+              onOpenDevModal={setDevModal}
+              onOpenCorpModal={setCorpModal}
+            />
+          )}
         </div>
       )}
 
@@ -631,7 +635,7 @@ export default function App() {
       />
 
       {/* Floating Action Buttons: WhatsApp & Scroll To Top */}
-      <FloatingActionButtons isDashboard={currentView === 'dashboard'} />
+      <FloatingActionButtons isDashboard={currentView === 'dashboard' || activeSection === 'auth'} />
     </div>
   );
 }
