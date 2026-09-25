@@ -10,6 +10,7 @@ import {
   Clock,
   Sparkles
 } from 'lucide-react';
+import ShinyText from './ShinyText';
 
 export default function HeroSection({ 
   onNavigate, 
@@ -111,9 +112,15 @@ export default function HeroSection({
                 style={{ width: '18px', height: '18px', objectFit: 'contain' }} 
               />
               <span className="pulse-dot" />
-              <span>
-                {lang === 'en' ? 'Biofloc Tilapia Aquaculture • Sumedang' : 'Usaha Budidaya Nila Keluarga • Sumedang'}
-              </span>
+              <ShinyText
+                text={lang === 'en' ? 'Biofloc Tilapia Aquaculture • Sumedang' : 'Usaha Budidaya Nila Keluarga • Sumedang'}
+                speed={2.6}
+                delay={0}
+                color={isDark ? '#90caf9' : '#0d47a1'}
+                shineColor="#ffffff"
+                spread={100}
+                direction="left"
+              />
             </div>
 
             {/* Main Headline */}
@@ -128,15 +135,16 @@ export default function HeroSection({
               }}
             >
               {lang === 'en' ? 'Fresh Tilapia from Our Ponds, ' : 'Nila Segar dari Kolam Kami, '}
-              <span 
-                style={{
-                  background: 'linear-gradient(135deg, #2196f3, #0d47a1)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  display: 'inline'
-                }}
-              >
-                {lang === 'en' ? 'Straight to Your Table' : 'Langsung ke Meja Anda'}
+              <span style={{ display: 'inline-block' }}>
+                <ShinyText
+                  text={lang === 'en' ? 'Straight to Your Table' : 'Langsung ke Meja Anda'}
+                  speed={2}
+                  delay={0}
+                  color="#2196f3"
+                  shineColor={isDark ? '#ffffff' : '#64b5f6'}
+                  spread={120}
+                  direction="left"
+                />
               </span>
             </h1>
 
