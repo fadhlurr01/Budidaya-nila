@@ -14,19 +14,20 @@ export default function AuthModal({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (email.trim().toLowerCase() !== 'admin@nilafarm.id' || password !== 'admin123') {
+    const cleanEmail = email.trim().toLowerCase();
+    if ((cleanEmail !== 'ham@farm.id' && cleanEmail !== 'admin@nilafarm.id') || password !== 'admin123') {
       if (onShowToast) onShowToast('Email atau password admin salah. Silakan periksa kembali.', 'bad');
       return;
     }
 
     const session = {
-      email,
+      email: cleanEmail,
       name: 'Hamdan Russ',
       role: 'Farm Owner & Admin'
     };
 
     onLoginSuccess(session);
-    if (onShowToast) onShowToast('Selamat datang kembali di panel NilaFarm!', 'ok');
+    if (onShowToast) onShowToast('Selamat datang kembali di panel NilaFarm, Hamdan Russ!', 'ok');
     onClose();
   };
 
@@ -83,6 +84,7 @@ export default function AuthModal({
               <Mail size={16} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '13px' }} />
               <input
                 type="email"
+                placeholder="Ham@farm.id"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required

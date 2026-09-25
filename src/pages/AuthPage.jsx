@@ -20,6 +20,7 @@ import {
 export default function AuthPage({ 
   initialMode = 'login', // 'login' | 'register'
   onLoginSuccess, 
+  onAdminLogin,
   onNavigate,
   onShowToast,
   isDark = false 
@@ -66,6 +67,31 @@ export default function AuthPage({
     if (!inputVal || !passVal) {
       if (onShowToast) onShowToast('Harap masukkan email/no HP dan kata sandi.', 'bad');
       return;
+    }
+
+    // Check if logging in with Admin Account (Ham@farm.id)
+    if (inputVal.toLowerCase() === 'ham@farm.id' || inputVal.toLowerCase() === 'admin@nilafarm.id') {
+      if (passVal === 'admin123') {
+        const adminSession = {
+          email: 'Ham@farm.id',
+          name: 'Hamdan Russ',
+          role: 'Farm Owner & Admin'
+        };
+        if (onAdminLogin) {
+          onAdminLogin(adminSession);
+          if (onShowToast) onShowToast('Selamat datang Admin Farm (Hamdan Russ)! Mengalihkan ke dashboard...', 'ok');
+          return;
+        } else if (onLoginSuccess) {
+          onLoginSuccess(adminSession);
+          if (onShowToast) onShowToast('Selamat datang Admin Farm (Hamdan Russ)!', 'ok');
+          if (onNavigate) onNavigate('beranda');
+          return;
+        }
+      } else {
+        setLoginError('Kata sandi admin tidak sesuai. Silakan periksa kembali.');
+        if (onShowToast) onShowToast('Kata sandi admin salah.', 'bad');
+        return;
+      }
     }
 
     let savedUsers = [];

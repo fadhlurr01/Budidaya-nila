@@ -514,6 +514,7 @@ export default function App() {
                     <AuthPage 
                       initialMode={customerAuthInitialMode}
                       onLoginSuccess={handleCustomerLogin}
+                      onAdminLogin={handleLoginSuccess}
                       onNavigate={handleNavigate}
                       onShowToast={showToast}
                       isDark={isDark}
