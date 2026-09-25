@@ -120,102 +120,108 @@ export default function Navbar({
           transition: 'all 0.3s ease'
         }}
       >
-        {/* Brand Logo with assets/logo.png (Far Left) */}
-        <div 
-          onClick={() => handleLinkClick('beranda')}
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '12px', 
-            cursor: 'pointer',
-            userSelect: 'none',
-            flexShrink: 0
-          }}
-        >
-          <img 
-            src="/assets/logo.png" 
-            alt="NilaFarm Logo" 
+        {/* Left Side: Brand Logo + Desktop Menu */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '32px', minWidth: 0 }}>
+          {/* Brand Logo with assets/logo.png */}
+          <div 
+            onClick={() => handleLinkClick('beranda')}
             style={{ 
-              height: '38px', 
-              width: 'auto', 
-              objectFit: 'contain',
-              filter: 'drop-shadow(0 2px 8px rgba(33, 150, 243, 0.3))'
-            }} 
-          />
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '2px', lineHeight: 1.1 }}>
-              <span style={{ fontSize: '20px', fontWeight: 800, color: '#2196f3', letterSpacing: '-0.3px' }}>
-                Nila
-              </span>
-              <span style={{ fontSize: '20px', fontWeight: 800, color: isDark ? '#ffffff' : '#0d47a1', letterSpacing: '-0.3px' }}>
-                Farm
-              </span>
-            </div>
-            <span 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '12px', 
+              cursor: 'pointer',
+              userSelect: 'none',
+              flexShrink: 0
+            }}
+          >
+            <img 
+              src="/assets/logo.png" 
+              alt="NilaFarm Logo" 
               style={{ 
-                fontSize: '10px', 
-                fontWeight: 600, 
-                color: 'var(--mut)', 
-                letterSpacing: '1.2px', 
-                textTransform: 'uppercase',
-                display: 'block'
-              }}
-            >
-              Smart Bioflok IoT
-            </span>
-          </div>
-        </div>
-
-        {/* Desktop Navigation Links (Centered Track) */}
-        <nav 
-          className="desktop-floating-menu"
-          style={{ 
-            display: 'none', 
-            alignItems: 'center', 
-            gap: '4px',
-            position: 'absolute',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: isDark ? 'rgba(8, 22, 48, 0.5)' : 'rgba(235, 244, 255, 0.75)',
-            padding: '4px 6px',
-            borderRadius: '9999px',
-            border: isDark ? '1px solid rgba(144, 202, 249, 0.16)' : '1px solid rgba(33, 150, 243, 0.16)',
-            boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.03)'
-          }}
-        >
-          {navItems.map((item) => {
-            const isActive = activeSection === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => handleLinkClick(item.id)}
-                style={{
-                  background: isActive ? 'var(--grad)' : 'transparent',
-                  border: 'none',
-                  color: isActive ? '#ffffff' : 'var(--txt)',
-                  fontSize: '13px',
-                  fontWeight: isActive ? 700 : 500,
-                  cursor: 'pointer',
-                  padding: '7px 16px',
-                  borderRadius: '9999px',
-                  position: 'relative',
-                  transition: 'all 0.2s ease',
-                  outline: 'none',
-                  boxShadow: isActive ? '0 2px 8px rgba(33, 150, 243, 0.35)' : 'none',
-                  whiteSpace: 'nowrap'
-                }}
-                onMouseEnter={e => {
-                  if (!isActive) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(33,150,243,0.08)';
-                }}
-                onMouseLeave={e => {
-                  if (!isActive) e.currentTarget.style.background = 'transparent';
+                height: '38px', 
+                width: 'auto', 
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 2px 8px rgba(33, 150, 243, 0.3))'
+              }} 
+            />
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '2px', lineHeight: 1.1 }}>
+                <span style={{ fontSize: '20px', fontWeight: 800, color: '#2196f3', letterSpacing: '-0.3px' }}>
+                  Nila
+                </span>
+                <span style={{ fontSize: '20px', fontWeight: 800, color: isDark ? '#ffffff' : '#0d47a1', letterSpacing: '-0.3px' }}>
+                  Farm
+                </span>
+              </div>
+              <span 
+                style={{ 
+                  fontSize: '10px', 
+                  fontWeight: 600, 
+                  color: 'var(--mut)', 
+                  letterSpacing: '1.2px', 
+                  textTransform: 'uppercase',
+                  display: 'block'
                 }}
               >
-                {item.label}
-              </button>
-            );
-          })}
-        </nav>
+                Smart Bioflok IoT
+              </span>
+            </div>
+          </div>
+
+          {/* Desktop Navigation Links (Positioned on the Left beside Logo, No Circle/Pill) */}
+          <nav 
+            className="desktop-floating-menu"
+            style={{ 
+              display: 'none', 
+              alignItems: 'center', 
+              gap: '6px'
+            }}
+          >
+            {navItems.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleLinkClick(item.id)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: isActive ? 'var(--b)' : 'var(--txt)',
+                    fontSize: '14px',
+                    fontWeight: isActive ? 700 : 500,
+                    cursor: 'pointer',
+                    padding: '8px 12px',
+                    position: 'relative',
+                    transition: 'color 0.2s ease',
+                    outline: 'none',
+                    whiteSpace: 'nowrap'
+                  }}
+                  onMouseEnter={e => {
+                    if (!isActive) e.currentTarget.style.color = 'var(--b)';
+                  }}
+                  onMouseLeave={e => {
+                    if (!isActive) e.currentTarget.style.color = 'var(--txt)';
+                  }}
+                >
+                  {item.label}
+                  {isActive && (
+                    <span 
+                      style={{
+                        position: 'absolute',
+                        bottom: '0px',
+                        left: '12px',
+                        right: '12px',
+                        height: '2.5px',
+                        background: 'var(--b)',
+                        borderRadius: '2px'
+                      }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
 
         {/* Right Controls & CTA Button (Far Right) */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
