@@ -89,36 +89,38 @@ export default function Navbar({
     <header
       style={{
         position: 'fixed',
-        top: isScrolled ? '10px' : '16px',
+        top: isScrolled ? '8px' : '14px',
         left: 0,
         right: 0,
         margin: '0 auto',
-        width: 'calc(100% - 32px)',
-        maxWidth: '1180px',
+        width: 'calc(100% - 24px)',
+        maxWidth: '1760px',
         zIndex: 1000,
         transition: 'all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1)'
       }}
     >
       {/* Floating Navbar Container */}
       <div 
+        className="navbar-main-container"
         style={{
-          background: isDark ? 'rgba(14, 36, 71, 0.88)' : 'rgba(255, 255, 255, 0.88)',
-          backdropFilter: 'blur(20px) saturate(1.8)',
-          WebkitBackdropFilter: 'blur(20px) saturate(1.8)',
+          background: isDark ? 'rgba(14, 36, 71, 0.92)' : 'rgba(255, 255, 255, 0.94)',
+          backdropFilter: 'blur(24px) saturate(1.8)',
+          WebkitBackdropFilter: 'blur(24px) saturate(1.8)',
           border: isDark ? '1px solid rgba(144, 202, 249, 0.22)' : '1px solid rgba(255, 255, 255, 0.9)',
           boxShadow: isDark 
             ? '0 16px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08)' 
-            : '0 14px 38px rgba(13, 71, 161, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
-          borderRadius: '24px',
-          padding: isScrolled ? '8px 18px' : '10px 22px',
+            : '0 14px 38px rgba(13, 71, 161, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
+          borderRadius: '9999px',
+          padding: isScrolled ? '6px 16px 6px 20px' : '8px 20px 8px 24px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: '16px',
+          gap: '12px',
+          position: 'relative',
           transition: 'all 0.3s ease'
         }}
       >
-        {/* Brand Logo with assets/logo.png */}
+        {/* Brand Logo with assets/logo.png (Far Left) */}
         <div 
           onClick={() => handleLinkClick('beranda')}
           style={{ 
@@ -126,7 +128,8 @@ export default function Navbar({
             alignItems: 'center', 
             gap: '12px', 
             cursor: 'pointer',
-            userSelect: 'none'
+            userSelect: 'none',
+            flexShrink: 0
           }}
         >
           <img 
@@ -163,153 +166,66 @@ export default function Navbar({
           </div>
         </div>
 
-        {/* Desktop Navigation Links (5 Main Items) */}
+        {/* Desktop Navigation Links (Centered Track) */}
         <nav 
+          className="desktop-floating-menu"
           style={{ 
             display: 'none', 
             alignItems: 'center', 
-            gap: '12px' 
+            gap: '4px',
+            position: 'absolute',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: isDark ? 'rgba(8, 22, 48, 0.5)' : 'rgba(235, 244, 255, 0.75)',
+            padding: '4px 6px',
+            borderRadius: '9999px',
+            border: isDark ? '1px solid rgba(144, 202, 249, 0.16)' : '1px solid rgba(33, 150, 243, 0.16)',
+            boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.03)'
           }}
-          className="desktop-floating-menu"
         >
           {navItems.map((item) => {
-            if (item.isDropdown) {
-              const isChildActive = item.children.some(c => c.id === activeSection);
-              return (
-                <div key={item.id} style={{ position: 'relative' }} ref={dropdownRef}>
-                  <button
-                    onClick={() => setBudidayaDropOpen(!budidayaDropOpen)}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: isChildActive ? 'var(--b)' : 'var(--txt)',
-                      fontSize: '13.5px',
-                      fontWeight: isChildActive ? 700 : 500,
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      padding: '6px 10px',
-                      borderRadius: '10px',
-                      transition: 'all 0.2s ease',
-                      outline: 'none'
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'var(--card2)'}
-                    onMouseLeave={e => {
-                      if (!budidayaDropOpen) e.currentTarget.style.background = 'none';
-                    }}
-                  >
-                    <span>{item.label}</span>
-                    <ChevronDown size={14} style={{ transform: budidayaDropOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
-                  </button>
-
-                  {/* Dropdown Menu */}
-                  {budidayaDropOpen && (
-                    <div 
-                      style={{
-                        position: 'absolute',
-                        top: 'calc(100% + 10px)',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        width: '230px',
-                        background: isDark ? 'rgba(14, 36, 71, 0.96)' : 'rgba(255, 255, 255, 0.96)',
-                        backdropFilter: 'blur(20px)',
-                        border: '1px solid var(--border)',
-                        borderRadius: '18px',
-                        padding: '8px',
-                        boxShadow: 'var(--shadow-lg)',
-                        zIndex: 100,
-                        animation: 'fadeIn 0.2s ease'
-                      }}
-                    >
-                      {item.children.map((sub) => {
-                        const SubIcon = sub.icon;
-                        const isSubActive = activeSection === sub.id;
-                        return (
-                          <button
-                            key={sub.id}
-                            onClick={() => handleDropdownSubClick(sub)}
-                            style={{
-                              width: '100%',
-                              textAlign: 'left',
-                              padding: '10px 12px',
-                              borderRadius: '12px',
-                              border: 'none',
-                              background: isSubActive ? 'var(--card2)' : 'transparent',
-                              color: isSubActive ? 'var(--b)' : 'var(--txt)',
-                              fontSize: '13px',
-                              fontWeight: isSubActive ? 600 : 500,
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '10px',
-                              transition: 'background 0.15s'
-                            }}
-                            onMouseEnter={e => e.currentTarget.style.background = 'var(--card2)'}
-                            onMouseLeave={e => {
-                              if (!isSubActive) e.currentTarget.style.background = 'transparent';
-                            }}
-                          >
-                            <SubIcon size={16} color="var(--b)" />
-                            <span>{sub.label}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              );
-            }
-
             const isActive = activeSection === item.id;
             return (
               <button
                 key={item.id}
                 onClick={() => handleLinkClick(item.id)}
                 style={{
-                  background: 'none',
+                  background: isActive ? 'var(--grad)' : 'transparent',
                   border: 'none',
-                  color: isActive ? 'var(--b)' : 'var(--txt)',
-                  fontSize: '13.5px',
+                  color: isActive ? '#ffffff' : 'var(--txt)',
+                  fontSize: '13px',
                   fontWeight: isActive ? 700 : 500,
                   cursor: 'pointer',
-                  padding: '6px 12px',
-                  borderRadius: '10px',
+                  padding: '7px 16px',
+                  borderRadius: '9999px',
                   position: 'relative',
                   transition: 'all 0.2s ease',
-                  outline: 'none'
+                  outline: 'none',
+                  boxShadow: isActive ? '0 2px 8px rgba(33, 150, 243, 0.35)' : 'none',
+                  whiteSpace: 'nowrap'
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = 'var(--card2)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'none'}
+                onMouseEnter={e => {
+                  if (!isActive) e.currentTarget.style.background = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(33,150,243,0.08)';
+                }}
+                onMouseLeave={e => {
+                  if (!isActive) e.currentTarget.style.background = 'transparent';
+                }}
               >
                 {item.label}
-                {isActive && (
-                  <span 
-                    style={{
-                      position: 'absolute',
-                      bottom: '2px',
-                      left: '20%',
-                      right: '20%',
-                      height: '2px',
-                      background: 'var(--b)',
-                      borderRadius: '4px'
-                    }}
-                  />
-                )}
               </button>
             );
           })}
         </nav>
 
-        {/* Right Controls & CTA Button */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        {/* Right Controls & CTA Button (Far Right) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
           {/* Language Toggle */}
           <button
             onClick={onToggleLang}
             title={lang === 'en' ? 'Ganti ke Bahasa Indonesia' : 'Switch to English'}
             style={{
-              padding: '6px 10px',
-              borderRadius: '10px',
+              padding: '7px 14px',
+              borderRadius: '9999px',
               background: 'var(--card2)',
               border: '1px solid var(--border)',
               color: 'var(--txt)',
@@ -318,7 +234,8 @@ export default function Navbar({
               fontWeight: 700,
               display: 'flex',
               alignItems: 'center',
-              gap: '4px'
+              gap: '5px',
+              transition: 'all 0.2s ease'
             }}
           >
             <Globe size={13} />
@@ -330,9 +247,9 @@ export default function Navbar({
             onClick={onToggleTheme}
             title={isDark ? 'Mode Terang' : 'Mode Gelap'}
             style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '10px',
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
               background: 'var(--card2)',
               border: '1px solid var(--border)',
               color: 'var(--txt)',
@@ -340,7 +257,7 @@ export default function Navbar({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              transition: '0.2s'
+              transition: 'all 0.2s ease'
             }}
           >
             {isDark ? <Sun size={16} /> : <Moon size={16} />}
@@ -354,18 +271,19 @@ export default function Navbar({
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              padding: '6px 12px',
-              borderRadius: '10px',
+              padding: '7px 16px',
+              borderRadius: '9999px',
               background: 'var(--card2)',
               border: '1px solid var(--border)',
               color: 'var(--txt)',
               cursor: 'pointer',
               fontSize: '12.5px',
-              fontWeight: 600
+              fontWeight: 600,
+              transition: 'all 0.2s ease'
             }}
           >
             <Package size={15} color="var(--b)" />
-            <span className="cta-text-desk">Lacak Pesanan</span>
+            <span className="cta-text-desk cta-text-collapse">Lacak Pesanan</span>
           </button>
 
           {/* Customer Auth / Profile Pill */}
@@ -377,8 +295,8 @@ export default function Navbar({
                 gap: '6px',
                 background: 'rgba(33, 150, 243, 0.12)',
                 border: '1px solid rgba(33, 150, 243, 0.3)',
-                padding: '4px 10px',
-                borderRadius: '12px'
+                padding: '4px 12px 4px 6px',
+                borderRadius: '9999px'
               }}
             >
               <button
@@ -394,11 +312,26 @@ export default function Navbar({
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '5px',
+                  gap: '6px',
                   padding: 0
                 }}
               >
-                <User size={14} />
+                <div 
+                  style={{ 
+                    width: '24px', 
+                    height: '24px', 
+                    borderRadius: '50%', 
+                    background: 'var(--b)', 
+                    color: '#fff', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    fontSize: '11px', 
+                    fontWeight: 800 
+                  }}
+                >
+                  {customerUser.name.charAt(0).toUpperCase()}
+                </div>
                 <span>{customerUser.name.split(' ')[0]}</span>
               </button>
 
@@ -413,7 +346,8 @@ export default function Navbar({
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  padding: '2px'
+                  padding: '2px',
+                  marginLeft: '2px'
                 }}
               >
                 <LogOut size={13} />
@@ -425,13 +359,14 @@ export default function Navbar({
               title="Masuk atau Daftar Akun Pembeli"
               className="btn-ghost"
               style={{
-                padding: '6px 12px',
+                padding: '7px 16px',
                 fontSize: '12.5px',
-                borderRadius: '10px'
+                borderRadius: '9999px',
+                border: '1px solid var(--border)'
               }}
             >
               <User size={14} />
-              <span className="cta-text-desk">Masuk</span>
+              <span className="cta-text-desk cta-text-collapse">Masuk</span>
             </button>
           )}
 
@@ -441,16 +376,17 @@ export default function Navbar({
             title="Keranjang Belanja"
             style={{
               position: 'relative',
-              width: '36px',
-              height: '36px',
-              borderRadius: '10px',
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
               background: 'var(--card2)',
               border: '1px solid var(--border)',
               color: 'var(--txt)',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              transition: 'all 0.2s ease'
             }}
           >
             <ShoppingCart size={17} />
@@ -458,8 +394,8 @@ export default function Navbar({
               <span 
                 style={{
                   position: 'absolute',
-                  top: '-3px',
-                  right: '-3px',
+                  top: '-2px',
+                  right: '-2px',
                   background: 'var(--grad)',
                   color: '#ffffff',
                   fontSize: '10px',
@@ -483,9 +419,14 @@ export default function Navbar({
             onClick={onOpenDashboard}
             className="btn-primary"
             style={{ 
-              padding: '8px 14px', 
+              padding: '8px 18px', 
               fontSize: '12.5px',
-              borderRadius: '12px'
+              borderRadius: '9999px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'var(--grad)',
+              boxShadow: '0 4px 14px rgba(33, 150, 243, 0.35)'
             }}
           >
             <LayoutDashboard size={14} />
@@ -499,9 +440,9 @@ export default function Navbar({
             className="mobile-burger-btn"
             style={{
               display: 'none',
-              width: '36px',
-              height: '36px',
-              borderRadius: '10px',
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
               background: 'var(--card2)',
               border: '1px solid var(--border)',
               color: 'var(--txt)',
@@ -694,12 +635,17 @@ export default function Navbar({
             display: flex !important;
           }
         }
+        @media (max-width: 1260px) and (min-width: 1024px) {
+          .cta-text-collapse {
+            display: none !important;
+          }
+        }
         @media (max-width: 1023px) {
           .mobile-burger-btn {
             display: flex !important;
           }
           .cta-text-desk {
-            display: none;
+            display: none !important;
           }
         }
       `}</style>
