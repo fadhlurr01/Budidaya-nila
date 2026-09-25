@@ -3,6 +3,7 @@ import HeroSection from '../components/HeroSection';
 import FeaturesSection from '../components/FeaturesSection';
 import TestimonialsSection from '../components/TestimonialsSection';
 import AccordionGallery from '../components/AccordionGallery';
+import Stack from '../components/Stack';
 import { 
   Sparkles, 
   ArrowRight, 
@@ -99,6 +100,7 @@ export default function HomePage({
       timeline: 'Hari ke-1 s/d Hari ke-7',
       tag: 'Biosecurity & Media',
       accent: '#2196f3',
+      img: '/assets/products/kolam-d4.jpg',
       desc: 'Pembersihan kolam terpal bundar D4, sterilisasi air dengan garam krosok, dan inokulasi kultur probiotik Bacillus sp. bersama molase tebu. Aerasi uniring micro-bubble dinyalakan 24 jam nonstop hingga air matang berwarna cokelat kehijauan dan beraroma segar fermentasi.',
       points: [
         'Dosis garam krosok 1–2 kg/m³ untuk menstabilkan osmoregulasi air',
@@ -119,6 +121,7 @@ export default function HomePage({
       timeline: 'Hari ke-8',
       tag: 'Penebaran Bibit',
       accent: '#0284c7',
+      img: '/assets/products/benih-nila.jpg',
       desc: 'Benih Nila Hitam & Merah strain unggul (ukuran 5–7 cm) diaklimatisasi suhu dan pH secara bertahap selama 30 menit sebelum dilepas ke dalam kolam terpal berflok aktif. Hal ini mencegah shock suhu serta memastikan angka kelangsungan hidup (SR) melampaui 92%.',
       points: [
         'Kepadatan tebar optimal 100–120 ekor/m³ (3.500–4.000 ekor per kolam D4)',
@@ -139,6 +142,7 @@ export default function HomePage({
       timeline: 'Hari ke-9 s/d Hari ke-80',
       tag: 'Pertumbuhan Cepat',
       accent: '#10b981',
+      img: '/assets/products/pakan-nila.jpg',
       desc: 'Pakan pelet apung berprotein 32% diberikan teratur dengan bantuan Auto-Feeder cerdas. Ditambah suplemen daun Azolla segar dan daun pepaya setiap akhir pekan untuk melancarkan saluran cerna ikan serta menjaga rasio FCR ultra hemat di 1.18 - 1.22.',
       points: [
         'Jadwal pakan 3x sehari (07:30, 12:30, 17:00) dengan feeding rate 2.5%–3.5%',
@@ -159,6 +163,7 @@ export default function HomePage({
       timeline: 'Realtime 24 Jam Nonstop',
       tag: 'Pengawasan IoT',
       accent: '#f59e0b',
+      img: '/assets/products/sensor-iot.jpg',
       desc: 'Probe sensor industri memantau Dissolved Oxygen (DO), suhu, pH, dan amonia 24/7. Central drain kerucut membuang endapan kotoran padat dalam 30 detik setiap beberapa hari sekali, menjaga kualitas air selalu stabil dan kolam 100% bebas bau lumpur.',
       points: [
         'Alarm & notifikasi WhatsApp otomatis jika DO turun di bawah batas aman 4.5 mg/L',
@@ -179,6 +184,7 @@ export default function HomePage({
       timeline: 'Hari ke-85 s/d Hari ke-90',
       tag: 'Panen & Jual',
       accent: '#8b5cf6',
+      img: '/assets/products/nila-segar.jpg',
       desc: 'Ikan nila mencapai bobot konsumsi idaman 500–800 gram per ekor. Dipuasakan 24 jam sebelum pemanenan pagi hari untuk menjamin kebersihan isi perut. Ikan dikirim hidup dalam tangki aerasi oksigen atau dalam fillet vakum segar siap masak.',
       points: [
         '100% daging manis gurih tanpa aroma amis lumpur / tanah',
@@ -642,253 +648,45 @@ export default function HomePage({
         </div>
       </section>
 
-      {/* 5. WORKFLOW BUDIDAYA NILA 90 HARI (SEAMLESS & FLUID INTERACTIVE EXPERIENCE) */}
-      {(() => {
-        const curStep = workflowSteps[activeWorkflowStage] || workflowSteps[0];
-        const stepAccent = curStep.accent || '#2196f3';
-        return (
-          <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '50px 20px 60px', width: '100%', boxSizing: 'border-box' }}>
-            <div style={{ textAlign: 'center', maxWidth: '760px', margin: '0 auto 36px' }}>
-              <span style={{ fontSize: '12.5px', fontWeight: 800, color: 'var(--b)', letterSpacing: '2px', textTransform: 'uppercase', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                <Waves size={15} />
-                Workflow Siklus Budidaya Nila 90 Hari
-              </span>
-              <h2 style={{ fontSize: 'clamp(26px, 3.5vw, 36px)', fontWeight: 800, color: 'var(--txt)', marginTop: '8px' }}>
-                Standar Operasional Prosedur (SOP) Bioflok Modern
-              </h2>
-              <p style={{ color: 'var(--mut)', fontSize: '15px', marginTop: '10px', lineHeight: 1.6 }}>
-                Pilih tahapan di bawah untuk mengeksplorasi alur teknis, parameter kontrol kualitas air, dan rahasia panen raya tanpa aroma lumpur.
-              </p>
-            </div>
+      {/* 5. WORKFLOW BUDIDAYA NILA 90 HARI (REACT BITS STACK COMPONENT) */}
+      <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '50px 20px 70px', width: '100%', boxSizing: 'border-box' }}>
+        <div style={{ textAlign: 'center', maxWidth: '760px', margin: '0 auto 40px' }}>
+          <span style={{ fontSize: '12.5px', fontWeight: 800, color: 'var(--b)', letterSpacing: '2px', textTransform: 'uppercase', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Waves size={15} />
+            Roadmap & Workflow Terpadu
+          </span>
+          <h2 style={{ fontSize: 'clamp(26px, 3.5vw, 36px)', fontWeight: 800, color: 'var(--txt)', marginTop: '8px' }}>
+            Workflow Siklus Budidaya Nila 90 Hari
+          </h2>
+          <p style={{ color: 'var(--mut)', fontSize: '15px', marginTop: '10px', lineHeight: 1.6 }}>
+            Alur kerja terstandarisasi bioflok modern NilaFarm. Tarik ke samping atau klik kartu tumpukan (<i>React Bits Stack</i>) untuk menjelajahi tahapan dari bibit hingga panen raya.
+          </p>
+        </div>
 
-            {/* Fluid Stage Stepper / Progress Bar (Zero Outer Card / Zero Stiff Boxes) */}
-            <div 
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
-                gap: '10px',
-                maxWidth: '1100px',
-                margin: '0 auto 36px',
-                padding: '0 4px'
-              }}
-            >
-              {workflowSteps.map((st, idx) => {
-                const isActive = activeWorkflowStage === idx;
-                const isPast = activeWorkflowStage > idx;
-                const itemAccent = st.accent || '#2196f3';
-                return (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setActiveWorkflowStage(idx)}
-                    style={{
-                      background: isActive 
-                        ? `linear-gradient(135deg, ${itemAccent}1f, ${itemAccent}0a)` 
-                        : 'transparent',
-                      border: 'none',
-                      borderBottom: isActive ? `3.5px solid ${itemAccent}` : '2px solid var(--border)',
-                      padding: '12px 14px',
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      transition: 'all 0.25s ease',
-                      borderRadius: '16px 16px 0 0',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '5px',
-                      outline: 'none'
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span 
-                        style={{ 
-                          fontSize: '11px', 
-                          fontWeight: 800, 
-                          color: isActive ? itemAccent : isPast ? 'var(--b)' : 'var(--mut)',
-                          letterSpacing: '0.8px'
-                        }}
-                      >
-                        TAHAP {st.step}
-                      </span>
-                      <span 
-                        style={{
-                          width: '8px',
-                          height: '8px',
-                          borderRadius: '50%',
-                          background: isActive ? itemAccent : isPast ? 'var(--b)' : 'var(--border)',
-                          boxShadow: isActive ? `0 0 10px ${itemAccent}` : 'none',
-                          transition: 'all 0.25s ease'
-                        }}
-                      />
-                    </div>
-                    <span 
-                      style={{ 
-                        fontSize: '13.5px', 
-                        fontWeight: isActive ? 800 : 600, 
-                        color: isActive ? 'var(--txt)' : 'var(--mut)',
-                        lineHeight: 1.3
-                      }}
-                    >
-                      {st.shortTitle}
-                    </span>
-                    <span style={{ fontSize: '11.5px', color: isActive ? itemAccent : 'var(--mut)', opacity: 0.9 }}>
-                      {st.timeline}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Seamless Interactive Stage Content Area */}
-            <div 
-              style={{
-                maxWidth: '1100px',
-                margin: '0 auto',
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
-                gap: '36px',
-                alignItems: 'start'
-              }}
-            >
-              {/* Left Column: Stage Details & Action Checklist */}
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px', flexWrap: 'wrap' }}>
-                  <span 
-                    style={{
-                      background: stepAccent,
-                      color: '#ffffff',
-                      fontSize: '12px',
-                      fontWeight: 800,
-                      padding: '4px 14px',
-                      borderRadius: '9999px',
-                      letterSpacing: '0.8px'
-                    }}
-                  >
-                    TAHAP {curStep.step} DARI 05
-                  </span>
-                  <span style={{ fontSize: '13px', fontWeight: 700, color: stepAccent }}>
-                    {curStep.tag}
-                  </span>
-                  <span style={{ fontSize: '12px', color: 'var(--mut)', fontWeight: 600, marginLeft: 'auto' }}>
-                    ⏱️ {curStep.timeline}
-                  </span>
-                </div>
-
-                <h3 style={{ fontSize: 'clamp(22px, 2.8vw, 30px)', fontWeight: 800, color: 'var(--txt)', marginBottom: '12px', lineHeight: 1.3 }}>
-                  {curStep.title}
-                </h3>
-
-                <p style={{ fontSize: '14.5px', color: 'var(--mut)', lineHeight: 1.7, marginBottom: '22px' }}>
-                  {curStep.desc}
-                </p>
-
-                {/* Key Checklist with Accent Border Accent */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '26px' }}>
-                  {curStep.points.map((pt, pIdx) => (
-                    <div 
-                      key={pIdx}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: '12px',
-                        padding: '12px 16px',
-                        borderRadius: '16px',
-                        background: 'var(--card2)',
-                        borderLeft: `4px solid ${stepAccent}`,
-                        transition: 'transform 0.2s ease'
-                      }}
-                    >
-                      <CheckCircle2 size={18} color={stepAccent} style={{ flexShrink: 0, marginTop: '2px' }} />
-                      <span style={{ fontSize: '13px', color: 'var(--txt)', lineHeight: 1.5, fontWeight: 500 }}>
-                        {pt}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Stepper Navigation Buttons (Prev / Next) */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                  <button
-                    type="button"
-                    disabled={activeWorkflowStage === 0}
-                    onClick={() => setActiveWorkflowStage(prev => Math.max(0, prev - 1))}
-                    className="btn-ghost"
-                    style={{
-                      padding: '10px 20px',
-                      fontSize: '13px',
-                      borderRadius: '9999px',
-                      opacity: activeWorkflowStage === 0 ? 0.35 : 1,
-                      cursor: activeWorkflowStage === 0 ? 'not-allowed' : 'pointer'
-                    }}
-                  >
-                    <span>← Tahap Sebelumnya</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    disabled={activeWorkflowStage === workflowSteps.length - 1}
-                    onClick={() => setActiveWorkflowStage(prev => Math.min(workflowSteps.length - 1, prev + 1))}
-                    className="btn-primary"
-                    style={{
-                      padding: '10px 22px',
-                      fontSize: '13px',
-                      borderRadius: '9999px',
-                      background: stepAccent,
-                      opacity: activeWorkflowStage === workflowSteps.length - 1 ? 0.35 : 1,
-                      cursor: activeWorkflowStage === workflowSteps.length - 1 ? 'not-allowed' : 'pointer'
-                    }}
-                  >
-                    <span>Tahap Berikutnya →</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Right Column: Key Operational Metrics & Pro-Tips */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                {/* Metric Highlights */}
+        <div 
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '40px',
+            flexWrap: 'wrap'
+          }}
+        >
+          {/* Left: Summary Steps & Guidance */}
+          <div style={{ flex: '1 1 360px', maxWidth: '560px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {workflowSteps.map((st, sIdx) => (
                 <div 
+                  key={sIdx}
                   style={{
-                    background: 'linear-gradient(135deg, rgba(33, 150, 243, 0.08) 0%, rgba(13, 71, 161, 0.04) 100%)',
-                    padding: '24px',
-                    borderRadius: '24px',
-                    border: '1px solid var(--border)'
-                  }}
-                >
-                  <span style={{ fontSize: '12px', fontWeight: 800, color: stepAccent, letterSpacing: '1px', textTransform: 'uppercase', display: 'block', marginBottom: '14px' }}>
-                    📊 Target Parameter & Standar Kunci
-                  </span>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px' }}>
-                    {curStep.metrics.map((m, mIdx) => (
-                      <div 
-                        key={mIdx}
-                        style={{
-                          background: 'var(--card)',
-                          padding: '14px 16px',
-                          borderRadius: '16px',
-                          border: '1px solid var(--border)'
-                        }}
-                      >
-                        <small style={{ color: 'var(--mut)', fontSize: '11px', display: 'block', marginBottom: '4px' }}>
-                          {m.label}
-                        </small>
-                        <b style={{ fontSize: '16px', color: stepAccent, fontWeight: 800 }}>
-                          {m.val}
-                        </b>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Expert Pro-Tip Callout */}
-                <div 
-                  style={{
-                    padding: '20px',
-                    borderRadius: '20px',
-                    background: 'var(--card2)',
-                    border: '1px solid var(--border)',
                     display: 'flex',
+                    alignItems: 'center',
                     gap: '14px',
-                    alignItems: 'flex-start'
+                    padding: '12px 16px',
+                    borderRadius: '18px',
+                    background: 'var(--card2)',
+                    border: '1.5px solid var(--border)',
+                    transition: 'all 0.25s ease'
                   }}
                 >
                   <div 
@@ -896,72 +694,223 @@ export default function HomePage({
                       width: '38px',
                       height: '38px',
                       borderRadius: '50%',
-                      background: `${stepAccent}18`,
-                      color: stepAccent,
+                      background: `${st.accent}1f`,
+                      color: st.accent,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
+                      fontWeight: 800,
+                      fontSize: '13px',
                       flexShrink: 0
                     }}
                   >
-                    <Sparkles size={18} />
+                    {st.step}
                   </div>
-                  <div>
-                    <b style={{ fontSize: '13.5px', color: 'var(--txt)', display: 'block', marginBottom: '4px' }}>
-                      Tips Ahli Budidaya Sumedang:
-                    </b>
-                    <p style={{ fontSize: '12.5px', color: 'var(--mut)', margin: 0, lineHeight: 1.55 }}>
-                      {curStep.expertTip}
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                      <b style={{ fontSize: '13.5px', color: 'var(--txt)' }}>{st.title}</b>
+                      <span style={{ fontSize: '11px', color: st.accent, fontWeight: 700 }}>{st.timeline}</span>
+                    </div>
+                    <p style={{ fontSize: '12px', color: 'var(--mut)', margin: '3px 0 0', lineHeight: 1.4 }}>
+                      {st.points[0]}
                     </p>
                   </div>
                 </div>
-
-                {/* Direct Action Links */}
-                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                  <button
-                    type="button"
-                    onClick={() => onNavigate('budidaya')}
-                    className="btn-ghost"
-                    style={{
-                      flex: 1,
-                      padding: '12px 18px',
-                      fontSize: '13px',
-                      borderRadius: '9999px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px'
-                    }}
-                  >
-                    <BookOpen size={15} />
-                    <span>Panduan SOP Lengkap</span>
-                  </button>
-
-                  <a
-                    href={`https://wa.me/6281382570406?text=${encodeURIComponent(`Halo Hamdan Russ, saya ingin konsultasi mengenai Tahap ${curStep.step}: ${curStep.title} pada budidaya nila bioflok.`)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="btn-primary"
-                    style={{
-                      flex: 1,
-                      padding: '12px 18px',
-                      fontSize: '13px',
-                      borderRadius: '9999px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px'
-                    }}
-                  >
-                    <MessageCircle size={15} />
-                    <span>Konsultasi Tahap Ini</span>
-                  </a>
-                </div>
-              </div>
+              ))}
             </div>
-          </section>
-        );
-      })()}
+
+            <div style={{ display: 'flex', gap: '12px', marginTop: '24px', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                onClick={() => onNavigate('budidaya')}
+                className="btn-primary"
+                style={{ padding: '12px 24px', fontSize: '13.5px', borderRadius: '9999px' }}
+              >
+                <BookOpen size={15} />
+                <span>Buka Panduan SOP Lengkap</span>
+              </button>
+
+              <a
+                href="https://wa.me/6281382570406?text=Halo%20Hamdan%20Russ,%20saya%20ingin%20konsultasi%20mengenai%20workflow%20budidaya%20nila%20bioflok."
+                target="_blank"
+                rel="noreferrer"
+                className="btn-ghost"
+                style={{ padding: '12px 22px', fontSize: '13.5px', borderRadius: '9999px' }}
+              >
+                <MessageCircle size={15} />
+                <span>Konsultasi Teknis WA</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Right: React Bits Stack Component Deck */}
+          <div style={{ flex: '1 1 360px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <div 
+              style={{ 
+                width: 'min(380px, 88vw)', 
+                height: '490px', 
+                position: 'relative'
+              }}
+            >
+              <Stack
+                randomRotation={true}
+                sensitivity={160}
+                sendToBackOnClick={true}
+                autoplay={false}
+                cards={workflowSteps.map((st, i) => (
+                  <div 
+                    key={i} 
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: '24px',
+                      overflow: 'hidden',
+                      position: 'relative',
+                      background: 'var(--card2)',
+                      border: `2px solid ${st.accent}55`,
+                      boxShadow: `0 20px 45px ${st.accent}25`,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      userSelect: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  >
+                    {/* Image Header with Badge */}
+                    <div style={{ position: 'relative', height: '210px', width: '100%', flexShrink: 0 }}>
+                      <img 
+                        src={st.img} 
+                        alt={st.title} 
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} 
+                      />
+                      <div 
+                        style={{ 
+                          position: 'absolute', 
+                          inset: 0, 
+                          background: 'linear-gradient(to top, rgba(7, 21, 43, 0.88) 0%, rgba(7, 21, 43, 0.25) 60%, transparent 100%)' 
+                        }} 
+                      />
+                      <div 
+                        style={{ 
+                          position: 'absolute', 
+                          top: '12px', 
+                          left: '12px', 
+                          right: '12px', 
+                          display: 'flex', 
+                          justifyContent: 'space-between', 
+                          alignItems: 'center' 
+                        }}
+                      >
+                        <span 
+                          style={{ 
+                            background: st.accent, 
+                            color: '#ffffff', 
+                            padding: '4px 14px', 
+                            borderRadius: '9999px', 
+                            fontSize: '11px', 
+                            fontWeight: 800, 
+                            letterSpacing: '0.8px',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+                          }}
+                        >
+                          TAHAP {st.step}
+                        </span>
+                        <span 
+                          style={{ 
+                            background: 'rgba(0,0,0,0.65)', 
+                            backdropFilter: 'blur(6px)', 
+                            color: '#ffffff', 
+                            padding: '3px 12px', 
+                            borderRadius: '9999px', 
+                            fontSize: '10.5px', 
+                            fontWeight: 600 
+                          }}
+                        >
+                          ⏱️ {st.timeline}
+                        </span>
+                      </div>
+                      <div style={{ position: 'absolute', bottom: '12px', left: '16px', right: '16px' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 700, color: st.accent, textTransform: 'uppercase', letterSpacing: '0.8px', display: 'block' }}>
+                          {st.tag}
+                        </span>
+                        <h3 style={{ fontSize: '16.5px', fontWeight: 800, color: '#ffffff', margin: '2px 0 0', lineHeight: 1.25 }}>
+                          {st.title}
+                        </h3>
+                      </div>
+                    </div>
+
+                    {/* Content Body */}
+                    <div style={{ padding: '16px 18px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1, boxSizing: 'border-box' }}>
+                      <p style={{ fontSize: '12.5px', color: 'var(--mut)', lineHeight: 1.5, margin: 0 }}>
+                        {st.desc}
+                      </p>
+
+                      {/* Target Metric Pills */}
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px', margin: '10px 0' }}>
+                        {st.metrics.map((m, mIdx) => (
+                          <div 
+                            key={mIdx}
+                            style={{
+                              background: 'var(--card)',
+                              padding: '7px 8px',
+                              borderRadius: '10px',
+                              border: '1px solid var(--border)',
+                              textAlign: 'center'
+                            }}
+                          >
+                            <small style={{ color: 'var(--mut)', fontSize: '9.5px', display: 'block' }}>
+                              {m.label}
+                            </small>
+                            <b style={{ fontSize: '11.5px', color: st.accent, fontWeight: 800, marginTop: '2px', display: 'block' }}>
+                              {m.val}
+                            </b>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--border)', paddingTop: '10px' }}>
+                        <span style={{ fontSize: '11px', color: 'var(--mut)', fontWeight: 600 }}>
+                          👆 Geser kartu / klik untuk tahap berikutnya
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onNavigate('budidaya');
+                          }}
+                          className="btn-ghost"
+                          style={{ padding: '5px 12px', fontSize: '11.5px', borderRadius: '9999px', color: st.accent, borderColor: `${st.accent}55` }}
+                        >
+                          <span>SOP Detail</span>
+                          <ArrowRight size={11} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              />
+            </div>
+
+            <div 
+              style={{ 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                gap: '8px', 
+                marginTop: '22px', 
+                padding: '8px 18px', 
+                borderRadius: '9999px', 
+                background: 'var(--card)', 
+                border: '1px solid var(--border)', 
+                fontSize: '12px', 
+                color: 'var(--mut)',
+                boxShadow: 'var(--shadow-sm)'
+              }}
+            >
+              <Sparkles size={14} color="var(--b)" />
+              <span>Tarik kartu ke kiri/kanan atau klik untuk siklus berikutnya</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* 6. VISUAL BUDIDAYA PIPELINE & CALCULATOR BANNER (Replaces Heavy Boxy Card) */}
       <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '20px 20px 60px', width: '100%', boxSizing: 'border-box' }}>
