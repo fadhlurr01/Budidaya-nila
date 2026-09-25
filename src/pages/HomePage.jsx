@@ -3,6 +3,7 @@ import HeroSection from '../components/HeroSection';
 import FeaturesSection from '../components/FeaturesSection';
 import TestimonialsSection from '../components/TestimonialsSection';
 import AccordionGallery from '../components/AccordionGallery';
+import ScrollStack, { ScrollStackItem } from '../components/ScrollStack';
 import { 
   Sparkles, 
   ArrowRight, 
@@ -25,7 +26,8 @@ import {
   Wind,
   Activity,
   Layers,
-  Check
+  Check,
+  Zap
 } from 'lucide-react';
 
 export default function HomePage({ 
@@ -88,6 +90,74 @@ export default function HomePage({
   const [selectedGalleryProduct, setSelectedGalleryProduct] = useState(galleryItems[0].product);
 
   const formatRupiah = (val) => 'Rp' + Number(val || 0).toLocaleString('id-ID');
+
+  const workflowSteps = [
+    {
+      step: '01',
+      title: 'Persiapan Kolam & Fermentasi Kultur Flok',
+      timeline: 'Hari ke-1 s/d Hari ke-7',
+      tag: 'Biosecurity & Media',
+      accent: '#2196f3',
+      desc: 'Pembersihan kolam terpal bundar D4, sterilisasi air dengan garam krosok, dan inokulasi kultur probiotik Bacillus sp. bersama molase tebu. Aerasi uniring micro-bubble dinyalakan 24 jam nonstop hingga air matang berwarna cokelat kehijauan dan beraroma segar fermentasi.',
+      points: [
+        'Dosis garam krosok 1–2 kg/m³ untuk menstabilkan osmoregulasi air',
+        'Aerasi continuous micro-bubble dengan Dissolved Oxygen minimum 5.5 mg/L',
+        'Fermentasi kultur probiotik selama 7 hari hingga mikroba heterotrof siap menyerap amonia'
+      ]
+    },
+    {
+      step: '02',
+      title: 'Aklimatisasi & Penebaran Benih Unggul',
+      timeline: 'Hari ke-8',
+      tag: 'Penebaran Bibit',
+      accent: '#0284c7',
+      desc: 'Benih Nila Hitam & Merah strain unggul (ukuran 5–7 cm) diaklimatisasi suhu dan pH secara bertahap selama 30 menit sebelum dilepas ke dalam kolam terpal berflok aktif. Hal ini mencegah shock suhu serta memastikan angka kelangsungan hidup (SR) melampaui 92%.',
+      points: [
+        'Kepadatan tebar optimal 100–120 ekor/m³ (3.500–4.000 ekor per kolam D4)',
+        'Aklimatisasi kantong benih di atas permukaan air selama 25–30 menit',
+        'Pemberian vitamin C & asam amino pada air untuk mempercepat adaptasi benih'
+      ]
+    },
+    {
+      step: '03',
+      title: 'Manajemen Pakan FCR 1.2 & Suplemen Daun',
+      timeline: 'Hari ke-9 s/d Hari ke-80',
+      tag: 'Pertumbuhan Cepat',
+      accent: '#10b981',
+      desc: 'Pakan pelet apung berprotein 32% diberikan teratur dengan bantuan Auto-Feeder cerdas. Ditambah suplemen daun Azolla segar dan daun pepaya setiap akhir pekan untuk melancarkan saluran cerna ikan serta menjaga rasio FCR ultra hemat di 1.18 - 1.22.',
+      points: [
+        'Jadwal pakan 3x sehari (07:30, 12:30, 17:00) dengan feeding rate 2.5%–3.5%',
+        'Gumpalan flok mikroba dikonsumsi ikan sebagai sumber protein alami gratis',
+        'Sampling bobot setiap 14 hari untuk kalibrasi porsi pelet dan evaluasi biomassa'
+      ]
+    },
+    {
+      step: '04',
+      title: 'Monitoring Kualitas Air & Telemetri IoT 24 Jam',
+      timeline: 'Realtime 24 Jam Nonstop',
+      tag: 'Pengawasan IoT',
+      accent: '#f59e0b',
+      desc: 'Probe sensor industri memantau Dissolved Oxygen (DO), suhu, pH, dan amonia 24/7. Central drain kerucut membuang endapan kotoran padat dalam 30 detik setiap beberapa hari sekali, menjaga kualitas air selalu stabil dan kolam 100% bebas bau lumpur.',
+      points: [
+        'Alarm & notifikasi WhatsApp otomatis jika DO turun di bawah batas aman 4.5 mg/L',
+        'Flushing endapan amonia sentral (central drain) selama 30 detik tiap 5 hari',
+        'Kontrol kepadatan flok dengan kerucut Imhoff pada rentang ideal 25–45 ml/L'
+      ]
+    },
+    {
+      step: '05',
+      title: 'Panen Raya Selektif & Distribusi Segar',
+      timeline: 'Hari ke-85 s/d Hari ke-90',
+      tag: 'Panen & Jual',
+      accent: '#8b5cf6',
+      desc: 'Ikan nila mencapai bobot konsumsi idaman 500–800 gram per ekor. Dipuasakan 24 jam sebelum pemanenan pagi hari untuk menjamin kebersihan isi perut. Ikan dikirim hidup dalam tangki aerasi oksigen atau dalam fillet vakum segar siap masak.',
+      points: [
+        '100% daging manis gurih tanpa aroma amis lumpur / tanah',
+        'Layanan bersihkan sisik, insang, dan jeroan gratis tanpa biaya tambahan',
+        'Pengantaran same-day ke resto, katering, dan konsumen rumah tangga'
+      ]
+    }
+  ];
 
   const faqs = [
     {
@@ -537,7 +607,149 @@ export default function HomePage({
         </div>
       </section>
 
-      {/* 5. VISUAL BUDIDAYA PIPELINE & CALCULATOR BANNER (Replaces Heavy Boxy Card) */}
+      {/* 5. WORKFLOW BUDIDAYA NILA 90 HARI (REACT BITS SCROLLSTACK) */}
+      <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '40px 20px 50px', width: '100%', boxSizing: 'border-box' }}>
+        <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 32px' }}>
+          <span style={{ fontSize: '12.5px', fontWeight: 800, color: 'var(--b)', letterSpacing: '2px', textTransform: 'uppercase', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Waves size={15} />
+            Roadmap & Workflow Terpadu
+          </span>
+          <h2 style={{ fontSize: 'clamp(26px, 3.5vw, 36px)', fontWeight: 800, color: 'var(--txt)', marginTop: '8px' }}>
+            Workflow Siklus Budidaya Nila 90 Hari
+          </h2>
+          <p style={{ color: 'var(--mut)', fontSize: '15px', marginTop: '10px', lineHeight: 1.6 }}>
+            Alur kerja terstandarisasi budidaya nila sistem bioflok NilaFarm dari hari ke-1 hingga panen raya. Gulir wadah kartu di bawah untuk merasakan interaksi tumpukan kartu (<i>ScrollStack</i>).
+          </p>
+        </div>
+
+        {/* ScrollStack Interactive Deck */}
+        <div 
+          style={{
+            height: '620px',
+            borderRadius: '32px',
+            border: '1.5px solid var(--border)',
+            background: 'var(--card)',
+            overflow: 'hidden',
+            boxShadow: '0 20px 50px rgba(13, 71, 161, 0.08)'
+          }}
+        >
+          <ScrollStack
+            itemDistance={75}
+            itemScale={0.035}
+            itemStackDistance={30}
+            stackPosition="12%"
+            scaleEndPosition="6%"
+            baseScale={0.88}
+            blurAmount={1.5}
+            useWindowScroll={false}
+          >
+            {workflowSteps.map((st, sIdx) => {
+              const accentColor = st.accent || '#2196f3';
+              return (
+                <ScrollStackItem 
+                  key={sIdx}
+                  style={{
+                    background: 'var(--card2)',
+                    border: `1.5px solid ${accentColor}66`,
+                    boxShadow: `0 14px 40px ${accentColor}18`,
+                    position: 'relative',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    minHeight: '20rem'
+                  }}
+                >
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span 
+                          style={{
+                            background: accentColor,
+                            color: '#ffffff',
+                            fontSize: '12px',
+                            fontWeight: 800,
+                            padding: '4px 14px',
+                            borderRadius: '9999px',
+                            letterSpacing: '0.8px'
+                          }}
+                        >
+                          TAHAP {st.step}
+                        </span>
+                        <span style={{ fontSize: '13.5px', color: accentColor, fontWeight: 700 }}>
+                          {st.tag}
+                        </span>
+                      </div>
+                      <span style={{ fontSize: '12px', color: 'var(--mut)', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        ⏱️ {st.timeline}
+                      </span>
+                    </div>
+
+                    <h3 style={{ fontSize: 'clamp(18px, 2.2vw, 24px)', fontWeight: 800, color: 'var(--txt)', marginBottom: '10px', lineHeight: 1.3 }}>
+                      {st.title}
+                    </h3>
+
+                    <p style={{ fontSize: '14px', color: 'var(--mut)', lineHeight: 1.6, marginBottom: '18px' }}>
+                      {st.desc}
+                    </p>
+
+                    <div 
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))',
+                        gap: '10px',
+                        marginBottom: '16px'
+                      }}
+                    >
+                      {st.points.map((pt, pIdx) => (
+                        <div 
+                          key={pIdx}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'flex-start',
+                            gap: '8px',
+                            background: 'var(--card)',
+                            padding: '9px 13px',
+                            borderRadius: '12px',
+                            border: '1px solid var(--border)'
+                          }}
+                        >
+                          <CheckCircle2 size={16} color={accentColor} style={{ flexShrink: 0, marginTop: '2px' }} />
+                          <span style={{ fontSize: '12.5px', color: 'var(--txt)', lineHeight: 1.45, fontWeight: 500 }}>
+                            {pt}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', borderTop: '1px solid var(--border)', paddingTop: '12px', marginTop: 'auto' }}>
+                    <span style={{ fontSize: '12px', color: 'var(--mut)', fontWeight: 600 }}>
+                      SOP Teruji NilaFarm Sumedang
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => onNavigate('budidaya')}
+                      className="btn-ghost"
+                      style={{
+                        padding: '7px 18px',
+                        fontSize: '12.5px',
+                        borderRadius: '9999px',
+                        color: accentColor,
+                        borderColor: `${accentColor}55`
+                      }}
+                    >
+                      <span>Pelajari SOP Detail</span>
+                      <ArrowRight size={14} />
+                    </button>
+                  </div>
+                </ScrollStackItem>
+              );
+            })}
+          </ScrollStack>
+        </div>
+      </section>
+
+      {/* 6. VISUAL BUDIDAYA PIPELINE & CALCULATOR BANNER (Replaces Heavy Boxy Card) */}
       <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '20px 20px 60px', width: '100%', boxSizing: 'border-box' }}>
         <div 
           style={{
