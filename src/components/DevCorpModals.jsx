@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Code, Terminal, Cpu, CheckCircle2, Download, Shield } from 'lucide-react';
+import { X, Code, Terminal, Cpu, CheckCircle2, Download, Shield, MessageCircle, PhoneCall, ExternalLink, Sparkles, MapPin } from 'lucide-react';
 
 export default function DevCorpModals({ modalType, onClose, onShowToast }) {
   if (!modalType) return null;
@@ -165,6 +165,88 @@ export default function DevCorpModals({ modalType, onClose, onShowToast }) {
             <p style={{ fontSize: '13px', color: 'var(--mut)', lineHeight: 1.65 }}>
               Pemesanan ikan nila konsumsi segar dilakukan dengan sistem panen pagi same-day. Garansi ikan hidup 3 hari berlaku untuk benih unggul ukuran 5-8 cm dengan syarat pembudidaya menerapkan SOP aklimatisasi suhu yang telah kami sediakan.
             </p>
+          </div>
+        );
+
+      case 'konsultasi':
+        return (
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(33, 150, 243, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <MessageCircle size={18} color="var(--b)" />
+              </div>
+              <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--txt)', margin: 0 }}>
+                Konsultasi NilaFarm Sumedang
+              </h3>
+            </div>
+            <p style={{ fontSize: '13px', color: 'var(--mut)', marginBottom: '18px', lineHeight: 1.55 }}>
+              Diskusikan kebutuhan budidaya bioflok, paket kolam, bibit unggul, maupun pemesanan ikan segar langsung dengan tim kami:
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px' }}>
+              {/* Option 1: Owner */}
+              <div style={{ padding: '14px', background: 'var(--card2)', borderRadius: '14px', border: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                  <div>
+                    <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--b)', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+                      Teknis & Budidaya Bioflok IoT
+                    </span>
+                    <b style={{ fontSize: '14.5px', color: 'var(--txt)', display: 'block', marginTop: '2px' }}>
+                      Hamdan Russ (Owner & Pengelola Farm)
+                    </b>
+                    <small style={{ color: 'var(--mut)', fontSize: '12px' }}>
+                      Konsultasi SOP probiotik, pembuatan kolam D4, uniring, dan sensor IoT
+                    </small>
+                  </div>
+                </div>
+                <a
+                  href="https://wa.me/6281382570406?text=Halo%20Pak%20Hamdan,%20saya%20ingin%20konsultasi%20mengenai%20budidaya%20nila%20bioflok%20NilaFarm"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-primary"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 16px', fontSize: '12.5px', textDecoration: 'none', borderRadius: '10px', marginTop: '6px' }}
+                >
+                  <MessageCircle size={14} />
+                  <span>Chat WhatsApp Pak Hamdan</span>
+                  <ExternalLink size={12} />
+                </a>
+              </div>
+
+              {/* Option 2: CS */}
+              <div style={{ padding: '14px', background: 'var(--card2)', borderRadius: '14px', border: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                  <div>
+                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#16a34a', textTransform: 'uppercase', letterSpacing: '0.8px' }}>
+                      Pesanan Segar & Pengantaran
+                    </span>
+                    <b style={{ fontSize: '14.5px', color: 'var(--txt)', display: 'block', marginTop: '2px' }}>
+                      Customer Service NilaFarm
+                    </b>
+                    <small style={{ color: 'var(--mut)', fontSize: '12px' }}>
+                      Pemesanan ikan nila hidup/fillet, jadwal panen same-day & kurir logistik
+                    </small>
+                  </div>
+                </div>
+                <a
+                  href="https://wa.me/6282122319510?text=Halo%20Admin%20NilaFarm,%20saya%20ingin%20konsultasi%20pemesanan%20ikan%20nila"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 16px', fontSize: '12.5px', textDecoration: 'none', borderRadius: '10px', marginTop: '6px', background: '#16a34a', color: '#fff', fontWeight: 700 }}
+                >
+                  <PhoneCall size={14} />
+                  <span>Chat WhatsApp CS Pemesanan</span>
+                  <ExternalLink size={12} />
+                </a>
+              </div>
+
+              {/* Option 3: Kunjungan Farm */}
+              <div style={{ padding: '12px 14px', background: 'var(--card)', borderRadius: '12px', border: '1px dashed var(--border)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <MapPin size={18} color="var(--b)" style={{ flexShrink: 0 }} />
+                <div style={{ fontSize: '12px', color: 'var(--txt)', lineHeight: 1.4 }}>
+                  <b>Lokasi Farm:</b> Jl. Raya Sumedang - Cimalaka KM 4, Sumedang, Jawa Barat. Terbuka untuk kunjungan silaturahmi & belajar langsung.
+                </div>
+              </div>
+            </div>
           </div>
         );
 

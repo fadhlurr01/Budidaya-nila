@@ -1281,13 +1281,28 @@ export default function DashboardView({
                             </div>
                           </div>
 
-                          {/* 3. Bukti Pembayaran */}
+                          {/* 3. Bukti Pembayaran / Gateway */}
                           <div style={{ background: 'var(--card2)', padding: '14px', borderRadius: '14px', border: '1px solid var(--border)' }}>
                             <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--mut)', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '8px' }}>
-                              Bukti Pembayaran (Transfer/Struk)
+                              Bukti Pembayaran / Gateway
                             </div>
 
-                            {order.buktiBayar ? (
+                            {order.midtransData ? (
+                              <div style={{ background: 'rgba(34, 197, 94, 0.08)', border: '1.5px solid rgba(34, 197, 94, 0.3)', borderRadius: '12px', padding: '12px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#16a34a', fontWeight: 800, fontSize: '12.5px', marginBottom: '6px' }}>
+                                  <CheckCircle2 size={16} />
+                                  <span>Lunas Otomatis (Midtrans Sandbox)</span>
+                                </div>
+                                <div style={{ fontSize: '11.5px', color: 'var(--txt)', lineHeight: 1.6 }}>
+                                  <div>Tx ID: <code style={{ color: 'var(--b)' }}>{order.midtransData.transactionId}</code></div>
+                                  <div>Metode: <b>{order.midtransData.channelLabel || order.midtransData.paymentType}</b></div>
+                                  <div>Waktu: {order.midtransData.settlementTime}</div>
+                                  <div style={{ fontSize: '10.5px', color: '#16a34a', marginTop: '4px' }}>
+                                    ✓ Webhook status: settlement (HTTP 200 OK)
+                                  </div>
+                                </div>
+                              </div>
+                            ) : order.buktiBayar ? (
                               <div>
                                 <div 
                                   onClick={() => setSelectedProofOrder(order)}

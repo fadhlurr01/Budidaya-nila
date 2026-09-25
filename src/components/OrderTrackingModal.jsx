@@ -324,6 +324,13 @@ export default function OrderTrackingModal({
                         <span>{activeOrder.alamat}</span>
                       </div>
                     </div>
+
+                    {activeOrder.midtransData && (
+                      <div style={{ marginTop: '10px', background: 'rgba(34, 197, 94, 0.08)', border: '1px solid rgba(34, 197, 94, 0.25)', borderRadius: '10px', padding: '8px 12px', fontSize: '11.5px', color: '#16a34a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <CheckCircle2 size={14} />
+                        <span>Pembayaran diverifikasi otomatis via Midtrans Sandbox ({activeOrder.metode}) • Ref: {activeOrder.midtransData.transactionId}</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* VISUAL REAL-TIME TIMELINE TRACKER ("SUDAH DIMANA DAN GIMANA") */}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Fish, ShieldCheck, Heart, Lock, ArrowUp } from 'lucide-react';
+import { Fish, ShieldCheck, Heart, Lock, ArrowUp, LayoutDashboard } from 'lucide-react';
 
 export default function Footer({ 
   onNavigate, 
@@ -55,25 +55,32 @@ export default function Footer({
             Usaha budidaya ikan nila keluarga berbasis sistem bioflok modern di Sumedang. Dari kolam sendiri, dipanen pagi hari, diantar segar same-day.
           </p>
 
-          <button
-            onClick={onOpenDashboard}
-            style={{
-              background: 'none',
-              border: '1px solid var(--border-strong)',
-              color: 'var(--b)',
-              padding: '6px 14px',
-              borderRadius: '10px',
-              fontSize: '12.5px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <Lock size={13} />
-            <span>Masuk Admin Farm</span>
-          </button>
+          <div style={{ marginTop: '16px' }}>
+            <button
+              onClick={onOpenDashboard}
+              style={{
+                background: 'linear-gradient(135deg, rgba(33, 150, 243, 0.15) 0%, rgba(13, 71, 161, 0.15) 100%)',
+                border: '1.5px solid var(--b)',
+                color: 'var(--b)',
+                padding: '9px 18px',
+                borderRadius: '12px',
+                fontSize: '13px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 12px rgba(33, 150, 243, 0.15)',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              <LayoutDashboard size={15} />
+              <span>Buka Panel Farm & Admin</span>
+            </button>
+            <div style={{ fontSize: '11px', color: 'var(--mut)', marginTop: '6px' }}>
+              Monitoring Sensor IoT Realtime & Kelola Pesanan
+            </div>
+          </div>
         </div>
 
         {/* Col 1: Produk */}
@@ -131,6 +138,15 @@ export default function Footer({
             Teknologi IoT & API
           </h4>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13.5px', color: 'var(--mut)' }}>
+            <li>
+              <button 
+                onClick={onOpenDashboard}
+                style={{ background: 'none', border: 'none', color: 'var(--b)', cursor: 'pointer', padding: 0, fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
+                <LayoutDashboard size={13} />
+                <span>Panel Farm (IoT Dashboard)</span>
+              </button>
+            </li>
             <li>
               <button 
                 onClick={() => onOpenDevModal('api')}

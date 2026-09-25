@@ -16,7 +16,8 @@ import {
   Cpu,
   Package,
   User,
-  LogOut
+  LogOut,
+  MessageCircle
 } from 'lucide-react';
 
 export default function Navbar({ 
@@ -468,9 +469,15 @@ export default function Navbar({
             )}
           </button>
 
-          {/* Dashboard Enter CTA */}
+          {/* Konsultasi Kami CTA Button */}
           <button
-            onClick={onOpenDashboard}
+            onClick={() => {
+              if (onOpenCorpModal) {
+                onOpenCorpModal('konsultasi');
+              } else {
+                onNavigate('kontak');
+              }
+            }}
             className="btn-primary"
             style={{ 
               padding: '8px 18px', 
@@ -480,11 +487,12 @@ export default function Navbar({
               alignItems: 'center',
               gap: '6px',
               background: 'var(--grad)',
-              boxShadow: '0 4px 14px rgba(33, 150, 243, 0.35)'
+              boxShadow: '0 4px 14px rgba(33, 150, 243, 0.35)',
+              cursor: 'pointer'
             }}
           >
-            <LayoutDashboard size={14} />
-            <span className="cta-text-desk">{lang === 'en' ? 'IoT Panel' : 'Panel Farm'}</span>
+            <MessageCircle size={14} />
+            <span className="cta-text-desk">{lang === 'en' ? 'Consult Us' : 'Konsultasi kami'}</span>
             <ArrowRight size={12} />
           </button>
 
@@ -689,6 +697,35 @@ export default function Navbar({
               <span>Masuk / Buat Akun Pembeli</span>
             </button>
           )}
+
+          {/* Konsultasi Kami Mobile Button */}
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false);
+              if (onOpenCorpModal) {
+                onOpenCorpModal('konsultasi');
+              } else {
+                onNavigate('kontak');
+              }
+            }}
+            className="btn-primary"
+            style={{
+              width: '100%',
+              padding: '11px 14px',
+              borderRadius: '12px',
+              fontSize: '13.5px',
+              fontWeight: 700,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              background: 'var(--grad)',
+              marginTop: '4px'
+            }}
+          >
+            <MessageCircle size={16} />
+            <span>{lang === 'en' ? 'Consultation' : 'Konsultasi kami'}</span>
+          </button>
         </div>
       )}
 
