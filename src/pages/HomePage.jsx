@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import HeroSection from '../components/HeroSection';
 import FeaturesSection from '../components/FeaturesSection';
 import TestimonialsSection from '../components/TestimonialsSection';
+import AccordionGallery from '../components/AccordionGallery';
 import { 
   Sparkles, 
   ArrowRight, 
@@ -40,6 +41,51 @@ export default function HomePage({
   const [openFaq, setOpenFaq] = useState(null);
   const [compareMode, setCompareMode] = useState('bioflok'); // 'bioflok' | 'konvensional'
   const [activeBenchmark, setActiveBenchmark] = useState(0);
+
+  const galleryItems = [
+    {
+      id: 'p1',
+      image: '/assets/products/nila-segar.jpg',
+      label: 'Nila Hitam Segar',
+      sublabel: 'Rp38.000 / Kg • Panen Pagi',
+      alt: 'Nila Segar Panen Pagi',
+      product: products.find(p => p.id === 'p1') || products[0]
+    },
+    {
+      id: 'p2',
+      image: '/assets/products/nila-fillet.jpg',
+      label: 'Nila Fillet Bersih Sisik',
+      sublabel: 'Rp45.000 / Pack • Tanpa Duri',
+      alt: 'Nila Fillet Kemasan Vakum',
+      product: products.find(p => p.id === 'p2') || products[1]
+    },
+    {
+      id: 'p3',
+      image: '/assets/products/benih-nila.jpg',
+      label: 'Bibit Benih Nila Unggul',
+      sublabel: 'Rp600 / Ekor • Ukuran 5-7 cm',
+      alt: 'Bibit Benih Nila Bioflok',
+      product: products.find(p => p.id === 'p3') || products[2]
+    },
+    {
+      id: 'p4',
+      image: '/assets/products/kolam-d4.jpg',
+      label: 'Paket Kolam Bundar D4',
+      sublabel: 'Rp4.800.000 / Unit • Rangka Wiremesh M8',
+      alt: 'Kolam Bioflok D4 Galvanis',
+      product: products.find(p => p.id === 'p4') || products[3]
+    },
+    {
+      id: 'p8',
+      image: '/assets/products/pakan-nila.jpg',
+      label: 'Pelet Apung FCR 1.2',
+      sublabel: 'Rp320.000 / Sak • Protein 32%',
+      alt: 'Pakan Pelet Apung Nila',
+      product: products.find(p => p.id === 'p8') || products[4] || products[0]
+    }
+  ];
+
+  const [selectedGalleryProduct, setSelectedGalleryProduct] = useState(galleryItems[0].product);
 
   const formatRupiah = (val) => 'Rp' + Number(val || 0).toLocaleString('id-ID');
 
@@ -311,18 +357,18 @@ export default function HomePage({
       {/* 3. VISUAL AQUACULTURE PIPELINE (Features Section without bland cards) */}
       <FeaturesSection lang={lang} onNavigate={onNavigate} />
 
-      {/* 4. FEATURED PRODUCTS (Cards preserved strictly for media presentation) */}
+      {/* 4. FEATURED PRODUCTS SHOWCASE WITH ACCORDION GALLERY */}
       <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '50px 20px', width: '100%', boxSizing: 'border-box' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '16px', marginBottom: '32px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '16px', marginBottom: '28px' }}>
           <div>
             <span style={{ fontSize: '12.5px', fontWeight: 800, color: 'var(--b)', letterSpacing: '2px', textTransform: 'uppercase' }}>
-              Katalog Pilihan
+              Media Showcase & Katalog
             </span>
             <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 34px)', fontWeight: 800, color: 'var(--txt)', marginTop: '6px' }}>
               Produk Panen & Peralatan Terlaris
             </h2>
             <p style={{ color: 'var(--mut)', fontSize: '14.5px', marginTop: '6px' }}>
-              Dipanen segar setiap pagi dari kolam bioflok Sumedang, siap dikirim ke dapur Anda.
+              Arahkan kursor atau sentuh panel untuk melihat detail media produk segar dan perlengkapan bioflok.
             </p>
           </div>
 
@@ -336,13 +382,102 @@ export default function HomePage({
           </button>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '22px' }}>
+        {/* React Bits AccordionGallery Component */}
+        <div style={{ marginBottom: '24px' }}>
+          <AccordionGallery
+            items={galleryItems}
+            defaultIndex={0}
+            expandRatio={0.46}
+            trigger="hover"
+            height={420}
+            gap={12}
+            radius={22}
+            accentColor="#2196f3"
+            overlayColor="#07152b"
+            textColor="#ffffff"
+            onSelect={(item) => item?.product && setSelectedGalleryProduct(item.product)}
+          />
+        </div>
+
+        {/* Selected Product Interactive Action Bar */}
+        {selectedGalleryProduct && (
+          <div 
+            style={{
+              padding: '16px 24px',
+              borderRadius: '9999px',
+              background: 'var(--card)',
+              border: '1px solid var(--border)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '14px',
+              boxShadow: 'var(--shadow-sm)',
+              marginBottom: '36px'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div 
+                style={{
+                  width: '42px',
+                  height: '42px',
+                  borderRadius: '50%',
+                  overflow: 'hidden',
+                  flexShrink: 0,
+                  border: '2px solid var(--b)'
+                }}
+              >
+                <img 
+                  src={getProductImage(selectedGalleryProduct)} 
+                  alt={selectedGalleryProduct.nama}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+              <div>
+                <b style={{ fontSize: '15.5px', color: 'var(--txt)', display: 'block' }}>
+                  {selectedGalleryProduct.nama}
+                </b>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ fontSize: '15px', fontWeight: 800, color: 'var(--p)' }}>
+                    {formatRupiah(selectedGalleryProduct.harga)}
+                  </span>
+                  <small style={{ color: 'var(--mut)', fontSize: '12px' }}>{selectedGalleryProduct.satuan}</small>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <button
+                type="button"
+                onClick={() => onAddToCart(selectedGalleryProduct)}
+                className="btn-primary"
+                style={{ padding: '10px 22px', fontSize: '13px', borderRadius: '9999px' }}
+              >
+                <ShoppingCart size={15} />
+                <span>+ Tambah ke Keranjang</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => onNavigate('produk')}
+                className="btn-ghost"
+                style={{ padding: '10px 18px', fontSize: '13px', borderRadius: '9999px' }}
+              >
+                <span>Lihat Detail</span>
+                <ArrowRight size={14} />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Quick Grid of Products */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(270px, 100%), 1fr))', gap: '20px' }}>
           {topProducts.map((p) => (
             <div 
               key={p.id}
               className="glass-panel product-card-hover"
               style={{
-                padding: '20px',
+                padding: '18px',
                 borderRadius: '22px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -352,7 +487,7 @@ export default function HomePage({
             >
               <div>
                 {/* Media Image Frame */}
-                <div style={{ height: '180px', borderRadius: '14px', overflow: 'hidden', marginBottom: '14px', position: 'relative' }}>
+                <div style={{ height: '170px', borderRadius: '16px', overflow: 'hidden', marginBottom: '12px', position: 'relative' }}>
                   <img 
                     src={getProductImage(p)} 
                     alt={p.nama}
@@ -365,16 +500,16 @@ export default function HomePage({
                   </div>
                 </div>
 
-                <h3 style={{ fontSize: '16.5px', fontWeight: 700, color: 'var(--txt)', marginBottom: '6px' }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--txt)', marginBottom: '4px' }}>
                   {p.nama}
                 </h3>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '10px' }}>
-                  <span style={{ fontSize: '22px', fontWeight: 800, color: 'var(--p)' }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '20px', fontWeight: 800, color: 'var(--p)' }}>
                     {formatRupiah(p.harga)}
                   </span>
-                  <span style={{ fontSize: '12.5px', color: 'var(--mut)' }}>{p.satuan}</span>
+                  <span style={{ fontSize: '12px', color: 'var(--mut)' }}>{p.satuan}</span>
                 </div>
-                <p style={{ fontSize: '13px', color: 'var(--mut)', lineHeight: 1.55, marginBottom: '16px' }}>
+                <p style={{ fontSize: '12.5px', color: 'var(--mut)', lineHeight: 1.5, marginBottom: '14px' }}>
                   {p.desk}
                 </p>
               </div>
@@ -383,7 +518,7 @@ export default function HomePage({
                 <button
                   onClick={() => onAddToCart(p)}
                   className="btn-ghost"
-                  style={{ flex: 1, padding: '10px', fontSize: '12.5px' }}
+                  style={{ flex: 1, padding: '10px', fontSize: '12.5px', borderRadius: '9999px' }}
                 >
                   <ShoppingCart size={14} />
                   <span>+ Keranjang</span>
@@ -391,7 +526,7 @@ export default function HomePage({
                 <button
                   onClick={() => onNavigate('produk')}
                   className="btn-primary"
-                  style={{ padding: '10px 14px', fontSize: '12.5px' }}
+                  style={{ padding: '10px 14px', fontSize: '12.5px', borderRadius: '9999px' }}
                 >
                   <span>Detail</span>
                   <ArrowRight size={13} />

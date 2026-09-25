@@ -21,6 +21,7 @@ import {
   Wind
 } from 'lucide-react';
 import GallerySection from '../components/GallerySection';
+import ScrollStack, { ScrollStackItem } from '../components/ScrollStack';
 
 export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'id' }) {
   // Interactive Calculator State
@@ -50,6 +51,7 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
       step: '01',
       title: 'Persiapan Kolam & Fermentasi Flok (Hari -7 s/d Hari 0)',
       tag: 'Bakteri & Air',
+      accent: '#2196f3',
       desc: 'Isi kolam terpal D4 dengan air bersih setinggi 90 cm. Masukkan garam krosok 1-2 kg/m³ untuk menekan parasit. Tambahkan probiotik Bacillus subtilis (10 ml/m³) dicampur molase (100 ml/m³) yang telah diaerasi selama 24 jam. Nyalakan aerator uniring 24 jam nonstop hingga flok mulai berkembang (air berwarna kehijauan cokelat muda).',
       points: [
         'Sterilisasi kolam dengan kaporit ringan atau garam krosok',
@@ -62,6 +64,7 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
       step: '02',
       title: 'Aklimatisasi & Penebaran Benih Unggul (Hari ke-1)',
       tag: 'Penebaran Benih',
+      accent: '#0284c7',
       desc: 'Gunakan benih nila hitam / merah berukuran 5–8 cm yang bersertifikasi bebas penyakit. Lakukan aklimatisasi suhu dengan mengapungkan kantong benih di atas permukaan air kolam selama 20–30 menit agar benih tidak mengalami shock temperatur sebelum dilepas perlahan.',
       points: [
         'Padat tebar ideal kolam D4: 3.000 - 4.000 ekor',
@@ -74,6 +77,7 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
       step: '03',
       title: 'Manajemen Pakan Presisi & Target FCR 1.2 (Hari ke-2 s/d Hari ke-70)',
       tag: 'Feeding Schedule',
+      accent: '#10b981',
       desc: 'Pakan pelet apung diberikan 3 kali sehari dengan takaran feeding rate 2.5%–3.5% dari biomassa ikan. Pemberian pakan teratur menggunakan bantuan Auto-Feeder cerdas mencegah pakan berlebih mengendap di dasar kolam.',
       points: [
         'Jadwal makan: 07:30 (30%), 12:30 (30%), dan 17:00 (40%)',
@@ -86,6 +90,7 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
       step: '04',
       title: 'Monitoring Kualitas Air & Telemetri Sensor IoT (Realtime 24 Jam)',
       tag: 'Pengawasan IoT',
+      accent: '#f59e0b',
       desc: 'Sensor probe industri memantau dissolved oxygen (DO), suhu air, pH, dan amonia (NH3) tanpa henti. Jika DO turun di bawah batas kritis 4.5 mg/L pada dini hari, sistem otomatis menyalakan aerator cadangan dan mengirim peringatan ke WhatsApp pengelola.',
       points: [
         'Batas aman DO: 5.0 - 7.5 mg/L untuk pertumbuhan maksimal nila',
@@ -98,6 +103,7 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
       step: '05',
       title: 'Panen Raya Selektif & Distribusi Segar (Hari ke-85 s/d Hari ke-90)',
       tag: 'Panen & Jual',
+      accent: '#8b5cf6',
       desc: 'Ikan nila mencapai bobot 500–800 gram per ekor (ukuran konsumsi idaman resto dan pasar). Panen dilakukan pagi hari dalam kondisi hidup. Air dikuras separuh, ikan dijaring halus, dan disortir. Kami sediakan layanan bersihkan sisik dan isi perut gratis sebelum diantar ke pemesan.',
       points: [
         'Ikan dipuasakan 24 jam sebelum panen agar perut bersih higienis',
@@ -272,153 +278,111 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
         </div>
       </section>
 
-      {/* INTERACTIVE SOP 5 TAHAPAN BUDIDAYA (Replaces 5 Stacked Cards with Interactive Roadmap Console) */}
+      {/* REACT BITS SCROLLSTACK WORKFLOW BUDIDAYA */}
       <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '50px 20px 40px' }}>
         <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 36px' }}>
           <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--b)', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-            Roadmap Operasional Prosedur
+            Workflow & Roadmap Budidaya Nila
           </span>
           <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 34px)', fontWeight: 800, color: 'var(--txt)', marginTop: '8px' }}>
             5 Langkah Budidaya Nila dari Awal Hingga Panen
           </h2>
           <p style={{ color: 'var(--mut)', fontSize: '15px', marginTop: '10px' }}>
-            Klik salah satu tahapan di bawah untuk menginspeksi SOP teknis detail dan kunci keberhasilan operasionalnya.
+            Gulir wadah di bawah untuk melihat efek tumpukan kartu (*Scroll Stack*) pada alur 90 hari siklus bioflok kami.
           </p>
         </div>
 
-        {/* Interactive Step Navigator Buttons */}
+        {/* ScrollStack Container with Lenis smooth scroll and interactive cards */}
         <div 
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            overflowX: 'auto',
-            padding: '6px 4px 16px',
-            scrollbarWidth: 'none',
-            WebkitOverflowScrolling: 'touch',
-            marginBottom: '24px'
+            height: '620px',
+            borderRadius: '32px',
+            border: '1.5px solid var(--border)',
+            background: 'var(--card)',
+            overflow: 'hidden',
+            boxShadow: '0 20px 50px rgba(13, 71, 161, 0.08)'
           }}
         >
-          {sopSteps.map((st, sIdx) => {
-            const isSelected = activeSopStage === sIdx;
-            return (
-              <button
-                key={sIdx}
-                type="button"
-                onClick={() => setActiveSopStage(sIdx)}
-                style={{
-                  flex: '0 0 auto',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  padding: '10px 18px',
-                  borderRadius: '9999px',
-                  border: isSelected ? '1.5px solid var(--b)' : '1px solid var(--border)',
-                  background: isSelected ? 'rgba(33, 150, 243, 0.14)' : 'var(--card2)',
-                  color: isSelected ? 'var(--b)' : 'var(--txt)',
-                  fontWeight: isSelected ? 800 : 600,
-                  fontSize: '13px',
-                  cursor: 'pointer',
-                  transition: 'all 0.25s ease'
-                }}
-              >
-                <div 
+          <ScrollStack
+            itemDistance={70}
+            itemScale={0.035}
+            itemStackDistance={28}
+            stackPosition="12%"
+            scaleEndPosition="6%"
+            baseScale={0.88}
+            blurAmount={1.5}
+            useWindowScroll={false}
+          >
+            {sopSteps.map((st, sIdx) => {
+              const accentColor = st.accent || '#2196f3';
+              return (
+                <ScrollStackItem 
+                  key={sIdx}
                   style={{
-                    width: '26px',
-                    height: '26px',
-                    borderRadius: '50%',
-                    background: isSelected ? 'var(--b)' : 'var(--card)',
-                    color: isSelected ? '#ffffff' : 'var(--mut)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '11px',
-                    fontWeight: 800
+                    background: 'var(--card2)',
+                    border: `1.5px solid ${accentColor}66`,
+                    boxShadow: `0 14px 40px ${accentColor}18`,
+                    position: 'relative'
                   }}
                 >
-                  {st.step}
-                </div>
-                <span>{st.tag}</span>
-              </button>
-            );
-          })}
-        </div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <span 
+                        style={{
+                          background: accentColor,
+                          color: '#ffffff',
+                          fontSize: '12px',
+                          fontWeight: 800,
+                          padding: '4px 14px',
+                          borderRadius: '9999px',
+                          letterSpacing: '0.8px'
+                        }}
+                      >
+                        TAHAP {st.step}
+                      </span>
+                      <span style={{ fontSize: '13.5px', color: accentColor, fontWeight: 700 }}>
+                        {st.tag}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: '12px', color: 'var(--mut)', fontWeight: 600 }}>
+                      SOP Resmi NilaFarm Sumedang
+                    </span>
+                  </div>
 
-        {/* Detailed Interactive Stage View */}
-        <div 
-          style={{
-            borderRadius: '28px',
-            background: 'var(--card)',
-            border: '1.5px solid var(--border)',
-            padding: 'clamp(24px, 3.5vw, 36px)',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
-            gap: '28px',
-            alignItems: 'center',
-            boxShadow: '0 16px 40px rgba(13, 71, 161, 0.06)'
-          }}
-        >
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-              <span 
-                style={{
-                  background: 'var(--grad)',
-                  color: '#ffffff',
-                  fontSize: '12px',
-                  fontWeight: 800,
-                  padding: '4px 14px',
-                  borderRadius: '9999px'
-                }}
-              >
-                TAHAP {activeSop.step}
-              </span>
-              <span style={{ fontSize: '13px', color: 'var(--b)', fontWeight: 700 }}>
-                {activeSop.tag}
-              </span>
-            </div>
+                  <h3 style={{ fontSize: 'clamp(18px, 2.2vw, 24px)', fontWeight: 800, color: 'var(--txt)', marginBottom: '12px', lineHeight: 1.3 }}>
+                    {st.title}
+                  </h3>
 
-            <h3 style={{ fontSize: 'clamp(20px, 2.5vw, 26px)', fontWeight: 800, color: 'var(--txt)', marginBottom: '12px', lineHeight: 1.3 }}>
-              {activeSop.title}
-            </h3>
+                  <p style={{ fontSize: '14px', color: 'var(--mut)', lineHeight: 1.65, marginBottom: '20px' }}>
+                    {st.desc}
+                  </p>
 
-            <p style={{ fontSize: '14.5px', color: 'var(--mut)', lineHeight: 1.7, marginBottom: '22px' }}>
-              {activeSop.desc}
-            </p>
+                  <div 
+                    style={{
+                      background: 'var(--card)',
+                      padding: '16px 20px',
+                      borderRadius: '18px',
+                      border: '1px solid var(--border)'
+                    }}
+                  >
+                    <div style={{ fontSize: '12.5px', fontWeight: 800, color: 'var(--txt)', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <Sparkles size={15} color={accentColor} />
+                      <span>Kunci Keberhasilan Teknis:</span>
+                    </div>
 
-            <button
-              type="button"
-              onClick={() => setActiveSopStage((activeSopStage + 1) % sopSteps.length)}
-              className="btn-ghost"
-              style={{ padding: '9px 18px', fontSize: '13px' }}
-            >
-              <span>Lanjut ke Tahap Berikutnya</span>
-              <ArrowRight size={14} />
-            </button>
-          </div>
-
-          {/* Right Success Factors Console */}
-          <div 
-            style={{
-              background: 'var(--card2)',
-              padding: '24px',
-              borderRadius: '20px',
-              border: '1px solid var(--border)'
-            }}
-          >
-            <div style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--txt)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Sparkles size={16} color="var(--b)" />
-              <span>Kunci Keberhasilan Teknis:</span>
-            </div>
-
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {activeSop.points.map((pt, ptIdx) => (
-                <li key={ptIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13.5px', color: 'var(--txt)' }}>
-                  <CheckCircle2 size={16} color="#22c55e" style={{ flexShrink: 0, marginTop: '2px' }} />
-                  <span style={{ lineHeight: 1.5 }}>{pt}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '8px' }}>
+                      {st.points.map((pt, ptIdx) => (
+                        <div key={ptIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '12.5px', color: 'var(--txt)' }}>
+                          <CheckCircle2 size={15} color="#22c55e" style={{ flexShrink: 0, marginTop: '2px' }} />
+                          <span style={{ lineHeight: 1.45 }}>{pt}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </ScrollStackItem>
+              );
+            })}
+          </ScrollStack>
         </div>
       </section>
 
