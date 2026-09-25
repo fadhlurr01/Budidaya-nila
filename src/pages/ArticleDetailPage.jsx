@@ -233,8 +233,8 @@ export default function ArticleDetailPage({
                 background: 'rgba(37, 211, 102, 0.12)',
                 border: '1px solid rgba(37, 211, 102, 0.35)',
                 color: '#25d366',
-                borderRadius: '10px',
-                padding: '7px 14px',
+                borderRadius: '9999px',
+                padding: '7px 18px',
                 fontSize: '12.5px',
                 fontWeight: 600,
                 display: 'inline-flex',
@@ -361,8 +361,8 @@ export default function ArticleDetailPage({
           <button
             onClick={handleAskOwnerWa}
             style={{
-              padding: '10px 18px',
-              borderRadius: '12px',
+              padding: '10px 22px',
+              borderRadius: '9999px',
               background: 'linear-gradient(135deg, #25d366, #128c7e)',
               color: '#ffffff',
               border: 'none',
@@ -656,7 +656,7 @@ export default function ArticleDetailPage({
                 className="btn-primary"
                 style={{
                   padding: '11px 24px',
-                  borderRadius: '12px',
+                  borderRadius: '9999px',
                   fontSize: '13.5px',
                   fontWeight: 700,
                   display: 'inline-flex',

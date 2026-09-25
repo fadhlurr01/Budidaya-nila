@@ -209,8 +209,8 @@ export default function PortfolioSection({ onInspectProject }) {
                 style={{
                   width: '100%',
                   justifyContent: 'center',
-                  padding: '11px 16px',
-                  borderRadius: '12px',
+                  padding: '11px 20px',
+                  borderRadius: '9999px',
                   fontSize: '13.5px',
                   fontWeight: 700
                 }}

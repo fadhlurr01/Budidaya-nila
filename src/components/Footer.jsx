@@ -62,8 +62,8 @@ export default function Footer({
                 background: 'linear-gradient(135deg, rgba(33, 150, 243, 0.15) 0%, rgba(13, 71, 161, 0.15) 100%)',
                 border: '1.5px solid var(--b)',
                 color: 'var(--b)',
-                padding: '9px 18px',
-                borderRadius: '12px',
+                padding: '9px 20px',
+                borderRadius: '9999px',
                 fontSize: '13px',
                 fontWeight: 700,
                 cursor: 'pointer',
@@ -249,14 +249,14 @@ export default function Footer({
           style={{
             background: 'var(--card2)',
             border: '1px solid var(--border)',
-            borderRadius: '10px',
-            padding: '6px 12px',
+            borderRadius: '9999px',
+            padding: '6px 16px',
             color: 'var(--txt)',
             fontSize: '12px',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
-            gap: '4px'
+            gap: '6px'
           }}
         >
           <ArrowUp size={14} />

@@ -235,9 +235,9 @@ export default function ProductSection({ onAddToCart, onOpenConsultation }) {
                   onClick={() => onAddToCart(prod)}
                   className="btn-royal"
                   style={{
-                    padding: '9px 14px',
+                    padding: '9px 18px',
                     fontSize: '12.5px',
-                    borderRadius: '10px'
+                    borderRadius: '9999px'
                   }}
                   title="Tambah ke keranjang pesanan"
                 >

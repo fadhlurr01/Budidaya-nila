@@ -558,8 +558,8 @@ export default function Navbar({
                       style={{
                         width: '100%',
                         textAlign: 'left',
-                        padding: '10px 14px',
-                        borderRadius: '12px',
+                        padding: '10px 18px',
+                        borderRadius: '9999px',
                         border: 'none',
                         background: activeSection === sub.id ? 'var(--card2)' : 'transparent',
                         color: activeSection === sub.id ? 'var(--b)' : 'var(--txt)',
@@ -587,8 +587,8 @@ export default function Navbar({
                 style={{
                   width: '100%',
                   textAlign: 'left',
-                  padding: '11px 14px',
-                  borderRadius: '12px',
+                  padding: '11px 18px',
+                  borderRadius: '9999px',
                   border: 'none',
                   background: activeSection === item.id ? 'var(--card2)' : 'transparent',
                   color: activeSection === item.id ? 'var(--b)' : 'var(--txt)',
@@ -617,8 +617,8 @@ export default function Navbar({
             style={{
               width: '100%',
               textAlign: 'left',
-              padding: '11px 14px',
-              borderRadius: '12px',
+              padding: '11px 18px',
+              borderRadius: '9999px',
               border: '1px solid var(--border)',
               background: 'var(--card2)',
               color: 'var(--txt)',
@@ -645,8 +645,8 @@ export default function Navbar({
                 style={{
                   flex: 1,
                   textAlign: 'left',
-                  padding: '11px 14px',
-                  borderRadius: '12px',
+                  padding: '11px 18px',
+                  borderRadius: '9999px',
                   border: 'none',
                   background: 'rgba(33, 150, 243, 0.12)',
                   color: 'var(--b)',
@@ -668,7 +668,7 @@ export default function Navbar({
                   onCustomerLogout();
                 }}
                 className="btn-danger"
-                style={{ padding: '0 14px', borderRadius: '12px', fontSize: '12px' }}
+                style={{ padding: '0 14px', borderRadius: '9999px', fontSize: '12px' }}
                 title="Keluar Akun Pembeli"
               >
                 <LogOut size={14} />
@@ -683,8 +683,8 @@ export default function Navbar({
               className="btn-ghost"
               style={{
                 width: '100%',
-                padding: '11px 14px',
-                borderRadius: '12px',
+                padding: '11px 18px',
+                borderRadius: '9999px',
                 fontSize: '13.5px',
                 fontWeight: 600,
                 display: 'flex',
@@ -711,8 +711,8 @@ export default function Navbar({
             className="btn-primary"
             style={{
               width: '100%',
-              padding: '11px 14px',
-              borderRadius: '12px',
+              padding: '11px 18px',
+              borderRadius: '9999px',
               fontSize: '13.5px',
               fontWeight: 700,
               display: 'flex',

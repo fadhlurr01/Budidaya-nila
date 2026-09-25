@@ -188,8 +188,8 @@ export default function OrderTrackingModal({
                 background: 'var(--b)',
                 color: '#ffffff',
                 border: 'none',
-                padding: '6px 14px',
-                borderRadius: '8px',
+                padding: '7px 16px',
+                borderRadius: '9999px',
                 fontSize: '11.5px',
                 fontWeight: 700,
                 cursor: 'pointer'
@@ -245,8 +245,8 @@ export default function OrderTrackingModal({
                         key={ord.id}
                         onClick={() => setSelectedOrder(ord)}
                         style={{
-                          padding: '7px 12px',
-                          borderRadius: '10px',
+                          padding: '7px 16px',
+                          borderRadius: '9999px',
                           border: isSel ? '1.5px solid var(--b)' : '1px solid var(--border)',
                           background: isSel ? 'var(--b)' : 'var(--card2)',
                           color: isSel ? '#ffffff' : 'var(--txt)',

@@ -345,8 +345,8 @@ export default function ContactPage({ onNavigate, onShowToast, lang = 'id' }) {
                     type="button"
                     onClick={() => setFormData({ ...formData, adminTarget: 'admin1' })}
                     style={{
-                      padding: '10px 12px',
-                      borderRadius: '12px',
+                      padding: '10px 18px',
+                      borderRadius: '9999px',
                       border: formData.adminTarget === 'admin1' ? '1.5px solid var(--b)' : '1px solid var(--border)',
                       background: formData.adminTarget === 'admin1' ? 'rgba(33, 150, 243, 0.12)' : 'var(--card2)',
                       color: formData.adminTarget === 'admin1' ? 'var(--p)' : 'var(--txt)',
@@ -364,8 +364,8 @@ export default function ContactPage({ onNavigate, onShowToast, lang = 'id' }) {
                     type="button"
                     onClick={() => setFormData({ ...formData, adminTarget: 'admin2' })}
                     style={{
-                      padding: '10px 12px',
-                      borderRadius: '12px',
+                      padding: '10px 18px',
+                      borderRadius: '9999px',
                       border: formData.adminTarget === 'admin2' ? '1.5px solid #22c55e' : '1px solid var(--border)',
                       background: formData.adminTarget === 'admin2' ? 'rgba(34, 197, 94, 0.12)' : 'var(--card2)',
                       color: formData.adminTarget === 'admin2' ? '#15803d' : 'var(--txt)',

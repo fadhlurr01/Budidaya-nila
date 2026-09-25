@@ -181,7 +181,7 @@ export default function CustomerAuthModal({
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
             background: 'var(--card2)',
-            borderRadius: '12px',
+            borderRadius: '9999px',
             padding: '4px',
             gap: '4px',
             marginBottom: '18px'
@@ -191,8 +191,8 @@ export default function CustomerAuthModal({
             type="button"
             onClick={() => setMode('login')}
             style={{
-              padding: '8px',
-              borderRadius: '9px',
+              padding: '9px 16px',
+              borderRadius: '9999px',
               border: 'none',
               background: mode === 'login' ? 'var(--card)' : 'transparent',
               color: mode === 'login' ? 'var(--b)' : 'var(--mut)',
@@ -209,8 +209,8 @@ export default function CustomerAuthModal({
             type="button"
             onClick={() => setMode('register')}
             style={{
-              padding: '8px',
-              borderRadius: '9px',
+              padding: '9px 16px',
+              borderRadius: '9999px',
               border: 'none',
               background: mode === 'register' ? 'var(--card)' : 'transparent',
               color: mode === 'register' ? 'var(--b)' : 'var(--mut)',

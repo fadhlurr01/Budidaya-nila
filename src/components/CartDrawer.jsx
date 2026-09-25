@@ -556,10 +556,10 @@ export default function CartDrawer({
                       style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '4px',
+                        gap: '6px',
                         background: 'var(--card)',
-                        borderRadius: '6px',
-                        padding: '2px 5px',
+                        borderRadius: '9999px',
+                        padding: '3px 8px',
                         border: '1px solid var(--border)'
                       }}
                     >
@@ -678,10 +678,10 @@ export default function CartDrawer({
                     }}
                     className="btn-primary"
                     style={{
-                      padding: '12px 16px',
+                      padding: '12px 18px',
                       fontSize: '13.5px',
                       fontWeight: 700,
-                      borderRadius: '12px',
+                      borderRadius: '9999px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -704,10 +704,10 @@ export default function CartDrawer({
                     }}
                     className="btn-ghost"
                     style={{
-                      padding: '11px 16px',
+                      padding: '11px 18px',
                       fontSize: '13px',
                       fontWeight: 700,
-                      borderRadius: '12px',
+                      borderRadius: '9999px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -739,8 +739,8 @@ export default function CartDrawer({
                     style={{
                       background: 'rgba(245, 158, 11, 0.1)',
                       border: '1px dashed #f59e0b',
-                      borderRadius: '10px',
-                      padding: '9px 12px',
+                      borderRadius: '9999px',
+                      padding: '9px 14px',
                       fontSize: '12px',
                       color: '#b45309',
                       fontWeight: 700,
@@ -819,8 +819,8 @@ export default function CartDrawer({
                         fontWeight: 700, 
                         background: 'var(--card)', 
                         border: '1px solid var(--border)', 
-                        borderRadius: '8px', 
-                        padding: '4px 8px', 
+                        borderRadius: '9999px', 
+                        padding: '5px 12px', 
                         cursor: 'pointer',
                         whiteSpace: 'nowrap'
                       }}
@@ -859,8 +859,8 @@ export default function CartDrawer({
                       type="button"
                       onClick={() => setOrderMode('midtrans')}
                       style={{
-                        padding: '9px 8px',
-                        borderRadius: '12px',
+                        padding: '10px 10px',
+                        borderRadius: '9999px',
                         border: orderMode === 'midtrans' ? '1.5px solid var(--b)' : '1px solid var(--border)',
                         background: orderMode === 'midtrans' ? 'rgba(33, 150, 243, 0.12)' : 'var(--card2)',
                         color: orderMode === 'midtrans' ? 'var(--p)' : 'var(--txt)',
@@ -883,8 +883,8 @@ export default function CartDrawer({
                       type="button"
                       onClick={() => setOrderMode('website')}
                       style={{
-                        padding: '9px 8px',
-                        borderRadius: '12px',
+                        padding: '10px 10px',
+                        borderRadius: '9999px',
                         border: orderMode === 'website' ? '1.5px solid var(--b)' : '1px solid var(--border)',
                         background: orderMode === 'website' ? 'rgba(33, 150, 243, 0.12)' : 'var(--card2)',
                         color: orderMode === 'website' ? 'var(--p)' : 'var(--txt)',
@@ -907,8 +907,8 @@ export default function CartDrawer({
                       type="button"
                       onClick={() => setOrderMode('whatsapp')}
                       style={{
-                        padding: '9px 8px',
-                        borderRadius: '12px',
+                        padding: '10px 10px',
+                        borderRadius: '9999px',
                         border: orderMode === 'whatsapp' ? '1.5px solid #22c55e' : '1px solid var(--border)',
                         background: orderMode === 'whatsapp' ? 'rgba(34, 197, 94, 0.12)' : 'var(--card2)',
                         color: orderMode === 'whatsapp' ? '#15803d' : 'var(--txt)',
@@ -1134,8 +1134,8 @@ export default function CartDrawer({
                           type="button"
                           onClick={() => setSelectedAdmin('admin1')}
                           style={{
-                            padding: '8px 10px',
-                            borderRadius: '10px',
+                            padding: '8px 14px',
+                            borderRadius: '9999px',
                             border: selectedAdmin === 'admin1' ? '1.5px solid var(--b)' : '1px solid var(--border)',
                             background: selectedAdmin === 'admin1' ? 'rgba(33, 150, 243, 0.12)' : 'var(--card2)',
                             color: selectedAdmin === 'admin1' ? 'var(--p)' : 'var(--txt)',
@@ -1155,8 +1155,8 @@ export default function CartDrawer({
                           type="button"
                           onClick={() => setSelectedAdmin('admin2')}
                           style={{
-                            padding: '8px 10px',
-                            borderRadius: '10px',
+                            padding: '8px 14px',
+                            borderRadius: '9999px',
                             border: selectedAdmin === 'admin2' ? '1.5px solid var(--b)' : '1px solid var(--border)',
                             background: selectedAdmin === 'admin2' ? 'rgba(33, 150, 243, 0.12)' : 'var(--card2)',
                             color: selectedAdmin === 'admin2' ? 'var(--p)' : 'var(--txt)',
@@ -1342,11 +1342,11 @@ export default function CartDrawer({
                   type="button"
                   onClick={() => setMidtransChannel(tab.id)}
                   style={{
-                    padding: '8px 12px',
+                    padding: '8px 16px',
                     border: 'none',
                     background: midtransChannel === tab.id ? 'var(--card)' : 'transparent',
                     color: midtransChannel === tab.id ? 'var(--b)' : 'var(--mut)',
-                    borderRadius: '10px',
+                    borderRadius: '9999px',
                     fontWeight: midtransChannel === tab.id ? 700 : 500,
                     fontSize: '12px',
                     cursor: 'pointer',
@@ -1437,8 +1437,8 @@ export default function CartDrawer({
                         className="btn-primary"
                         style={{
                           width: '100%',
-                          padding: '13px 18px',
-                          borderRadius: '12px',
+                          padding: '13px 20px',
+                          borderRadius: '9999px',
                           fontSize: '13.5px',
                           fontWeight: 700,
                           display: 'flex',
@@ -1467,7 +1467,7 @@ export default function CartDrawer({
                           <button
                             type="button"
                             onClick={() => handleCopyText(`70070${(customer.phone || '081298452311').replace(/[^0-9]/g, '').slice(-9).padStart(9, '0')}`)}
-                            style={{ background: 'var(--card)', border: '1px solid var(--border)', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', color: 'var(--txt)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}
+                            style={{ background: 'var(--card)', border: '1px solid var(--border)', padding: '6px 14px', borderRadius: '9999px', cursor: 'pointer', fontSize: '12px', color: 'var(--txt)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}
                           >
                             {copiedField ? <Check size={14} color="#16a34a" /> : <Copy size={14} />}
                             <span>{copiedField ? 'Tersalin' : 'Salin'}</span>
@@ -1493,8 +1493,8 @@ export default function CartDrawer({
                         className="btn-primary"
                         style={{
                           width: '100%',
-                          padding: '13px 18px',
-                          borderRadius: '12px',
+                          padding: '13px 20px',
+                          borderRadius: '9999px',
                           fontSize: '13.5px',
                           fontWeight: 700,
                           display: 'flex',
@@ -1538,8 +1538,8 @@ export default function CartDrawer({
                         className="btn-primary"
                         style={{
                           width: '100%',
-                          padding: '13px 18px',
-                          borderRadius: '12px',
+                          padding: '13px 20px',
+                          borderRadius: '9999px',
                           fontSize: '13.5px',
                           fontWeight: 700,
                           display: 'flex',
@@ -1567,7 +1567,7 @@ export default function CartDrawer({
                           <button
                             type="button"
                             onClick={() => handleCopyText(`10234${(customer.phone || '081298452311').replace(/[^0-9]/g, '').slice(-9).padStart(9, '0')}`)}
-                            style={{ background: 'var(--card)', border: '1px solid var(--border)', padding: '6px 12px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', color: 'var(--txt)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}
+                            style={{ background: 'var(--card)', border: '1px solid var(--border)', padding: '6px 14px', borderRadius: '9999px', cursor: 'pointer', fontSize: '12px', color: 'var(--txt)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}
                           >
                             {copiedField ? <Check size={14} color="#16a34a" /> : <Copy size={14} />}
                             <span>{copiedField ? 'Tersalin' : 'Salin'}</span>
@@ -1585,8 +1585,8 @@ export default function CartDrawer({
                         className="btn-primary"
                         style={{
                           width: '100%',
-                          padding: '13px 18px',
-                          borderRadius: '12px',
+                          padding: '13px 20px',
+                          borderRadius: '9999px',
                           fontSize: '13.5px',
                           fontWeight: 700,
                           display: 'flex',
@@ -1653,8 +1653,8 @@ export default function CartDrawer({
                         className="btn-primary"
                         style={{
                           width: '100%',
-                          padding: '13px 18px',
-                          borderRadius: '12px',
+                          padding: '13px 20px',
+                          borderRadius: '9999px',
                           fontSize: '13.5px',
                           fontWeight: 700,
                           display: 'flex',
