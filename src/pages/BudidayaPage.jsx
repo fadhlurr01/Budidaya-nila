@@ -16,7 +16,9 @@ import {
   Zap, 
   Clock, 
   TrendingUp, 
-  ChevronRight 
+  ChevronRight,
+  Fish,
+  Wind
 } from 'lucide-react';
 import GallerySection from '../components/GallerySection';
 
@@ -27,6 +29,7 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
   const [fcr, setFcr] = useState(1.2);
   const [sellingPrice, setSellingPrice] = useState(38000); // Rp / kg
   const [survivalRate, setSurvivalRate] = useState(92); // %
+  const [activeSopStage, setActiveSopStage] = useState(0);
 
   // Calculations
   const harvestedFishCount = Math.round(seedCount * (survivalRate / 100));
@@ -106,47 +109,38 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
   ];
 
   const parameters = [
-    { name: 'Oksigen Terlarut (DO)', ideal: '5.0 - 7.5 mg/L', min: '4.0 mg/L', role: 'Kunci metabolisme bakteri bioflok & keaktifan makan ikan nila', color: '#2196f3' },
-    { name: 'Derajat Keasaman (pH)', ideal: '7.0 - 8.2', min: '6.5 - 8.5', role: 'Menjaga kestabilan cangkang sel bakteri & imunitas insang ikan', color: '#10b981' },
-    { name: 'Suhu Air Kolam', ideal: '27.5°C - 29.5°C', min: '25°C - 32°C', role: 'Mengoptimalkan laju cerna pakan dan mencegah serangan jamur', color: '#f59e0b' },
-    { name: 'Amonia Bebas (NH3)', ideal: '< 0.15 ppm', min: '< 0.30 ppm', role: 'Racun berbahaya yang segera diurai oleh bakteri heterotrof aktif', color: '#ef4444' },
-    { name: 'Kepadatan Flok', ideal: '20 - 45 ml/L', min: '15 - 50 ml/L', role: 'Diukur dengan kerucut Imhoff untuk kontrol populasi bakteri', color: '#8b5cf6' }
+    { name: 'Oksigen Terlarut (DO)', ideal: '5.0 - 7.5 mg/L', min: '4.0 mg/L', currentVal: 88, role: 'Kunci metabolisme bakteri bioflok & keaktifan makan ikan nila', color: '#2196f3' },
+    { name: 'Derajat Keasaman (pH)', ideal: '7.0 - 8.2', min: '6.5 - 8.5', currentVal: 92, role: 'Menjaga kestabilan cangkang sel bakteri & imunitas insang ikan', color: '#10b981' },
+    { name: 'Suhu Air Kolam', ideal: '27.5°C - 29.5°C', min: '25°C - 32°C', currentVal: 85, role: 'Mengoptimalkan laju cerna pakan dan mencegah serangan jamur', color: '#f59e0b' },
+    { name: 'Amonia Bebas (NH3)', ideal: '< 0.15 ppm', min: '< 0.30 ppm', currentVal: 96, role: 'Racun berbahaya yang segera diurai oleh bakteri heterotrof aktif', color: '#ef4444' },
+    { name: 'Kepadatan Flok', ideal: '20 - 45 ml/L', min: '15 - 50 ml/L', currentVal: 80, role: 'Diukur dengan kerucut Imhoff untuk kontrol populasi bakteri', color: '#8b5cf6' }
   ];
+
+  const activeSop = sopSteps[activeSopStage];
 
   return (
     <div style={{ paddingTop: '86px', minHeight: '100vh', background: 'var(--bg)' }}>
       {/* Top Header Banner */}
       <section 
         style={{
-          background: 'linear-gradient(180deg, var(--card2) 0%, var(--bg) 100%)',
-          padding: '48px 20px 36px',
-          borderBottom: '1px solid var(--border)'
+          position: 'relative',
+          padding: '60px 20px 40px',
+          textAlign: 'center',
+          background: 'radial-gradient(circle at 50% 20%, rgba(33, 150, 243, 0.15) 0%, transparent 70%)'
         }}
       >
-        <div style={{ maxWidth: '1240px', margin: '0 auto', textAlign: 'center' }}>
-          {/* Breadcrumb */}
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'var(--mut)', marginBottom: '16px' }}>
-            <button 
-              onClick={() => onNavigate('beranda')}
-              style={{ background: 'none', border: 'none', color: 'var(--b)', cursor: 'pointer', fontWeight: 600 }}
-            >
-              Beranda
-            </button>
-            <ChevronRight size={13} />
-            <span style={{ color: 'var(--txt)', fontWeight: 600 }}>Panduan & Sistem Budidaya</span>
-          </div>
-
+        <div style={{ maxWidth: '860px', margin: '0 auto' }}>
           <div 
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '6px',
+              gap: '8px',
+              padding: '6px 16px',
+              borderRadius: '9999px',
               background: 'rgba(33, 150, 243, 0.12)',
               color: 'var(--b)',
-              padding: '6px 16px',
-              borderRadius: '20px',
               fontSize: '12px',
-              fontWeight: 700,
+              fontWeight: 800,
               letterSpacing: '1px',
               textTransform: 'uppercase',
               marginBottom: '14px'
@@ -204,203 +198,299 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
         </div>
       </section>
 
-      {/* 4 Keunggulan Utama Bioflok vs Kolam Tanah */}
-      <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '50px 20px 30px' }}>
-        <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 36px' }}>
+      {/* 4 Pilar Keunggulan Bioflok (Visual Connected Flow) */}
+      <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '30px 20px' }}>
+        <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 30px' }}>
           <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--b)', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
             Mengapa Sistem Bioflok?
           </span>
           <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 34px)', fontWeight: 800, color: 'var(--txt)', marginTop: '8px' }}>
-            Kelebihan Dibandingkan Tambak Konvensional
+            4 Pilar Efisiensi Dibandingkan Tambak Konvensional
           </h2>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))', gap: '20px' }}>
-          <div className="glass-panel" style={{ padding: '26px', borderRadius: '20px' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(33, 150, 243, 0.14)', color: 'var(--b)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
-              <TrendingUp size={24} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))', gap: '16px' }}>
+          <div style={{ padding: '22px', borderRadius: '22px', background: 'var(--card2)', border: '1px solid var(--border)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(33, 150, 243, 0.14)', color: 'var(--b)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <TrendingUp size={22} />
+              </div>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--b)', padding: '3px 10px', borderRadius: '9999px', background: 'rgba(33,150,243,0.12)' }}>
+                EFISIENSI TINGGI
+              </span>
             </div>
-            <h3 style={{ fontSize: '17px', fontWeight: 700, color: 'var(--txt)', marginBottom: '8px' }}>FCR Hemat 1.18 - 1.22</h3>
-            <p style={{ fontSize: '13.5px', color: 'var(--mut)', lineHeight: 1.6 }}>
+            <h3 style={{ fontSize: '16.5px', fontWeight: 700, color: 'var(--txt)', marginBottom: '8px' }}>FCR Hemat 1.18 - 1.22</h3>
+            <p style={{ fontSize: '13px', color: 'var(--mut)', lineHeight: 1.6, margin: 0 }}>
               Bakteri mengolah kotoran dan sisa pakan menjadi gumpalan flok berprotein 30%+ yang dimakan kembali oleh ikan. Menghemat hingga 25% biaya pelet harian.
             </p>
           </div>
 
-          <div className="glass-panel" style={{ padding: '26px', borderRadius: '20px' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(34, 197, 94, 0.14)', color: '#22c55e', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
-              <Droplets size={24} />
+          <div style={{ padding: '22px', borderRadius: '22px', background: 'var(--card2)', border: '1px solid var(--border)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(34, 197, 94, 0.14)', color: '#22c55e', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Droplets size={22} />
+              </div>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#22c55e', padding: '3px 10px', borderRadius: '9999px', background: 'rgba(34,197,94,0.12)' }}>
+                0% BAU LUMPUR
+              </span>
             </div>
-            <h3 style={{ fontSize: '17px', fontWeight: 700, color: 'var(--txt)', marginBottom: '8px' }}>Daging Bebas Bau Lumpur</h3>
-            <p style={{ fontSize: '13.5px', color: 'var(--mut)', lineHeight: 1.6 }}>
-              Air kolam bioflok kaya oksigen bebas alga geosmin penyebab bau amis tanah. Rasa daging nila menjadi manis alami, lembut, dan disukai restoran bintang lima.
+            <h3 style={{ fontSize: '16.5px', fontWeight: 700, color: 'var(--txt)', marginBottom: '8px' }}>Daging Manis Alami</h3>
+            <p style={{ fontSize: '13px', color: 'var(--mut)', lineHeight: 1.6, margin: 0 }}>
+              Air kolam bioflok kaya oksigen bebas alga geosmin penyebab bau amis tanah. Rasa daging nila menjadi manis alami, lembut, dan disukai restoran.
             </p>
           </div>
 
-          <div className="glass-panel" style={{ padding: '26px', borderRadius: '20px' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(245, 158, 11, 0.14)', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
-              <Zap size={24} />
+          <div style={{ padding: '22px', borderRadius: '22px', background: 'var(--card2)', border: '1px solid var(--border)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(245, 158, 11, 0.14)', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Zap size={22} />
+              </div>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#f59e0b', padding: '3px 10px', borderRadius: '9999px', background: 'rgba(245,158,11,0.12)' }}>
+                HEMAT LAHAN
+              </span>
             </div>
-            <h3 style={{ fontSize: '17px', fontWeight: 700, color: 'var(--txt)', marginBottom: '8px' }}>Padat Tebar 3x Lebih Tinggi</h3>
-            <p style={{ fontSize: '13.5px', color: 'var(--mut)', lineHeight: 1.6 }}>
-              Satu kolam bundar D4 berdiameter 4 meter dapat menampung 3.000 hingga 5.000 ekor ikan nila. Hemat lahan pekarangan dan sangat cocok untuk usaha rumahan produktif.
+            <h3 style={{ fontSize: '16.5px', fontWeight: 700, color: 'var(--txt)', marginBottom: '8px' }}>Padat Tebar 3x Lipat</h3>
+            <p style={{ fontSize: '13px', color: 'var(--mut)', lineHeight: 1.6, margin: 0 }}>
+              Satu kolam bundar D4 berdiameter 4 meter dapat menampung 3.000 hingga 4.000 ekor ikan nila. Sangat cocok untuk usaha pekarangan produktif.
             </p>
           </div>
 
-          <div className="glass-panel" style={{ padding: '26px', borderRadius: '20px' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(13, 71, 161, 0.14)', color: 'var(--p)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
-              <Activity size={24} />
+          <div style={{ padding: '22px', borderRadius: '22px', background: 'var(--card2)', border: '1px solid var(--border)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'rgba(13, 71, 161, 0.14)', color: 'var(--p)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Activity size={22} />
+              </div>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--p)', padding: '3px 10px', borderRadius: '9999px', background: 'rgba(13,71,161,0.12)' }}>
+                OTOMASI IOT
+              </span>
             </div>
-            <h3 style={{ fontSize: '17px', fontWeight: 700, color: 'var(--txt)', marginBottom: '8px' }}>Proteksi Sensor IoT 24 Jam</h3>
-            <p style={{ fontSize: '13.5px', color: 'var(--mut)', lineHeight: 1.6 }}>
-              Pemantauan dissolved oxygen, suhu, dan relay aerator otomatis. Risiko gagal panen karena mati lampu atau oksigen drop di malam hari dapat ditekan hingga 0%.
+            <h3 style={{ fontSize: '16.5px', fontWeight: 700, color: 'var(--txt)', marginBottom: '8px' }}>Proteksi Sensor 24 Jam</h3>
+            <p style={{ fontSize: '13px', color: 'var(--mut)', lineHeight: 1.6, margin: 0 }}>
+              Pemantauan dissolved oxygen, suhu, dan relay aerator otomatis. Risiko gagal panen karena mati lampu atau oksigen drop dapat dicegah dini.
             </p>
           </div>
         </div>
       </section>
 
-      {/* SOP 5 Tahapan Budidaya */}
-      <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '40px 20px 50px' }}>
-        <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 40px' }}>
+      {/* INTERACTIVE SOP 5 TAHAPAN BUDIDAYA (Replaces 5 Stacked Cards with Interactive Roadmap Console) */}
+      <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '50px 20px 40px' }}>
+        <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 36px' }}>
           <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--b)', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-            Standar Operasional Prosedur
+            Roadmap Operasional Prosedur
           </span>
           <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 34px)', fontWeight: 800, color: 'var(--txt)', marginTop: '8px' }}>
             5 Langkah Budidaya Nila dari Awal Hingga Panen
           </h2>
           <p style={{ color: 'var(--mut)', fontSize: '15px', marginTop: '10px' }}>
-            Metode teruji NilaFarm yang diaplikasikan pada 4 kolam budidaya kami di Sumedang.
+            Klik salah satu tahapan di bawah untuk menginspeksi SOP teknis detail dan kunci keberhasilan operasionalnya.
           </p>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
-          {sopSteps.map((item, idx) => (
-            <div 
-              key={idx}
-              className="glass-panel"
-              style={{
-                padding: '28px',
-                borderRadius: '22px',
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
-                gap: '24px',
-                alignItems: 'center'
-              }}
-            >
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-                  <span 
-                    style={{
-                      background: 'var(--grad)',
-                      color: '#ffffff',
-                      fontSize: '13px',
-                      fontWeight: 800,
-                      padding: '4px 12px',
-                      borderRadius: '9999px'
-                    }}
-                  >
-                    TAHAP {item.step}
-                  </span>
-                  <span style={{ fontSize: '12px', color: 'var(--b)', fontWeight: 700 }}>
-                    {item.tag}
-                  </span>
-                </div>
-
-                <h3 style={{ fontSize: '19px', fontWeight: 800, color: 'var(--txt)', marginBottom: '10px', lineHeight: 1.35 }}>
-                  {item.title}
-                </h3>
-                <p style={{ fontSize: '14px', color: 'var(--mut)', lineHeight: 1.65 }}>
-                  {item.desc}
-                </p>
-              </div>
-
-              <div 
+        {/* Interactive Step Navigator Buttons */}
+        <div 
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            overflowX: 'auto',
+            padding: '6px 4px 16px',
+            scrollbarWidth: 'none',
+            WebkitOverflowScrolling: 'touch',
+            marginBottom: '24px'
+          }}
+        >
+          {sopSteps.map((st, sIdx) => {
+            const isSelected = activeSopStage === sIdx;
+            return (
+              <button
+                key={sIdx}
+                type="button"
+                onClick={() => setActiveSopStage(sIdx)}
                 style={{
-                  background: 'var(--card2)',
-                  padding: '20px 22px',
-                  borderRadius: '16px',
-                  border: '1px solid var(--border)'
+                  flex: '0 0 auto',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '10px 18px',
+                  borderRadius: '9999px',
+                  border: isSelected ? '1.5px solid var(--b)' : '1px solid var(--border)',
+                  background: isSelected ? 'rgba(33, 150, 243, 0.14)' : 'var(--card2)',
+                  color: isSelected ? 'var(--b)' : 'var(--txt)',
+                  fontWeight: isSelected ? 800 : 600,
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  transition: 'all 0.25s ease'
                 }}
               >
-                <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--txt)', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Sparkles size={15} color="var(--b)" />
-                  <span>Kunci Keberhasilan:</span>
+                <div 
+                  style={{
+                    width: '26px',
+                    height: '26px',
+                    borderRadius: '50%',
+                    background: isSelected ? 'var(--b)' : 'var(--card)',
+                    color: isSelected ? '#ffffff' : 'var(--mut)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '11px',
+                    fontWeight: 800
+                  }}
+                >
+                  {st.step}
                 </div>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '9px' }}>
-                  {item.points.map((pt, ptIdx) => (
-                    <li key={ptIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '13px', color: 'var(--txt)' }}>
-                      <CheckCircle2 size={15} color="#22c55e" style={{ flexShrink: 0, marginTop: '2px' }} />
-                      <span>{pt}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                <span>{st.tag}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Detailed Interactive Stage View */}
+        <div 
+          style={{
+            borderRadius: '28px',
+            background: 'var(--card)',
+            border: '1.5px solid var(--border)',
+            padding: 'clamp(24px, 3.5vw, 36px)',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
+            gap: '28px',
+            alignItems: 'center',
+            boxShadow: '0 16px 40px rgba(13, 71, 161, 0.06)'
+          }}
+        >
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+              <span 
+                style={{
+                  background: 'var(--grad)',
+                  color: '#ffffff',
+                  fontSize: '12px',
+                  fontWeight: 800,
+                  padding: '4px 14px',
+                  borderRadius: '9999px'
+                }}
+              >
+                TAHAP {activeSop.step}
+              </span>
+              <span style={{ fontSize: '13px', color: 'var(--b)', fontWeight: 700 }}>
+                {activeSop.tag}
+              </span>
             </div>
-          ))}
+
+            <h3 style={{ fontSize: 'clamp(20px, 2.5vw, 26px)', fontWeight: 800, color: 'var(--txt)', marginBottom: '12px', lineHeight: 1.3 }}>
+              {activeSop.title}
+            </h3>
+
+            <p style={{ fontSize: '14.5px', color: 'var(--mut)', lineHeight: 1.7, marginBottom: '22px' }}>
+              {activeSop.desc}
+            </p>
+
+            <button
+              type="button"
+              onClick={() => setActiveSopStage((activeSopStage + 1) % sopSteps.length)}
+              className="btn-ghost"
+              style={{ padding: '9px 18px', fontSize: '13px' }}
+            >
+              <span>Lanjut ke Tahap Berikutnya</span>
+              <ArrowRight size={14} />
+            </button>
+          </div>
+
+          {/* Right Success Factors Console */}
+          <div 
+            style={{
+              background: 'var(--card2)',
+              padding: '24px',
+              borderRadius: '20px',
+              border: '1px solid var(--border)'
+            }}
+          >
+            <div style={{ fontSize: '13.5px', fontWeight: 800, color: 'var(--txt)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Sparkles size={16} color="var(--b)" />
+              <span>Kunci Keberhasilan Teknis:</span>
+            </div>
+
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {activeSop.points.map((pt, ptIdx) => (
+                <li key={ptIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13.5px', color: 'var(--txt)' }}>
+                  <CheckCircle2 size={16} color="#22c55e" style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <span style={{ lineHeight: 1.5 }}>{pt}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 
-      {/* Tabel Parameter Air Kolam */}
+      {/* DYNAMIC PARAMETER VISUAL MATRIX (Replaces Plain Table Card) */}
       <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '30px 20px 50px' }}>
-        <div className="glass-panel" style={{ padding: '32px', borderRadius: '24px' }}>
-          <div style={{ marginBottom: '24px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--b)', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-              Monitoring Parameter
-            </span>
-            <h3 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--txt)', marginTop: '6px' }}>
-              Standar Kualitas Air Bioflok Ideal NilaFarm
-            </h3>
-            <p style={{ fontSize: '14px', color: 'var(--mut)', marginTop: '6px' }}>
-              Setiap fluktuasi parameter diawasi otomatis melalui node sensor telemetri nirkabel.
-            </p>
-          </div>
+        <div style={{ marginBottom: '28px', textAlign: 'center' }}>
+          <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--b)', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+            Monitoring Parameter
+          </span>
+          <h3 style={{ fontSize: 'clamp(22px, 3vw, 30px)', fontWeight: 800, color: 'var(--txt)', marginTop: '6px' }}>
+            Standar Kualitas Air Bioflok Ideal NilaFarm
+          </h3>
+          <p style={{ fontSize: '14px', color: 'var(--mut)', marginTop: '6px' }}>
+            Setiap fluktuasi parameter diawasi otomatis melalui node sensor telemetri nirkabel 24 jam nonstop.
+          </p>
+        </div>
 
-          <div style={{ overflowX: 'auto', width: '100%' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13.5px', minWidth: '600px' }}>
-              <thead>
-                <tr style={{ background: 'var(--card2)', textAlign: 'left', borderBottom: '2px solid var(--border)' }}>
-                  <th style={{ padding: '12px 16px', color: 'var(--txt)' }}>Parameter Sensor</th>
-                  <th style={{ padding: '12px 16px', color: 'var(--txt)' }}>Nilai Ideal</th>
-                  <th style={{ padding: '12px 16px', color: 'var(--txt)' }}>Batas Toleransi</th>
-                  <th style={{ padding: '12px 16px', color: 'var(--txt)' }}>Peran & Fungsi dalam Kolam</th>
-                </tr>
-              </thead>
-              <tbody>
-                {parameters.map((param, pIdx) => (
-                  <tr key={pIdx} style={{ borderBottom: '1px solid var(--border)' }}>
-                    <td style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--txt)' }}>
-                      <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: param.color, marginRight: '8px' }} />
-                      {param.name}
-                    </td>
-                    <td style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--b)' }}>
-                      {param.ideal}
-                    </td>
-                    <td style={{ padding: '14px 16px', color: 'var(--mut)' }}>
-                      {param.min}
-                    </td>
-                    <td style={{ padding: '14px 16px', color: 'var(--txt)' }}>
-                      {param.role}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '16px' }}>
+          {parameters.map((param, pIdx) => (
+            <div 
+              key={pIdx} 
+              style={{ 
+                padding: '20px', 
+                borderRadius: '20px', 
+                background: 'var(--card)', 
+                border: '1px solid var(--border)' 
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: param.color }} />
+                  <b style={{ fontSize: '14px', color: 'var(--txt)' }}>{param.name}</b>
+                </div>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: param.color, background: `${param.color}22`, padding: '2px 8px', borderRadius: '9999px' }}>
+                  TARGET OPTIMAL
+                </span>
+              </div>
+
+              {/* Visual Meter Bar */}
+              <div style={{ height: '6px', borderRadius: '9999px', background: 'rgba(0,0,0,0.08)', overflow: 'hidden', marginBottom: '12px' }}>
+                <div style={{ height: '100%', width: `${param.currentVal}%`, background: param.color, borderRadius: '9999px' }} />
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', marginBottom: '8px' }}>
+                <span style={{ color: 'var(--mut)' }}>Nilai Ideal:</span>
+                <b style={{ color: 'var(--b)' }}>{param.ideal}</b>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', marginBottom: '10px' }}>
+                <span style={{ color: 'var(--mut)' }}>Batas Toleransi:</span>
+                <span style={{ color: 'var(--txt)' }}>{param.min}</span>
+              </div>
+
+              <p style={{ fontSize: '12px', color: 'var(--mut)', lineHeight: 1.5, margin: 0, borderTop: '1px dashed var(--border)', paddingTop: '8px' }}>
+                {param.role}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* INTERACTIVE CALCULATOR SECTION */}
       <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '20px 20px 60px' }}>
         <div 
-          className="glass-panel" 
           style={{ 
-            padding: '36px', 
-            borderRadius: '26px',
-            border: '2px solid var(--border-strong)',
+            padding: 'clamp(24px, 3.5vw, 42px)', 
+            borderRadius: '30px',
+            border: '1.5px solid var(--border-strong)',
             background: 'linear-gradient(180deg, var(--card2) 0%, var(--card) 40%)'
           }}
         >
           <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 32px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'var(--grad)', color: '#ffffff', padding: '6px 16px', borderRadius: '20px', fontSize: '12px', fontWeight: 700, marginBottom: '12px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'var(--grad)', color: '#ffffff', padding: '6px 16px', borderRadius: '9999px', fontSize: '12px', fontWeight: 700, marginBottom: '12px' }}>
               <Calculator size={15} />
               <span>Simulasi Finansial Budidaya Nila</span>
             </div>
@@ -504,8 +594,8 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
             <div 
               style={{
                 background: 'var(--card)',
-                borderRadius: '20px',
-                padding: '26px',
+                borderRadius: '24px',
+                padding: '24px',
                 border: '1px solid var(--border)',
                 display: 'flex',
                 flexDirection: 'column',
@@ -551,7 +641,7 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
                 style={{
                   marginTop: '20px',
                   padding: '16px',
-                  borderRadius: '14px',
+                  borderRadius: '16px',
                   background: 'rgba(34, 197, 94, 0.12)',
                   border: '1px solid rgba(34, 197, 94, 0.3)',
                   textAlign: 'center'
@@ -572,22 +662,22 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
         </div>
       </section>
 
-      {/* Galeri Kolam */}
+      {/* Galeri Kolam (Media Cards Kept for Photos) */}
       <GallerySection lang={lang} />
 
       {/* Profil Hamdan Russ Consultation Banner */}
       <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '20px 20px 80px' }}>
         <div 
-          className="glass-panel"
           style={{
-            padding: '36px',
-            borderRadius: '24px',
+            padding: 'clamp(24px, 3.5vw, 40px)',
+            borderRadius: '28px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             flexWrap: 'wrap',
             gap: '24px',
-            background: 'linear-gradient(135deg, rgba(33, 150, 243, 0.12) 0%, rgba(13, 71, 161, 0.08) 100%)'
+            background: 'var(--card)',
+            border: '1px solid var(--border)'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
@@ -614,7 +704,7 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
                 <h3 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--txt)', margin: 0 }}>
                   Hamdan Russ
                 </h3>
-                <span className="chip ok" style={{ fontSize: '11px' }}>Owner & Farm Operator</span>
+                <span className="chip ok" style={{ fontSize: '11px', borderRadius: '9999px' }}>Owner & Farm Operator</span>
               </div>
               <p style={{ fontSize: '14px', color: 'var(--mut)', margin: '4px 0 0', lineHeight: 1.5 }}>
                 Siap mendampingi konsultasi pembuatan kolam bioflok, pemilihan benih, setting aerasi, dan instalasi sensor IoT di lokasi Anda.

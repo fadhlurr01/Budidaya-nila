@@ -20,7 +20,11 @@ import {
   TrendingUp,
   Cpu,
   Truck,
-  Fish
+  Fish,
+  Wind,
+  Activity,
+  Layers,
+  Check
 } from 'lucide-react';
 
 export default function HomePage({ 
@@ -34,6 +38,8 @@ export default function HomePage({
   lang = 'id' 
 }) {
   const [openFaq, setOpenFaq] = useState(null);
+  const [compareMode, setCompareMode] = useState('bioflok'); // 'bioflok' | 'konvensional'
+  const [activeBenchmark, setActiveBenchmark] = useState(0);
 
   const formatRupiah = (val) => 'Rp' + Number(val || 0).toLocaleString('id-ID');
 
@@ -57,6 +63,45 @@ export default function HomePage({
     {
       q: 'Apakah saya bisa datang langsung berkunjung ke lokasi kolam farm?',
       a: 'Sangat bisa! Kami menyambut kunjungan silaturahmi, belajar budidaya bioflok, maupun pembelian langsung di lokasi (Jl. Raya Sumedang - Cimalaka KM 4). Mohon mengabari terlebih dahulu melalui Admin 1 (Hamdan Russ: 0813-8257-0406) atau Admin 2 (CS: 0821-2231-9510) agar tim kami siap menyambut.'
+    }
+  ];
+
+  const benchmarks = [
+    {
+      title: 'Aroma & Bau Lumpur (Geosmin)',
+      bioflokScore: 100,
+      bioflokLabel: '0% Bau Lumpur (100% Bersih)',
+      bioflokDetail: 'Kolam terpal tanpa lumpur dasar. Bakteri Bacillus mengurai zat bau amonia sebelum menempel ke insang dan daging ikan.',
+      konvensionalScore: 25,
+      konvensionalLabel: 'Bau Lumpur Sangat Terasa',
+      konvensionalDetail: 'Ikan menyerap geosmin dari alga biru-hijau di lumpur dasar tambak, menimbulkan bau amis tanah pekat saat dimasak.'
+    },
+    {
+      title: 'Kadar Oksigen Terlarut (DO)',
+      bioflokScore: 95,
+      bioflokLabel: 'DO 5.8 - 6.8 mg/L (Super Optimal)',
+      bioflokDetail: 'Aerator uniring micro-bubble bekerja 24 jam nonstop. Ikan sangat aktif, metabolisme lancar, nafsu makan stabil.',
+      konvensionalScore: 40,
+      konvensionalLabel: 'DO 2.5 - 3.8 mg/L (Fluktuatif)',
+      konvensionalDetail: 'Tanpa aerasi kontinu, oksigen anjlok drastis pada dini hari menyebabkan stres dan kematian massal ikan.'
+    },
+    {
+      title: 'Efisiensi Pakan & Tekstur Daging',
+      bioflokScore: 92,
+      bioflokLabel: 'FCR 1.18 - 1.22 (Daging Padat & Manis)',
+      bioflokDetail: 'Flok mikroba kaya protein dimakan kembali oleh ikan sebagai suplemen alami, menghasilkan daging padat dan susut goreng minimal.',
+      konvensionalScore: 35,
+      konvensionalLabel: 'FCR 1.60 - 1.85 (Boros & Lembek)',
+      konvensionalDetail: 'Banyak pelet tenggelam membusuk di dasar tanah. Daging cenderung berlemak lembek dan banyak susut saat dimasak.'
+    },
+    {
+      title: 'Sistem Higienitas & Pengawasan Limbah',
+      bioflokScore: 98,
+      bioflokLabel: 'Central Drain & Sensor IoT 24 Jam',
+      bioflokDetail: 'Feses dan sisa amonia terkuras setiap hari lewat saluran pembuangan sentral kerucut. Kualitas air selalu terkontrol.',
+      konvensionalScore: 30,
+      konvensionalLabel: 'Endapan Lumpur Mengendap Bertahun-tahun',
+      konvensionalDetail: 'Kotoran dan racun amonia menumpuk di dasar tanah tanpa filter, rentan menjadi sarang parasit dan penyakit ikan.'
     }
   ];
 
@@ -89,109 +134,184 @@ export default function HomePage({
         isDark={isDark}
       />
 
-      {/* 2. VALUE PROPOSITION: BIOFLOC VS TRADITIONAL */}
+      {/* 2. INTERACTIVE AQUACULTURE QUALITY STUDIO (Replaces Plain Cards with Visual Interactive Comparison) */}
       <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '60px 20px 40px', width: '100%', boxSizing: 'border-box' }}>
-        <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 36px' }}>
-          <span style={{ fontSize: '12.5px', fontWeight: 800, color: 'var(--b)', letterSpacing: '2px', textTransform: 'uppercase' }}>
+        <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 32px' }}>
+          <span style={{ fontSize: '12.5px', fontWeight: 800, color: 'var(--b)', letterSpacing: '2px', textTransform: 'uppercase', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Activity size={15} />
             Standar Mutu Ikan
           </span>
           <h2 style={{ fontSize: 'clamp(26px, 3.5vw, 36px)', fontWeight: 800, color: 'var(--txt)', marginTop: '8px' }}>
             Perbedaan Nila Bioflok vs Tambak Tanah
           </h2>
           <p style={{ color: 'var(--mut)', fontSize: '15px', marginTop: '10px' }}>
-            Mengapa restoran, katering, dan keluarga di Sumedang lebih memilih ikan nila hasil budidaya bioflok NilaFarm.
+            Visualisasi komparasi kualitas air, tekstur daging, dan higienitas sistem bioflok NilaFarm dibandingkan tambak konvensional.
           </p>
+
+          {/* Interactive Mode Switcher Pill */}
+          <div 
+            style={{ 
+              display: 'inline-flex', 
+              alignItems: 'center', 
+              background: 'var(--card2)', 
+              padding: '5px', 
+              borderRadius: '9999px', 
+              border: '1px solid var(--border)',
+              marginTop: '20px'
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => setCompareMode('bioflok')}
+              style={{
+                padding: '8px 20px',
+                borderRadius: '9999px',
+                border: 'none',
+                background: compareMode === 'bioflok' ? 'var(--b)' : 'transparent',
+                color: compareMode === 'bioflok' ? '#ffffff' : 'var(--txt)',
+                fontSize: '13px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                transition: 'all 0.25s ease'
+              }}
+            >
+              <Sparkles size={14} />
+              <span>Bioflok Modern NilaFarm</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setCompareMode('konvensional')}
+              style={{
+                padding: '8px 20px',
+                borderRadius: '9999px',
+                border: 'none',
+                background: compareMode === 'konvensional' ? '#ef4444' : 'transparent',
+                color: compareMode === 'konvensional' ? '#ffffff' : 'var(--txt)',
+                fontSize: '13px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                transition: 'all 0.25s ease'
+              }}
+            >
+              <X size={14} />
+              <span>Tambak Tanah Tradisional</span>
+            </button>
+          </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '24px' }}>
-          {/* NilaFarm Biofloc Card */}
-          <div 
-            className="glass-panel"
-            style={{
-              padding: '32px',
-              borderRadius: '24px',
-              border: '2px solid var(--b)',
-              background: 'linear-gradient(180deg, var(--card2) 0%, var(--card) 40%)',
-              boxShadow: '0 12px 36px rgba(33, 150, 243, 0.18)'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--grad)', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <CheckCircle2 size={20} />
+        {/* Visual Interactive Comparison Board */}
+        <div 
+          style={{
+            position: 'relative',
+            borderRadius: '28px',
+            background: compareMode === 'bioflok'
+              ? 'linear-gradient(135deg, rgba(33, 150, 243, 0.08) 0%, rgba(13, 71, 161, 0.04) 100%)'
+              : 'linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(185, 28, 28, 0.04) 100%)',
+            border: compareMode === 'bioflok' ? '2px solid rgba(33, 150, 243, 0.3)' : '2px solid rgba(239, 68, 68, 0.3)',
+            padding: 'clamp(20px, 3.5vw, 36px)',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          {/* Header indicator banner */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px', marginBottom: '24px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div 
+                style={{ 
+                  width: '38px', 
+                  height: '38px', 
+                  borderRadius: '50%', 
+                  background: compareMode === 'bioflok' ? '#22c55e' : '#ef4444', 
+                  color: '#ffffff', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  boxShadow: compareMode === 'bioflok' ? '0 4px 14px rgba(34, 197, 94, 0.4)' : '0 4px 14px rgba(239, 68, 68, 0.4)'
+                }}
+              >
+                {compareMode === 'bioflok' ? <CheckCircle2 size={20} /> : <X size={20} />}
               </div>
               <div>
-                <b style={{ fontSize: '18px', color: 'var(--txt)' }}>Nila Bioflok Modern NilaFarm</b>
-                <small style={{ color: 'var(--b)', display: 'block', fontWeight: 700 }}>STANDAR AKUAKULTUR SEHAT</small>
+                <b style={{ fontSize: '18px', color: 'var(--txt)', display: 'block' }}>
+                  {compareMode === 'bioflok' ? 'Standar Mutu Nila Bioflok Modern' : 'Risiko Mutu Tambak Tanah Konvensional'}
+                </b>
+                <span style={{ fontSize: '12px', color: compareMode === 'bioflok' ? '#22c55e' : '#ef4444', fontWeight: 700 }}>
+                  {compareMode === 'bioflok' ? '100% HIGIENIS & KONTROL TEKNOLOGI' : 'METODE TANAH RAWAN BAU AMIS & AMONIA'}
+                </span>
               </div>
             </div>
 
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '13.5px' }}>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                <CheckCircle2 size={16} color="#22c55e" style={{ flexShrink: 0, marginTop: '2px' }} />
-                <span><b>100% Bebas Bau Lumpur:</b> Kolam bundar terpal tanpa tanah, air beroksigen tinggi mencegah alga berbau menyengat.</span>
-              </li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                <CheckCircle2 size={16} color="#22c55e" style={{ flexShrink: 0, marginTop: '2px' }} />
-                <span><b>Tekstur Daging Padat & Manis:</b> Protein pakan FCR 1.2 ditambah suplemen flok alami menjadikan daging kenyal dan gurih.</span>
-              </li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                <CheckCircle2 size={16} color="#22c55e" style={{ flexShrink: 0, marginTop: '2px' }} />
-                <span><b>Higienis & Bebas Parasit:</b> Sirkulasi central drain membuang kotoran setiap hari, air selalu jernih dan terkontrol.</span>
-              </li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                <CheckCircle2 size={16} color="#22c55e" style={{ flexShrink: 0, marginTop: '2px' }} />
-                <span><b>Terpantau Sensor IoT 24 Jam:</b> Suhu air, dissolved oxygen, dan pH dicatat realtime demi kesehatan optimal ikan.</span>
-              </li>
-            </ul>
+            <span style={{ fontSize: '12.5px', color: 'var(--mut)', fontWeight: 600 }}>
+              Klik parameter untuk inspeksi teknis
+            </span>
           </div>
 
-          {/* Conventional Pond Card */}
-          <div 
-            className="glass-panel"
-            style={{
-              padding: '32px',
-              borderRadius: '24px',
-              border: '1px solid var(--border)',
-              background: 'var(--card)',
-              opacity: 0.9
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(239, 68, 68, 0.12)', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <X size={20} />
-              </div>
-              <div>
-                <b style={{ fontSize: '18px', color: 'var(--txt)' }}>Tambak Tanah Konvensional</b>
-                <small style={{ color: 'var(--mut)', display: 'block', fontWeight: 600 }}>METODE TRADISIONAL</small>
-              </div>
-            </div>
+          {/* 4 Interactive Visual Benchmark Bars */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(270px, 100%), 1fr))', gap: '18px' }}>
+            {benchmarks.map((bm, bIdx) => {
+              const isSelected = activeBenchmark === bIdx;
+              const isBio = compareMode === 'bioflok';
+              const currentScore = isBio ? bm.bioflokScore : bm.konvensionalScore;
+              const currentLabel = isBio ? bm.bioflokLabel : bm.konvensionalLabel;
+              const currentDetail = isBio ? bm.bioflokDetail : bm.konvensionalDetail;
+              const scoreColor = isBio ? '#22c55e' : '#ef4444';
 
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '13.5px', color: 'var(--mut)' }}>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                <span style={{ color: '#ef4444', fontWeight: 800 }}>✕</span>
-                <span><b>Sering Berbau Lumpur:</b> Ikan memakan endapan tanah di dasar kolam yang mengandung zat geosmin berbau amis tanah.</span>
-              </li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                <span style={{ color: '#ef4444', fontWeight: 800 }}>✕</span>
-                <span><b>Daging Lembek & Susut Tinggi:</b> Kurang asupan oksigen membuat daging cepat layu dan susut bobot setelah digoreng.</span>
-              </li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                <span style={{ color: '#ef4444', fontWeight: 800 }}>✕</span>
-                <span><b>Rentan Kotoran & Bakteri Liar:</b> Kotoran menumpuk di dasar lumpur tanpa sistem pembuangan limbah terpusat.</span>
-              </li>
-              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                <span style={{ color: '#ef4444', fontWeight: 800 }}>✕</span>
-                <span><b>Tanpa Pengawasan Kualitas Air:</b> Mudah mengalami kematian massal jika terjadi perubahan cuaca atau hujan lebat mendadak.</span>
-              </li>
-            </ul>
+              return (
+                <div
+                  key={bIdx}
+                  onClick={() => setActiveBenchmark(bIdx)}
+                  style={{
+                    padding: '20px',
+                    borderRadius: '20px',
+                    background: isSelected ? 'var(--card)' : 'var(--card2)',
+                    border: isSelected ? `2px solid ${scoreColor}` : '1px solid var(--border)',
+                    cursor: 'pointer',
+                    transition: 'all 0.25s ease'
+                  }}
+                >
+                  <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--b)', textTransform: 'uppercase', letterSpacing: '0.8px', display: 'block', marginBottom: '6px' }}>
+                    BENCHMARK {bIdx + 1}
+                  </span>
+                  <h4 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--txt)', margin: '0 0 10px', lineHeight: 1.3 }}>
+                    {bm.title}
+                  </h4>
+
+                  {/* Progress Gauge */}
+                  <div style={{ height: '8px', borderRadius: '9999px', background: 'rgba(0,0,0,0.1)', overflow: 'hidden', marginBottom: '10px' }}>
+                    <div 
+                      style={{ 
+                        height: '100%', 
+                        width: `${currentScore}%`, 
+                        background: scoreColor, 
+                        borderRadius: '9999px',
+                        transition: 'width 0.4s ease'
+                      }} 
+                    />
+                  </div>
+
+                  <b style={{ fontSize: '13px', color: scoreColor, display: 'block', marginBottom: '6px' }}>
+                    {currentLabel}
+                  </b>
+
+                  <p style={{ fontSize: '12.5px', color: 'var(--mut)', lineHeight: 1.55, margin: 0 }}>
+                    {currentDetail}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* 3. CORE FEATURES */}
+      {/* 3. VISUAL AQUACULTURE PIPELINE (Features Section without bland cards) */}
       <FeaturesSection lang={lang} onNavigate={onNavigate} />
 
-      {/* 4. FEATURED PRODUCTS HIGHLIGHT */}
+      {/* 4. FEATURED PRODUCTS (Cards preserved strictly for media presentation) */}
       <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '50px 20px', width: '100%', boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '16px', marginBottom: '32px' }}>
           <div>
@@ -231,6 +351,7 @@ export default function HomePage({
               }}
             >
               <div>
+                {/* Media Image Frame */}
                 <div style={{ height: '180px', borderRadius: '14px', overflow: 'hidden', marginBottom: '14px', position: 'relative' }}>
                   <img 
                     src={getProductImage(p)} 
@@ -238,7 +359,7 @@ export default function HomePage({
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                   <div style={{ position: 'absolute', bottom: '8px', left: '8px' }}>
-                    <span style={{ fontSize: '11px', fontWeight: 700, color: '#ffffff', background: 'rgba(13, 71, 161, 0.88)', padding: '3px 8px', borderRadius: '6px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 700, color: '#ffffff', background: 'rgba(13, 71, 161, 0.88)', padding: '3px 10px', borderRadius: '9999px' }}>
                       {p.kategori}
                     </span>
                   </div>
@@ -281,43 +402,57 @@ export default function HomePage({
         </div>
       </section>
 
-      {/* 5. BUDIDAYA PIPELINE CALLOUT BANNER */}
+      {/* 5. VISUAL BUDIDAYA PIPELINE & CALCULATOR BANNER (Replaces Heavy Boxy Card) */}
       <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '20px 20px 60px', width: '100%', boxSizing: 'border-box' }}>
         <div 
-          className="glass-panel"
           style={{
-            padding: '40px',
-            borderRadius: '26px',
-            background: 'linear-gradient(135deg, rgba(33, 150, 243, 0.14) 0%, rgba(13, 71, 161, 0.1) 100%)',
-            border: '2px solid var(--border-strong)',
+            position: 'relative',
+            padding: 'clamp(28px, 4vw, 48px)',
+            borderRadius: '32px',
+            background: 'linear-gradient(135deg, rgba(33, 150, 243, 0.12) 0%, rgba(13, 71, 161, 0.08) 100%)',
+            border: '1.5px solid var(--border-strong)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             flexWrap: 'wrap',
-            gap: '24px'
+            gap: '28px',
+            overflow: 'hidden'
           }}
         >
-          <div style={{ maxWidth: '640px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'var(--grad)', color: '#ffffff', padding: '5px 14px', borderRadius: '18px', fontSize: '11.5px', fontWeight: 700, marginBottom: '14px' }}>
+          <div style={{ maxWidth: '640px', position: 'relative', zIndex: 2 }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'var(--grad)', color: '#ffffff', padding: '5px 16px', borderRadius: '9999px', fontSize: '11.5px', fontWeight: 700, marginBottom: '16px' }}>
               <Calculator size={13} />
-              <span>Kalkulator & Panduan Khusus</span>
+              <span>Simulasi & Riset Akuakultur</span>
             </div>
-            <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 32px)', fontWeight: 800, color: 'var(--txt)', margin: '0 0 12px' }}>
-              Ingin Memulai Budidaya Nila Bioflok Sendiri?
+            <h2 style={{ fontSize: 'clamp(24px, 3.2vw, 34px)', fontWeight: 800, color: 'var(--txt)', margin: '0 0 14px', lineHeight: 1.25 }}>
+              Ingin Menghitung Estimasi Panen & Omset Sendiri?
             </h2>
             <p style={{ fontSize: '14.5px', color: 'var(--mut)', lineHeight: 1.65, margin: 0 }}>
-              Kunjungi Halaman Budidaya kami untuk membaca SOP langkah demi langkah (persiapan air, aklimatisasi benih, jadwal pakan FCR 1.2, hingga panen 90 hari) dan gunakan <b>Kalkulator Estimasi Hasil Panen & Omset</b> interaktif.
+              Gunakan <b>Kalkulator Budidaya Nila Bioflok</b> kami untuk mensimulasikan modal pakan FCR 1.2, padat tebar bibit, biomassa tonase, hingga keuntungan bersih siklus 90 hari secara realtime.
             </p>
+
+            {/* Quick Feature Metric Chips */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '18px' }}>
+              <span style={{ fontSize: '12px', fontWeight: 600, padding: '4px 12px', borderRadius: '9999px', background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--txt)' }}>
+                ⚡ Auto-Hitung FCR 1.2
+              </span>
+              <span style={{ fontSize: '12px', fontWeight: 600, padding: '4px 12px', borderRadius: '9999px', background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--txt)' }}>
+                🐟 Standar Kolam D4 (4.000 Ekor)
+              </span>
+              <span style={{ fontSize: '12px', fontWeight: 600, padding: '4px 12px', borderRadius: '9999px', background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--txt)' }}>
+                📈 Proyeksi Laba Bersih Siklus
+              </span>
+            </div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', position: 'relative', zIndex: 2 }}>
             <button
               onClick={() => onNavigate('budidaya')}
               className="btn-primary"
-              style={{ padding: '13px 26px', fontSize: '14.5px' }}
+              style={{ padding: '13px 26px', fontSize: '14px' }}
             >
               <Waves size={16} />
-              <span>Buka Halaman Budidaya & Kalkulator</span>
+              <span>Buka Kalkulator & SOP Budidaya</span>
               <ArrowRight size={15} />
             </button>
             <a 
@@ -337,7 +472,7 @@ export default function HomePage({
       {/* 6. TESTIMONIALS */}
       <TestimonialsSection lang={lang} />
 
-      {/* 7. LATEST ARTICLES CALLOUT */}
+      {/* 7. LATEST ARTICLES CALLOUT (Cards preserved strictly for media presentation) */}
       <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '50px 20px', width: '100%', boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '16px', marginBottom: '32px' }}>
           <div>
@@ -384,6 +519,7 @@ export default function HomePage({
               }}
             >
               <div>
+                {/* Media Image Frame */}
                 <div style={{ height: '190px', overflow: 'hidden' }}>
                   <img src={art.img} alt={art.judul} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
@@ -426,7 +562,7 @@ export default function HomePage({
         </div>
       </section>
 
-      {/* 8. FAQ ACCORDION */}
+      {/* 8. FAQ ACCORDION (Visual Clean Bordered Flow without Bland Glass Cards) */}
       <section style={{ maxWidth: '960px', margin: '0 auto', padding: '20px 20px 70px', width: '100%', boxSizing: 'border-box' }}>
         <div style={{ textAlign: 'center', marginBottom: '36px' }}>
           <span style={{ fontSize: '12.5px', fontWeight: 800, color: 'var(--b)', letterSpacing: '2px', textTransform: 'uppercase' }}>
@@ -437,25 +573,23 @@ export default function HomePage({
           </h2>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid var(--border)' }}>
           {faqs.map((faq, fIdx) => {
             const isOpen = openFaq === fIdx;
             return (
               <div 
                 key={fIdx}
-                className="glass-panel"
                 style={{
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  border: isOpen ? '1.5px solid var(--b)' : '1px solid var(--border)',
-                  transition: 'all 0.25s ease'
+                  borderBottom: '1px solid var(--border)',
+                  transition: 'background 0.2s ease',
+                  background: isOpen ? 'var(--card2)' : 'transparent'
                 }}
               >
                 <button
                   onClick={() => setOpenFaq(isOpen ? null : fIdx)}
                   style={{
                     width: '100%',
-                    padding: '18px 22px',
+                    padding: '20px 16px',
                     background: 'none',
                     border: 'none',
                     display: 'flex',
@@ -463,21 +597,35 @@ export default function HomePage({
                     justifyContent: 'space-between',
                     textAlign: 'left',
                     cursor: 'pointer',
-                    gap: '12px'
+                    gap: '14px'
                   }}
                 >
-                  <span style={{ fontSize: '15px', fontWeight: 700, color: 'var(--txt)' }}>
+                  <span style={{ fontSize: '15.5px', fontWeight: isOpen ? 800 : 600, color: isOpen ? 'var(--b)' : 'var(--txt)' }}>
                     {faq.q}
                   </span>
-                  <ChevronDown 
-                    size={18} 
-                    color="var(--b)" 
-                    style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s ease', flexShrink: 0 }} 
-                  />
+                  <div 
+                    style={{
+                      width: '28px',
+                      height: '28px',
+                      borderRadius: '50%',
+                      background: isOpen ? 'var(--b)' : 'var(--card2)',
+                      color: isOpen ? '#ffffff' : 'var(--mut)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      transition: 'all 0.25s ease'
+                    }}
+                  >
+                    <ChevronDown 
+                      size={16} 
+                      style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s ease' }} 
+                    />
+                  </div>
                 </button>
 
                 {isOpen && (
-                  <div style={{ padding: '0 22px 20px', color: 'var(--mut)', fontSize: '14px', lineHeight: 1.7, borderTop: '1px solid var(--border)', paddingTop: '14px' }}>
+                  <div style={{ padding: '0 16px 20px', color: 'var(--mut)', fontSize: '14px', lineHeight: 1.7 }}>
                     {faq.a}
                   </div>
                 )}
@@ -490,12 +638,11 @@ export default function HomePage({
       {/* 9. BOTTOM DUAL ADMIN WHATSAPP CALLOUT */}
       <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '0 20px 80px', width: '100%', boxSizing: 'border-box' }}>
         <div 
-          className="glass-panel"
           style={{
-            padding: '36px',
-            borderRadius: '26px',
-            background: 'linear-gradient(135deg, var(--card2) 0%, var(--card) 100%)',
-            border: '2px solid var(--border-strong)',
+            padding: 'clamp(24px, 3.5vw, 40px)',
+            borderRadius: '30px',
+            background: 'var(--card)',
+            border: '1px solid var(--border)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -524,20 +671,19 @@ export default function HomePage({
               target="_blank"
               rel="noreferrer"
               className="btn-primary"
-              style={{ padding: '12px 18px', fontSize: '13.5px' }}
+              style={{ padding: '12px 20px', fontSize: '13.5px' }}
             >
               <MessageCircle size={15} />
               <span>Admin 1: Hamdan Russ</span>
             </a>
-
             <a 
-              href="https://wa.me/6282122319510?text=Halo%20CS%20NilaFarm,%20saya%20ingin%20pesan%20ikan%20nila%20segar"
+              href="https://wa.me/6282122319510?text=Halo%20CS%20NilaFarm,%20saya%20ingin%20memesan%20ikan%20nila"
               target="_blank"
               rel="noreferrer"
               className="btn-ghost"
-              style={{ padding: '12px 18px', fontSize: '13.5px' }}
+              style={{ padding: '12px 20px', fontSize: '13.5px' }}
             >
-              <Truck size={15} color="#22c55e" />
+              <MessageCircle size={15} color="#22c55e" />
               <span>Admin 2: CS Pemesanan</span>
             </a>
           </div>
