@@ -20,8 +20,6 @@ export default function HeroSection({
   lang = 'id',
   isDark = false 
 }) {
-  const [activeTrustIndex, setActiveTrustIndex] = useState(0);
-
   const stats = [
     { num: '4', label: lang === 'en' ? 'Active Ponds' : 'Kolam Aktif', sub: '3 Bundar + 1 Kotak' },
     { num: '9.500+', label: lang === 'en' ? 'Healthy Tilapia' : 'Ekor Nila Sehat', sub: 'Bioflok Terawat' },
@@ -34,37 +32,25 @@ export default function HeroSection({
       id: 0,
       title: 'Panen Pagi Hari', 
       desc: 'Diserok langsung saat Anda memesan',
-      icon: Sun,
-      color: '#f59e0b',
-      detail: 'Panen pukul 06.00 WIB setiap pagi — ikan masih berenang saat Anda konfirmasi pesanan.',
-      highlight: 'Segar & Berenergi'
+      icon: Sun
     },
     { 
       id: 1,
       title: '100% Bebas Formalin', 
       desc: 'Air termonitor probe IoT 24 jam',
-      icon: ShieldCheck,
-      color: '#10b981',
-      detail: 'Kualitas air diukur sensor DO & pH kontinu. Nol obat kimia keras, alami dengan probiotik Bacillus.',
-      highlight: 'Alami & Higienis'
+      icon: ShieldCheck
     },
     { 
       id: 2,
       title: 'Dibersihkan Gratis', 
       desc: 'Minta sisik / fillet tanpa biaya',
-      icon: Sparkles,
-      color: '#06b6d4',
-      detail: 'Layanan pembersihan higienis tanpa biaya ekstra: buang isi perut, sisik, insang, atau minta fillet bersih.',
-      highlight: 'Siap Masak'
+      icon: Sparkles
     },
     { 
       id: 3,
       title: 'Antar Same-Day', 
-      desc: 'Area Sumedang & sekitarnya',
-      icon: Truck,
-      color: '#3b82f6',
-      detail: 'Kurir farm dengan coolbox ber-oksigen menjamin kualitas daging tetap kenyal manis hingga ke dapur Anda.',
-      highlight: 'Cepat & Dingin'
+      desc: 'Cepat & Dingin • Area Sumedang & sekitarnya',
+      icon: Truck
     }
   ];
 
@@ -351,154 +337,88 @@ export default function HeroSection({
         </div>
 
         {/* 
-          CARDLESS, INTERACTIVE, AND ELEGANT VALUE PROPOSITION SHOWCASE 
-          Under Hero Section:
+          CARDLESS, LINELESS, PREMIUM VALUE PROPOSITION
+          Pure open typography with subtle icons:
           - Panen Pagi Hari: Diserok langsung saat Anda memesan
           - 100% Bebas Formalin: Air termonitor probe IoT 24 jam
           - Dibersihkan Gratis: Minta sisik / fillet tanpa biaya
-          - Antar Same-Day: Area Sumedang & sekitarnya
+          - Antar Same-Day: Cepat & Dingin • Area Sumedang & sekitarnya
         */}
         <div 
           style={{
-            marginTop: '28px',
-            paddingTop: '24px',
-            borderTop: '1px solid var(--border)',
+            marginTop: '36px',
+            paddingTop: '20px',
             position: 'relative'
           }}
         >
-          {/* Subtle Ambient Backlight Track */}
           <div 
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))',
-              gap: '24px',
-              position: 'relative',
-              alignItems: 'stretch'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))',
+              gap: '28px',
+              alignItems: 'flex-start'
             }}
           >
-            {trustItems.map((item, idx) => {
+            {trustItems.map((item) => {
               const IconComp = item.icon;
-              const isActive = activeTrustIndex === idx;
-
               return (
                 <div
                   key={item.id}
-                  onClick={() => setActiveTrustIndex(idx)}
-                  onMouseEnter={() => setActiveTrustIndex(idx)}
                   style={{
-                    position: 'relative',
-                    padding: '16px 14px',
-                    borderRadius: '16px',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                    background: isActive
-                      ? (isDark ? 'rgba(33, 150, 243, 0.08)' : 'rgba(33, 150, 243, 0.05)')
-                      : 'transparent',
                     display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between'
+                    alignItems: 'flex-start',
+                    gap: '14px',
+                    transition: 'transform 0.25s ease'
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
-                  {/* Glowing Bottom Line Indicator for active item */}
                   <div 
                     style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      left: '14px',
-                      right: '14px',
-                      height: '2px',
-                      borderRadius: '2px',
-                      background: isActive ? item.color : 'transparent',
-                      boxShadow: isActive ? `0 0 12px ${item.color}` : 'none',
-                      transition: 'all 0.3s ease'
+                      width: '42px',
+                      height: '42px',
+                      borderRadius: '50%',
+                      background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(13, 71, 161, 0.05)',
+                      color: 'var(--b)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      transition: 'transform 0.25s ease'
                     }}
-                  />
-
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                    {/* Organic Aura Icon without hard card borders */}
-                    <div 
-                      style={{
-                        width: '38px',
-                        height: '38px',
-                        borderRadius: '12px',
-                        background: isActive 
-                          ? `${item.color}22` 
-                          : (isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)'),
-                        color: isActive ? item.color : 'var(--txt)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                        transition: 'all 0.3s ease',
-                        transform: isActive ? 'scale(1.08)' : 'scale(1)',
-                        boxShadow: isActive ? `0 4px 14px ${item.color}33` : 'none'
-                      }}
-                    >
-                      <IconComp size={20} />
-                    </div>
-
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
-                        <span 
-                          style={{ 
-                            fontSize: '14.5px', 
-                            fontWeight: 700, 
-                            color: isActive ? 'var(--txt)' : 'var(--txt)',
-                            transition: 'color 0.2s ease',
-                            lineHeight: 1.25
-                          }}
-                        >
-                          {item.title}
-                        </span>
-                        {isActive && (
-                          <span 
-                            style={{
-                              fontSize: '9px',
-                              fontWeight: 800,
-                              textTransform: 'uppercase',
-                              letterSpacing: '0.6px',
-                              padding: '1px 6px',
-                              borderRadius: '9999px',
-                              background: `${item.color}22`,
-                              color: item.color
-                            }}
-                          >
-                            {item.highlight}
-                          </span>
-                        )}
-                      </div>
-
-                      <p 
-                        style={{ 
-                          fontSize: '12.5px', 
-                          color: 'var(--mut)', 
-                          margin: '2px 0 0', 
-                          lineHeight: 1.45 
-                        }}
-                      >
-                        {item.desc}
-                      </p>
-                    </div>
+                  >
+                    <IconComp size={20} />
                   </div>
 
-                  {/* Dynamic interactive insight that expands smoothly on hover */}
-                  {isActive && (
-                    <div 
-                      style={{
-                        marginTop: '10px',
-                        padding: '8px 10px',
-                        borderRadius: '10px',
-                        background: isDark ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.7)',
-                        fontSize: '11px',
-                        color: 'var(--mut)',
-                        lineHeight: 1.4,
-                        borderLeft: `2.5px solid ${item.color}`,
-                        animation: 'fadeIn 0.25s ease'
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <h4 
+                      style={{ 
+                        fontSize: '15px', 
+                        fontWeight: 700, 
+                        color: 'var(--txt)',
+                        margin: '0 0 4px',
+                        lineHeight: 1.25,
+                        letterSpacing: '-0.2px'
                       }}
                     >
-                      {item.detail}
-                    </div>
-                  )}
+                      {item.title}
+                    </h4>
+
+                    <p 
+                      style={{ 
+                        fontSize: '13px', 
+                        color: 'var(--mut)', 
+                        margin: 0, 
+                        lineHeight: 1.5 
+                      }}
+                    >
+                      {item.desc}
+                    </p>
+                  </div>
                 </div>
               );
             })}
