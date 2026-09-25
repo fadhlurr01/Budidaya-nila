@@ -177,11 +177,20 @@ const OptionWheel = ({
     const el = rootRef.current;
     if (!el) return;
     const onWheel = e => {
-      e.preventDefault();
       const cfg = cfgRef.current;
       const delta = e.deltaMode === 1 ? e.deltaY * 24 : e.deltaY;
       const step = Math.max(-1, Math.min(1, delta / cfg.rowH));
-      applyTarget(targetRef.current + step, false);
+      const nextTarget = targetRef.current + step;
+      
+      // If reached top or bottom on non-looping, let the page scroll naturally
+      if (!cfg.loop) {
+        if ((delta < 0 && targetRef.current <= 0) || (delta > 0 && targetRef.current >= cfg.count - 1)) {
+          return;
+        }
+      }
+      
+      e.preventDefault();
+      applyTarget(nextTarget, false);
       if (wheelTimerRef.current) clearTimeout(wheelTimerRef.current);
       wheelTimerRef.current = setTimeout(() => applyTarget(targetRef.current, true), 140);
     };

@@ -3,18 +3,30 @@
   width: 100%;
   height: 100%;
   overflow-y: auto;
-  overflow-x: visible;
+  overflow-x: hidden;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
   will-change: scroll-position;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(33, 150, 243, 0.2) transparent;
+}
+
+.scroll-stack-scroller::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-stack-scroller::-webkit-scrollbar-thumb {
+  background: rgba(33, 150, 243, 0.25);
+  border-radius: 9999px;
 }
 
 .scroll-stack-inner {
-  padding: 12vh 2.5rem 35rem;
-  min-height: 100vh;
+  padding: 30px 1.5rem 12rem;
+  min-height: 100%;
+  box-sizing: border-box;
 }
 
 .scroll-stack-card-wrapper {
@@ -26,14 +38,13 @@
   will-change: transform, filter;
   backface-visibility: hidden;
   transform-style: preserve-3d;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
-  min-height: 18rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+  min-height: auto;
   width: 100%;
-  margin: 24px 0;
-  padding: 2.2rem;
-  border-radius: 32px;
+  margin: 16px 0;
+  padding: clamp(20px, 3vw, 30px);
+  border-radius: 24px;
   box-sizing: border-box;
-  /* Improve mobile performance */
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
   position: relative;
@@ -46,12 +57,12 @@
 
 @media (max-width: 768px) {
   .scroll-stack-inner {
-    padding: 6vh 0.75rem 24rem;
+    padding: 16px 0.5rem 8rem;
   }
   .scroll-stack-card {
-    min-height: 16rem;
-    padding: 1.4rem;
-    margin: 16px 0;
-    border-radius: 22px;
+    padding: 18px 14px;
+    margin: 12px 0;
+    border-radius: 20px;
   }
 }
+

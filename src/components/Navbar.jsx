@@ -101,7 +101,9 @@ export default function Navbar({
         margin: '0 auto',
         width: isHeroMerge ? '100%' : 'calc(100% - 24px)',
         maxWidth: isHeroMerge ? '100%' : '1760px',
-        zIndex: 1000,
+        zIndex: 9999,
+        transform: 'translateZ(0)',
+        WebkitTransform: 'translateZ(0)',
         boxSizing: 'border-box',
         transition: 'all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1)'
       }}
@@ -552,6 +554,8 @@ export default function Navbar({
             overscrollBehavior: 'contain',
             boxSizing: 'border-box',
             boxShadow: 'var(--shadow-lg)',
+            position: 'relative',
+            zIndex: 10000,
             display: 'flex',
             flexDirection: 'column',
             gap: '6px'

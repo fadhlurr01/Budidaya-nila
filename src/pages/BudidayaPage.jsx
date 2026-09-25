@@ -21,6 +21,7 @@ import {
   Wind
 } from 'lucide-react';
 import GallerySection from '../components/GallerySection';
+import ScrollStack, { ScrollStackItem } from '../components/ScrollStack';
 
 export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'id', isDark = false }) {
   // Interactive Calculator State
@@ -278,8 +279,8 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
       </section>
 
       {/* REACT BITS SCROLLSTACK WORKFLOW BUDIDAYA */}
-      <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '50px 20px 40px' }}>
-        <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 36px' }}>
+      <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '40px 20px 30px' }}>
+        <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 24px' }}>
           <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--b)', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
             Workflow & Roadmap Budidaya Nila
           </span>
@@ -287,100 +288,138 @@ export default function BudidayaPage({ onNavigate, onOpenConsultation, lang = 'i
             5 Langkah Budidaya Nila dari Awal Hingga Panen
           </h2>
           <p style={{ color: 'var(--mut)', fontSize: '15px', marginTop: '10px' }}>
-            Gulir wadah di bawah untuk melihat efek tumpukan kartu (*Scroll Stack*) pada alur 90 hari siklus bioflok kami.
+            Alur 90 hari terstandarisasi bioflok NilaFarm. Putar atau gulir tumpukan kartu di bawah secara interaktif.
           </p>
         </div>
 
-        {/* Smooth Natural Stacking Cards without outer white box - Zero Lag & Window Scroll */}
+        {/* Interactive Quick Stage Navigator Pills */}
+        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '22px' }}>
+          {sopSteps.map((st, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => {
+                setActiveSopStage(i);
+                const scroller = document.querySelector('.budidaya-scrollstack-container .scroll-stack-scroller');
+                const cards = document.querySelectorAll('.budidaya-scrollstack-container .scroll-stack-card');
+                if (scroller && cards[i]) {
+                  scroller.scrollTo({ top: cards[i].offsetTop - 15, behavior: 'smooth' });
+                }
+              }}
+              style={{
+                padding: '7px 16px',
+                borderRadius: '9999px',
+                fontSize: '12px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                border: activeSopStage === i ? `1.5px solid ${st.accent}` : '1px solid var(--border)',
+                background: activeSopStage === i ? `${st.accent}22` : 'var(--card2)',
+                color: activeSopStage === i ? st.accent : 'var(--mut)'
+              }}
+            >
+              Tahap {st.step}: {st.tag}
+            </button>
+          ))}
+        </div>
+
+        {/* ScrollStack Interactive Container - Open, Cardless Modern Wrapper */}
         <div 
-          style={{ 
-            maxWidth: '1000px', 
-            margin: '0 auto', 
+          className="budidaya-scrollstack-container"
+          style={{
+            height: 'clamp(520px, 70vh, 620px)',
+            borderRadius: '28px',
             position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '36px'
+            overflow: 'hidden',
+            background: isDark ? 'rgba(14, 36, 71, 0.45)' : 'rgba(240, 247, 255, 0.55)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1px solid var(--border)'
           }}
         >
-          {sopSteps.map((st, sIdx) => {
-            const accentColor = st.accent || '#2196f3';
-            const stickyTop = 100 + sIdx * 20;
-
-            return (
-              <div 
-                key={sIdx}
-                style={{
-                  position: 'sticky',
-                  top: `${stickyTop}px`,
-                  zIndex: sIdx + 1,
-                  background: isDark ? 'rgba(14, 36, 71, 0.96)' : 'rgba(255, 255, 255, 0.98)',
-                  backdropFilter: 'blur(20px)',
-                  WebkitBackdropFilter: 'blur(20px)',
-                  borderRadius: '24px',
-                  border: `1.5px solid ${accentColor}44`,
-                  boxShadow: `0 16px 40px ${accentColor}18, 0 4px 16px rgba(0, 0, 0, 0.06)`,
-                  padding: 'clamp(20px, 3.2vw, 32px)',
-                  marginBottom: sIdx === sopSteps.length - 1 ? '40px' : '0px',
-                  transition: 'transform 0.25s ease, box-shadow 0.25s ease'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span 
-                      style={{
-                        background: accentColor,
-                        color: '#ffffff',
-                        fontSize: '12px',
-                        fontWeight: 800,
-                        padding: '4px 14px',
-                        borderRadius: '9999px',
-                        letterSpacing: '0.8px'
-                      }}
-                    >
-                      TAHAP {st.step}
-                    </span>
-                    <span style={{ fontSize: '13.5px', color: accentColor, fontWeight: 700 }}>
-                      {st.tag}
-                    </span>
-                  </div>
-                  <span style={{ fontSize: '12px', color: 'var(--mut)', fontWeight: 600 }}>
-                    SOP Resmi NilaFarm Sumedang
-                  </span>
-                </div>
-
-                <h3 style={{ fontSize: 'clamp(18px, 2.2vw, 24px)', fontWeight: 800, color: 'var(--txt)', marginBottom: '12px', lineHeight: 1.3 }}>
-                  {st.title}
-                </h3>
-
-                <p style={{ fontSize: '14px', color: 'var(--mut)', lineHeight: 1.65, marginBottom: '18px' }}>
-                  {st.desc}
-                </p>
-
-                <div 
+          <ScrollStack
+            itemDistance={60}
+            itemScale={0.03}
+            itemStackDistance={24}
+            stackPosition="10%"
+            scaleEndPosition="4%"
+            baseScale={0.9}
+            blurAmount={0}
+            useWindowScroll={false}
+          >
+            {sopSteps.map((st, sIdx) => {
+              const accentColor = st.accent || '#2196f3';
+              return (
+                <ScrollStackItem 
+                  key={sIdx}
                   style={{
-                    background: isDark ? 'rgba(7, 21, 43, 0.65)' : 'rgba(240, 247, 255, 0.7)',
-                    padding: '16px 20px',
-                    borderRadius: '16px',
-                    border: '1px solid var(--border)'
+                    background: isDark ? 'rgba(14, 36, 71, 0.95)' : 'rgba(255, 255, 255, 0.98)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    border: `1.5px solid ${accentColor}55`,
+                    boxShadow: `0 14px 36px ${accentColor}18, 0 4px 12px rgba(0, 0, 0, 0.04)`,
+                    position: 'relative',
+                    borderRadius: '24px'
                   }}
                 >
-                  <div style={{ fontSize: '12.5px', fontWeight: 800, color: 'var(--txt)', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Sparkles size={15} color={accentColor} />
-                    <span>Kunci Keberhasilan Teknis:</span>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <span 
+                        style={{
+                          background: accentColor,
+                          color: '#ffffff',
+                          fontSize: '12px',
+                          fontWeight: 800,
+                          padding: '4px 14px',
+                          borderRadius: '9999px',
+                          letterSpacing: '0.8px'
+                        }}
+                      >
+                        TAHAP {st.step}
+                      </span>
+                      <span style={{ fontSize: '13.5px', color: accentColor, fontWeight: 700 }}>
+                        {st.tag}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: '12px', color: 'var(--mut)', fontWeight: 600 }}>
+                      SOP Resmi NilaFarm Sumedang
+                    </span>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '8px' }}>
-                    {st.points.map((pt, ptIdx) => (
-                      <div key={ptIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '12.5px', color: 'var(--txt)' }}>
-                        <CheckCircle2 size={15} color="#22c55e" style={{ flexShrink: 0, marginTop: '2px' }} />
-                        <span style={{ lineHeight: 1.45 }}>{pt}</span>
-                      </div>
-                    ))}
+                  <h3 style={{ fontSize: 'clamp(18px, 2.2vw, 24px)', fontWeight: 800, color: 'var(--txt)', marginBottom: '12px', lineHeight: 1.3 }}>
+                    {st.title}
+                  </h3>
+
+                  <p style={{ fontSize: '14px', color: 'var(--mut)', lineHeight: 1.65, marginBottom: '18px' }}>
+                    {st.desc}
+                  </p>
+
+                  <div 
+                    style={{
+                      background: isDark ? 'rgba(7, 21, 43, 0.65)' : 'rgba(240, 247, 255, 0.7)',
+                      padding: '16px 20px',
+                      borderRadius: '16px',
+                      border: '1px solid var(--border)'
+                    }}
+                  >
+                    <div style={{ fontSize: '12.5px', fontWeight: 800, color: 'var(--txt)', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <Sparkles size={15} color={accentColor} />
+                      <span>Kunci Keberhasilan Teknis:</span>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '8px' }}>
+                      {st.points.map((pt, ptIdx) => (
+                        <div key={ptIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', fontSize: '12.5px', color: 'var(--txt)' }}>
+                          <CheckCircle2 size={15} color="#22c55e" style={{ flexShrink: 0, marginTop: '2px' }} />
+                          <span style={{ lineHeight: 1.45 }}>{pt}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </div>
-            );
-          })}
+                </ScrollStackItem>
+              );
+            })}
+          </ScrollStack>
         </div>
       </section>
 
