@@ -43,9 +43,9 @@ export default function AuthModal({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <img 
-              src="/assets/logo.png" 
+              src="/assets/logo/logoo.png" 
               alt="Logo" 
-              style={{ width: '28px', height: '28px', objectFit: 'contain' }} 
+              style={{ width: '28px', height: '28px', objectFit: 'contain', imageRendering: '-webkit-optimize-contrast' }} 
             />
             <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--txt)', margin: 0 }}>
               Masuk Panel Farm

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
-  X, 
   User, 
   Mail, 
   Lock, 
@@ -8,7 +8,7 @@ import {
   MapPin, 
   ArrowRight, 
   CheckCircle2, 
-  ShoppingBag,
+  ArrowLeft,
   Sparkles,
   Waves,
   ShieldCheck,
@@ -17,12 +17,12 @@ import {
   AlertCircle
 } from 'lucide-react';
 
-export default function CustomerAuthModal({ 
-  isOpen, 
-  onClose, 
+export default function AuthPage({ 
+  initialMode = 'login', // 'login' | 'register'
   onLoginSuccess, 
+  onNavigate,
   onShowToast,
-  initialMode = 'login' // 'login' | 'register'
+  isDark = false 
 }) {
   const [mode, setMode] = useState(initialMode); // 'login' | 'register'
   const [loginEmail, setLoginEmail] = useState('');
@@ -40,27 +40,23 @@ export default function CustomerAuthModal({
   const [regError, setRegError] = useState('');
 
   const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' ? window.innerWidth <= 768 : false
+    typeof window !== 'undefined' ? window.innerWidth <= 840 : false
   );
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
+    const handleResize = () => setIsMobile(window.innerWidth <= 840);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
-    if (isOpen) {
-      setMode(initialMode || 'login');
-      setLoginError('');
-      setRegError('');
-    }
-  }, [isOpen, initialMode]);
+    setMode(initialMode || 'login');
+    setLoginError('');
+    setRegError('');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [initialMode]);
 
-  if (!isOpen) return null;
-
+  // Login handler with real validation
   const handleLogin = (e) => {
     e.preventDefault();
     setLoginError('');
@@ -79,7 +75,6 @@ export default function CustomerAuthModal({
       savedUsers = [];
     }
 
-    // Match by email or phone and password
     const found = savedUsers.find(
       u => (
         (u.email && u.email.toLowerCase() === inputVal.toLowerCase()) || 
@@ -88,11 +83,10 @@ export default function CustomerAuthModal({
     );
 
     if (found) {
-      onLoginSuccess(found);
+      if (onLoginSuccess) onLoginSuccess(found);
       if (onShowToast) onShowToast(`Selamat datang kembali, ${found.name}!`, 'ok');
-      onClose();
+      if (onNavigate) onNavigate('beranda');
     } else {
-      // Check if user exists with that email/phone but incorrect password
       const userExists = savedUsers.find(
         u => (u.email && u.email.toLowerCase() === inputVal.toLowerCase()) || (u.phone && u.phone === inputVal)
       );
@@ -107,6 +101,7 @@ export default function CustomerAuthModal({
     }
   };
 
+  // Register handler
   const handleRegister = (e) => {
     e.preventDefault();
     setRegError('');
@@ -162,103 +157,124 @@ export default function CustomerAuthModal({
       localStorage.setItem('nilafarm_users', JSON.stringify(savedUsers));
     } catch {}
 
-    onLoginSuccess(newUser);
+    if (onLoginSuccess) onLoginSuccess(newUser);
     if (onShowToast) onShowToast(`Akun berhasil dibuat! Selamat datang di NilaFarm, ${newUser.name}.`, 'ok');
-    onClose();
+    if (onNavigate) onNavigate('beranda');
   };
 
-  // 1. FRAME IDENTITAS
-  const renderIdentityFrame = () => (
-    <div 
-      className="auth-identity-frame"
+  // IDENTITY FRAME
+  const renderIdentity = () => (
+    <motion.div 
+      key={`identity-${mode}`}
+      initial={{ opacity: 0, x: mode === 'login' ? -30 : 30 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: mode === 'login' ? 30 : -30 }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
       style={{
         flex: '1 1 45%',
-        padding: 'clamp(24px, 4vw, 36px)',
-        background: 'linear-gradient(145deg, rgba(33, 150, 243, 0.16) 0%, rgba(13, 71, 161, 0.22) 100%)',
-        borderRight: mode === 'login' ? '1px solid var(--border)' : 'none',
-        borderLeft: mode === 'register' ? '1px solid var(--border)' : 'none',
+        padding: 'clamp(28px, 4vw, 44px)',
+        background: 'linear-gradient(145deg, rgba(33, 150, 243, 0.14) 0%, rgba(13, 71, 161, 0.22) 100%)',
         display: isMobile ? 'none' : 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        borderRight: mode === 'login' ? '1px solid var(--border)' : 'none',
+        borderLeft: mode === 'register' ? '1px solid var(--border)' : 'none'
       }}
     >
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
           <img 
             src="/assets/logo/logoo.png" 
-            alt="NilaFarm Logo" 
-            style={{ width: '40px', height: '40px', objectFit: 'contain', imageRendering: '-webkit-optimize-contrast' }} 
+            alt="NilaFarm Logo HD" 
+            style={{ 
+              width: '42px', 
+              height: '42px', 
+              objectFit: 'contain',
+              imageRendering: '-webkit-optimize-contrast',
+              filter: 'drop-shadow(0 4px 12px rgba(33, 150, 243, 0.35))' 
+            }} 
           />
           <div>
-            <b style={{ fontSize: '18px', color: 'var(--txt)', display: 'block', lineHeight: 1.1 }}>
+            <b style={{ fontSize: '20px', color: 'var(--txt)', display: 'block', lineHeight: 1.1 }}>
               NilaFarm
             </b>
-            <span style={{ fontSize: '11px', color: 'var(--b)', fontWeight: 700, letterSpacing: '0.5px' }}>
-              SMART BIOFLOK IOT
+            <span style={{ fontSize: '11px', color: 'var(--b)', fontWeight: 800, letterSpacing: '1px' }}>
+              SMART BIOFLOK IOT SUMEDANG
             </span>
           </div>
         </div>
 
-        <h3 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--txt)', margin: '0 0 10px', lineHeight: 1.3 }}>
+        <h3 style={{ fontSize: 'clamp(22px, 2.8vw, 26px)', fontWeight: 800, color: 'var(--txt)', margin: '0 0 12px', lineHeight: 1.25 }}>
           {mode === 'login' ? 'Selamat Datang Kembali di NilaFarm' : 'Daftar Akun & Dapatkan Akses Eksklusif'}
         </h3>
         
-        <p style={{ fontSize: '13px', color: 'var(--mut)', lineHeight: 1.55, margin: '0 0 24px' }}>
+        <p style={{ fontSize: '13.5px', color: 'var(--mut)', lineHeight: 1.6, margin: '0 0 28px' }}>
           {mode === 'login'
-            ? 'Masuk untuk memantau status pesanan ikan nila segar, riwayat pembelian, dan telemetri budidaya bioflok Anda.'
-            : 'Bergabunglah bersama ratusan pelanggan setia NilaFarm Sumedang dan nikmati kemudahan belanja ikan segar langsung dari kolam.'}
+            ? 'Masuk ke portal akun Anda untuk memantau status pesanan ikan nila segar, riwayat pembelian, nota digital, dan konsultasi budidaya bioflok secara real-time.'
+            : 'Bergabunglah bersama komunitas pelanggan NilaFarm Sumedang untuk kemudahan belanja ikan segar panen pagi tanpa bau lumpur langsung dari kolam.'}
         </p>
 
-        {/* Highlight Points */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-            <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(33, 150, 243, 0.18)', color: 'var(--b)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <Truck size={15} />
+        {/* Feature Highlights */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'rgba(33, 150, 243, 0.18)', color: 'var(--b)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <Truck size={17} />
             </div>
             <div>
-              <b style={{ fontSize: '12.5px', color: 'var(--txt)', display: 'block' }}>Lacak Posisi Pengiriman Real-time</b>
-              <small style={{ fontSize: '11.5px', color: 'var(--mut)' }}>Pantau armada pengantar langsung dari kolam ke lokasi Anda.</small>
+              <b style={{ fontSize: '13.5px', color: 'var(--txt)', display: 'block' }}>Lacak Posisi Pengiriman Real-time</b>
+              <small style={{ fontSize: '12px', color: 'var(--mut)', lineHeight: 1.4, display: 'block' }}>
+                Pantau armada pickup cold-chain langsung menuju alamat Anda.
+              </small>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-            <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.18)', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <ShieldCheck size={15} />
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.18)', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <ShieldCheck size={17} />
             </div>
             <div>
-              <b style={{ fontSize: '12.5px', color: 'var(--txt)', display: 'block' }}>100% Bebas Bau Lumpur</b>
-              <small style={{ fontSize: '11.5px', color: 'var(--mut)' }}>Kualitas daging manis gurih dengan standar bioflok modern.</small>
+              <b style={{ fontSize: '13.5px', color: 'var(--txt)', display: 'block' }}>Garansi 100% Bebas Bau Lumpur</b>
+              <small style={{ fontSize: '12px', color: 'var(--mut)', lineHeight: 1.4, display: 'block' }}>
+                Daging tebal manis gurih dipelihara dengan air terawat micro-bubble.
+              </small>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-            <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(245, 158, 11, 0.18)', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <FileText size={15} />
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'rgba(245, 158, 11, 0.18)', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <FileText size={17} />
             </div>
             <div>
-              <b style={{ fontSize: '12.5px', color: 'var(--txt)', display: 'block' }}>Nota & Riwayat Belanja Lengkap</b>
-              <small style={{ fontSize: '11.5px', color: 'var(--mut)' }}>Semua faktur dan pesanan Anda tersimpan rapi otomatis.</small>
+              <b style={{ fontSize: '13.5px', color: 'var(--txt)', display: 'block' }}>Riwayat Belanja & Nota Digital</b>
+              <small style={{ fontSize: '12px', color: 'var(--mut)', lineHeight: 1.4, display: 'block' }}>
+                Semua faktur dan pesanan Anda tersimpan rapi dan mudah dicetak.
+              </small>
             </div>
           </div>
         </div>
       </div>
 
-      <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid var(--border)' }}>
-        <span style={{ fontSize: '11px', color: 'var(--mut)', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-          <Sparkles size={13} color="var(--b)" />
-          Layanan Resmi Budidaya Nila Bioflok Sumedang
+      <div style={{ marginTop: '28px', paddingTop: '18px', borderTop: '1px solid var(--border)' }}>
+        <span style={{ fontSize: '11.5px', color: 'var(--mut)', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+          <Sparkles size={14} color="var(--b)" />
+          Layanan Resmi Budidaya Nila Bioflok Modern • Sumedang, Jawa Barat
         </span>
       </div>
-    </div>
+    </motion.div>
   );
 
-  // 2. FRAME FORM (LOGIN / REGISTER)
-  const renderFormFrame = () => (
-    <div 
+  // FORM FRAME
+  const renderForm = () => (
+    <motion.div 
+      key={`form-${mode}`}
+      initial={{ opacity: 0, x: mode === 'login' ? 30 : -30 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: mode === 'login' ? -30 : 30 }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
       style={{
         flex: '1 1 55%',
-        padding: 'clamp(20px, 3.5vw, 32px)',
+        padding: 'clamp(24px, 4vw, 44px)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -267,40 +283,36 @@ export default function CustomerAuthModal({
       }}
     >
       <div>
-        {/* Header Modal */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+        {/* Top Header */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
           <div>
-            <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--b)', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              {mode === 'login' ? 'Autentikasi Pembeli' : 'Registrasi Akun Baru'}
+            <span style={{ fontSize: '11.5px', fontWeight: 800, color: 'var(--b)', textTransform: 'uppercase', letterSpacing: '1.2px' }}>
+              {mode === 'login' ? 'Portal Pelanggan' : 'Pendaftaran Anggota'}
             </span>
-            <h2 style={{ fontSize: 'clamp(20px, 2.5vw, 24px)', fontWeight: 800, color: 'var(--txt)', margin: '4px 0 0' }}>
-              {mode === 'login' ? 'Masuk ke Akun Anda' : 'Buat Akun Pelanggan'}
+            <h2 style={{ fontSize: 'clamp(22px, 2.8vw, 28px)', fontWeight: 800, color: 'var(--txt)', margin: '4px 0 0' }}>
+              {mode === 'login' ? 'Masuk ke Akun Anda' : 'Buat Akun NilaFarm'}
             </h2>
           </div>
 
           <button 
             type="button"
-            onClick={onClose}
-            aria-label="Tutup"
+            onClick={() => onNavigate && onNavigate('beranda')}
+            className="btn-ghost"
             style={{
-              background: 'var(--card2)',
-              border: '1px solid var(--border)',
-              borderRadius: '50%',
-              width: '34px',
-              height: '34px',
-              cursor: 'pointer',
+              padding: '6px 14px',
+              fontSize: '12px',
+              borderRadius: '9999px',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--txt)',
-              flexShrink: 0
+              gap: '6px'
             }}
           >
-            <X size={17} />
+            <ArrowLeft size={13} />
+            <span>Beranda</span>
           </button>
         </div>
 
-        {/* Tab Switcher Pills */}
+        {/* Tab Pill Switcher with Smooth Swap */}
         <div 
           style={{
             display: 'grid',
@@ -309,7 +321,7 @@ export default function CustomerAuthModal({
             borderRadius: '9999px',
             padding: '4px',
             gap: '4px',
-            marginBottom: '18px',
+            marginBottom: '22px',
             border: '1px solid var(--border)'
           }}
         >
@@ -321,15 +333,15 @@ export default function CustomerAuthModal({
               setRegError('');
             }}
             style={{
-              padding: '8px 14px',
+              padding: '10px 16px',
               borderRadius: '9999px',
               border: 'none',
               background: mode === 'login' ? 'var(--b)' : 'transparent',
               color: mode === 'login' ? '#ffffff' : 'var(--mut)',
-              fontSize: '12.5px',
+              fontSize: '13px',
               fontWeight: 700,
               cursor: 'pointer',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.25s ease'
             }}
           >
             Masuk
@@ -342,15 +354,15 @@ export default function CustomerAuthModal({
               setRegError('');
             }}
             style={{
-              padding: '8px 14px',
+              padding: '10px 16px',
               borderRadius: '9999px',
               border: 'none',
               background: mode === 'register' ? 'var(--b)' : 'transparent',
               color: mode === 'register' ? '#ffffff' : 'var(--mut)',
-              fontSize: '12.5px',
+              fontSize: '13px',
               fontWeight: 700,
               cursor: 'pointer',
-              transition: 'all 0.2s ease'
+              transition: 'all 0.25s ease'
             }}
           >
             Daftar Akun Baru
@@ -361,18 +373,18 @@ export default function CustomerAuthModal({
         {mode === 'login' && loginError && (
           <div 
             style={{
-              padding: '12px 14px',
-              borderRadius: '14px',
+              padding: '14px 16px',
+              borderRadius: '16px',
               background: 'rgba(239, 68, 68, 0.1)',
               border: '1.5px solid rgba(239, 68, 68, 0.35)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '8px',
-              marginBottom: '16px'
+              gap: '10px',
+              marginBottom: '18px'
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ef4444', fontSize: '12.5px', fontWeight: 700 }}>
-              <AlertCircle size={16} flexShrink={0} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ef4444', fontSize: '13px', fontWeight: 700 }}>
+              <AlertCircle size={17} flexShrink={0} />
               <span>{loginError}</span>
             </div>
             <button
@@ -383,11 +395,10 @@ export default function CustomerAuthModal({
               }}
               className="btn-primary"
               style={{
-                padding: '7px 16px',
-                fontSize: '12px',
+                padding: '8px 18px',
+                fontSize: '12.5px',
                 borderRadius: '9999px',
-                alignSelf: 'flex-start',
-                marginTop: '2px'
+                alignSelf: 'flex-start'
               }}
             >
               <span>+ Buat Akun Baru Sekarang</span>
@@ -399,33 +410,33 @@ export default function CustomerAuthModal({
         {mode === 'register' && regError && (
           <div 
             style={{
-              padding: '10px 14px',
-              borderRadius: '12px',
+              padding: '12px 14px',
+              borderRadius: '14px',
               background: 'rgba(239, 68, 68, 0.1)',
               border: '1px solid rgba(239, 68, 68, 0.35)',
               color: '#ef4444',
-              fontSize: '12px',
+              fontSize: '12.5px',
               fontWeight: 600,
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              marginBottom: '14px'
+              marginBottom: '16px'
             }}
           >
-            <AlertCircle size={15} flexShrink={0} />
+            <AlertCircle size={16} flexShrink={0} />
             <span>{regError}</span>
           </div>
         )}
 
         {/* 1. FORM LOGIN */}
         {mode === 'login' && (
-          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--txt)', marginBottom: '5px' }}>
+              <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 700, color: 'var(--txt)', marginBottom: '6px' }}>
                 Email atau No. WhatsApp
               </label>
               <div style={{ position: 'relative' }}>
-                <Mail size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '12px' }} />
+                <Mail size={16} color="var(--mut)" style={{ position: 'absolute', left: '14px', top: '13px' }} />
                 <input 
                   type="text"
                   required
@@ -435,12 +446,12 @@ export default function CustomerAuthModal({
                   style={{
                     width: '100%',
                     boxSizing: 'border-box',
-                    padding: '10px 12px 10px 36px',
-                    borderRadius: '12px',
+                    padding: '12px 14px 12px 40px',
+                    borderRadius: '14px',
                     border: '1px solid var(--border)',
                     background: 'var(--card2)',
                     color: 'var(--txt)',
-                    fontSize: '13px',
+                    fontSize: '13.5px',
                     outline: 'none'
                   }}
                 />
@@ -448,13 +459,13 @@ export default function CustomerAuthModal({
             </div>
 
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
-                <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--txt)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <label style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--txt)' }}>
                   Kata Sandi
                 </label>
               </div>
               <div style={{ position: 'relative' }}>
-                <Lock size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '12px' }} />
+                <Lock size={16} color="var(--mut)" style={{ position: 'absolute', left: '14px', top: '13px' }} />
                 <input 
                   type="password"
                   required
@@ -464,12 +475,12 @@ export default function CustomerAuthModal({
                   style={{
                     width: '100%',
                     boxSizing: 'border-box',
-                    padding: '10px 12px 10px 36px',
-                    borderRadius: '12px',
+                    padding: '12px 14px 12px 40px',
+                    borderRadius: '14px',
                     border: '1px solid var(--border)',
                     background: 'var(--card2)',
                     color: 'var(--txt)',
-                    fontSize: '13px',
+                    fontSize: '13.5px',
                     outline: 'none'
                   }}
                 />
@@ -480,22 +491,22 @@ export default function CustomerAuthModal({
               type="submit"
               className="btn-primary"
               style={{
-                padding: '11px',
-                fontSize: '13.5px',
+                padding: '13px',
+                fontSize: '14px',
                 borderRadius: '9999px',
-                marginTop: '4px',
+                marginTop: '6px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px'
               }}
             >
-              <span>Masuk ke Akun</span>
-              <ArrowRight size={15} />
+              <span>Masuk ke Akun Saya</span>
+              <ArrowRight size={16} />
             </button>
 
-            <div style={{ textAlign: 'center', marginTop: '10px' }}>
-              <span style={{ fontSize: '12.5px', color: 'var(--mut)' }}>
+            <div style={{ textAlign: 'center', marginTop: '12px' }}>
+              <span style={{ fontSize: '13px', color: 'var(--mut)' }}>
                 Belum pernah mendaftar?{' '}
                 <button
                   type="button"
@@ -521,13 +532,13 @@ export default function CustomerAuthModal({
 
         {/* 2. FORM REGISTER (BUAT AKUN BARU) */}
         {mode === 'register' && (
-          <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '11px' }}>
+          <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--txt)', marginBottom: '4px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'var(--txt)', marginBottom: '5px' }}>
                 Nama Lengkap *
               </label>
               <div style={{ position: 'relative' }}>
-                <User size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '10px' }} />
+                <User size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
                 <input 
                   type="text"
                   required
@@ -537,12 +548,12 @@ export default function CustomerAuthModal({
                   style={{
                     width: '100%',
                     boxSizing: 'border-box',
-                    padding: '9px 12px 9px 36px',
-                    borderRadius: '10px',
+                    padding: '10px 12px 10px 38px',
+                    borderRadius: '12px',
                     border: '1px solid var(--border)',
                     background: 'var(--card2)',
                     color: 'var(--txt)',
-                    fontSize: '12.5px',
+                    fontSize: '13px',
                     outline: 'none'
                   }}
                 />
@@ -551,11 +562,11 @@ export default function CustomerAuthModal({
 
             <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '10px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--txt)', marginBottom: '4px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'var(--txt)', marginBottom: '5px' }}>
                   No. WhatsApp *
                 </label>
                 <div style={{ position: 'relative' }}>
-                  <Phone size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '10px' }} />
+                  <Phone size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
                   <input 
                     type="tel"
                     required
@@ -565,12 +576,12 @@ export default function CustomerAuthModal({
                     style={{
                       width: '100%',
                       boxSizing: 'border-box',
-                      padding: '9px 12px 9px 36px',
-                      borderRadius: '10px',
+                      padding: '10px 12px 10px 38px',
+                      borderRadius: '12px',
                       border: '1px solid var(--border)',
                       background: 'var(--card2)',
                       color: 'var(--txt)',
-                      fontSize: '12.5px',
+                      fontSize: '13px',
                       outline: 'none'
                     }}
                   />
@@ -578,11 +589,11 @@ export default function CustomerAuthModal({
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--txt)', marginBottom: '4px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'var(--txt)', marginBottom: '5px' }}>
                   Email (Opsional)
                 </label>
                 <div style={{ position: 'relative' }}>
-                  <Mail size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '10px' }} />
+                  <Mail size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
                   <input 
                     type="email"
                     placeholder="nama@gmail.com"
@@ -591,12 +602,12 @@ export default function CustomerAuthModal({
                     style={{
                       width: '100%',
                       boxSizing: 'border-box',
-                      padding: '9px 12px 9px 36px',
-                      borderRadius: '10px',
+                      padding: '10px 12px 10px 38px',
+                      borderRadius: '12px',
                       border: '1px solid var(--border)',
                       background: 'var(--card2)',
                       color: 'var(--txt)',
-                      fontSize: '12.5px',
+                      fontSize: '13px',
                       outline: 'none'
                     }}
                   />
@@ -605,11 +616,11 @@ export default function CustomerAuthModal({
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--txt)', marginBottom: '4px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'var(--txt)', marginBottom: '5px' }}>
                 Alamat Pengiriman Lengkap
               </label>
               <div style={{ position: 'relative' }}>
-                <MapPin size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '10px' }} />
+                <MapPin size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
                 <input 
                   type="text"
                   placeholder="Jl. Raya Sumedang No. 12, RT 02/04, Kotakaler"
@@ -618,12 +629,12 @@ export default function CustomerAuthModal({
                   style={{
                     width: '100%',
                     boxSizing: 'border-box',
-                    padding: '9px 12px 9px 36px',
-                    borderRadius: '10px',
+                    padding: '10px 12px 10px 38px',
+                    borderRadius: '12px',
                     border: '1px solid var(--border)',
                     background: 'var(--card2)',
                     color: 'var(--txt)',
-                    fontSize: '12.5px',
+                    fontSize: '13px',
                     outline: 'none'
                   }}
                 />
@@ -632,11 +643,11 @@ export default function CustomerAuthModal({
 
             <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '10px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--txt)', marginBottom: '4px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'var(--txt)', marginBottom: '5px' }}>
                   Kata Sandi *
                 </label>
                 <div style={{ position: 'relative' }}>
-                  <Lock size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '10px' }} />
+                  <Lock size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
                   <input 
                     type="password"
                     required
@@ -646,12 +657,12 @@ export default function CustomerAuthModal({
                     style={{
                       width: '100%',
                       boxSizing: 'border-box',
-                      padding: '9px 12px 9px 36px',
-                      borderRadius: '10px',
+                      padding: '10px 12px 10px 38px',
+                      borderRadius: '12px',
                       border: '1px solid var(--border)',
                       background: 'var(--card2)',
                       color: 'var(--txt)',
-                      fontSize: '12.5px',
+                      fontSize: '13px',
                       outline: 'none'
                     }}
                   />
@@ -659,11 +670,11 @@ export default function CustomerAuthModal({
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--txt)', marginBottom: '4px' }}>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'var(--txt)', marginBottom: '5px' }}>
                   Konfirmasi Sandi *
                 </label>
                 <div style={{ position: 'relative' }}>
-                  <Lock size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '10px' }} />
+                  <Lock size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
                   <input 
                     type="password"
                     required
@@ -673,12 +684,12 @@ export default function CustomerAuthModal({
                     style={{
                       width: '100%',
                       boxSizing: 'border-box',
-                      padding: '9px 12px 9px 36px',
-                      borderRadius: '10px',
+                      padding: '10px 12px 10px 38px',
+                      borderRadius: '12px',
                       border: '1px solid var(--border)',
                       background: 'var(--card2)',
                       color: 'var(--txt)',
-                      fontSize: '12.5px',
+                      fontSize: '13px',
                       outline: 'none'
                     }}
                   />
@@ -690,8 +701,8 @@ export default function CustomerAuthModal({
               type="submit"
               className="btn-primary"
               style={{
-                padding: '11px',
-                fontSize: '13.5px',
+                padding: '13px',
+                fontSize: '14px',
                 borderRadius: '9999px',
                 marginTop: '4px',
                 display: 'flex',
@@ -700,12 +711,12 @@ export default function CustomerAuthModal({
                 gap: '8px'
               }}
             >
-              <span>Daftar Sekarang</span>
-              <CheckCircle2 size={15} />
+              <span>Daftar Akun Sekarang</span>
+              <CheckCircle2 size={16} />
             </button>
 
-            <div style={{ textAlign: 'center', marginTop: '8px' }}>
-              <span style={{ fontSize: '12.5px', color: 'var(--mut)' }}>
+            <div style={{ textAlign: 'center', marginTop: '10px' }}>
+              <span style={{ fontSize: '13px', color: 'var(--mut)' }}>
                 Sudah memiliki akun?{' '}
                 <button
                   type="button"
@@ -729,50 +740,60 @@ export default function CustomerAuthModal({
           </form>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 
   return (
-    <div className="modal-backdrop" onClick={onClose} style={{ zIndex: 1100 }}>
+    <div 
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 'clamp(20px, 4vw, 40px) 16px',
+        boxSizing: 'border-box',
+        background: isDark ? 'var(--bg)' : 'linear-gradient(180deg, #f0f6ff 0%, var(--bg) 100%)'
+      }}
+    >
       <div 
-        className="modal-dialog" 
-        style={{ 
-          maxWidth: isMobile ? '460px' : '820px', 
-          width: '95%', 
-          padding: 0, 
-          borderRadius: '24px', 
-          overflow: 'hidden',
-          boxSizing: 'border-box',
+        style={{
+          width: '100%',
+          maxWidth: '1000px',
+          background: 'var(--card)',
+          borderRadius: '28px',
           border: '1.5px solid var(--border)',
-          background: 'var(--card)'
+          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.12)',
+          overflow: 'hidden'
         }}
-        onClick={e => e.stopPropagation()}
       >
-        {/* Desktop Two-Frames Layout:
-            - If Login: Left = Identity, Right = Form
-            - If Register / Signup: Left = Form, Right = Identity (Reversed)
-            - If Mobile: Identity is hidden, Form takes full width (Single Frame)
+        {/* Elegant Swap Layout:
+            - When mode === 'login': Left = Identity, Right = Form
+            - When mode === 'register': Left = Form, Right = Identity (Reversed)
+            - Animated with AnimatePresence for smooth swap transitions
         */}
         <div 
-          style={{ 
-            display: 'flex', 
-            flexDirection: 'row',
+          style={{
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
             alignItems: 'stretch',
-            width: '100%',
-            minHeight: isMobile ? 'auto' : '520px'
+            minHeight: isMobile ? 'auto' : '580px',
+            position: 'relative'
           }}
         >
-          {mode === 'login' ? (
-            <>
-              {renderIdentityFrame()}
-              {renderFormFrame()}
-            </>
-          ) : (
-            <>
-              {renderFormFrame()}
-              {renderIdentityFrame()}
-            </>
-          )}
+          <AnimatePresence mode="wait">
+            {mode === 'login' ? (
+              <React.Fragment key="layout-login">
+                {renderIdentity()}
+                {renderForm()}
+              </React.Fragment>
+            ) : (
+              <React.Fragment key="layout-register">
+                {renderForm()}
+                {renderIdentity()}
+              </React.Fragment>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>

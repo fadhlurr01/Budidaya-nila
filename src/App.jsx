@@ -8,7 +8,6 @@ import DashboardView from './components/DashboardView';
 import MagicBottomNav from './components/MagicBottomNav';
 import Toast from './components/Toast';
 import FloatingActionButtons from './components/FloatingActionButtons';
-import CustomerAuthModal from './components/CustomerAuthModal';
 import OrderTrackingModal from './components/OrderTrackingModal';
 
 // Dedicated Multipage Components
@@ -18,6 +17,7 @@ import ProductsPage from './pages/ProductsPage';
 import ArticlesPage from './pages/ArticlesPage';
 import ArticleDetailPage from './pages/ArticleDetailPage';
 import ContactPage from './pages/ContactPage';
+import AuthPage from './pages/AuthPage';
 
 import { 
   DEFAULT_PRODUCTS, 
@@ -34,7 +34,7 @@ export default function App() {
   const [activeSection, setActiveSection] = useState(() => {
     try {
       const hash = window.location.hash.replace('#', '').toLowerCase();
-      if (['beranda', 'budidaya', 'produk', 'artikel', 'kontak', 'cara', 'fitur'].includes(hash)) {
+      if (['beranda', 'budidaya', 'produk', 'artikel', 'kontak', 'cara', 'fitur', 'auth'].includes(hash)) {
         return hash;
       }
     } catch {}
@@ -151,7 +151,6 @@ export default function App() {
       return null;
     }
   });
-  const [isCustomerAuthOpen, setIsCustomerAuthOpen] = useState(false);
   const [isOrderTrackingOpen, setIsOrderTrackingOpen] = useState(false);
   const [trackingOrderId, setTrackingOrderId] = useState(null);
 
@@ -278,7 +277,7 @@ export default function App() {
           window.scrollTo({ top: 0, behavior: 'smooth' });
           return;
         }
-        if (['beranda', 'budidaya', 'produk', 'artikel', 'kontak', 'cara', 'fitur'].includes(rawHash)) {
+        if (['beranda', 'budidaya', 'produk', 'artikel', 'kontak', 'cara', 'fitur', 'auth'].includes(rawHash)) {
           setActiveSection(rawHash);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -396,7 +395,7 @@ export default function App() {
   const [customerAuthInitialMode, setCustomerAuthInitialMode] = useState('login');
   const handleOpenCustomerAuth = (mode = 'login') => {
     setCustomerAuthInitialMode(mode);
-    setIsCustomerAuthOpen(true);
+    handleNavigate('auth');
   };
 
   const handleCustomerLogin = (user) => {
@@ -510,6 +509,16 @@ export default function App() {
                       lang={lang}
                     />
                   );
+                case 'auth':
+                  return (
+                    <AuthPage 
+                      initialMode={customerAuthInitialMode}
+                      onLoginSuccess={handleCustomerLogin}
+                      onNavigate={handleNavigate}
+                      onShowToast={showToast}
+                      isDark={isDark}
+                    />
+                  );
                 case 'beranda':
                 default:
                   return (
@@ -588,15 +597,6 @@ export default function App() {
         onCustomerLogin={handleCustomerLogin}
         onCustomerLogout={handleCustomerLogout}
         onOpenOrderTracking={handleOpenOrderTracking}
-      />
-
-      {/* Customer Authentication Modal (Login & Register Akun Pelanggan) */}
-      <CustomerAuthModal 
-        isOpen={isCustomerAuthOpen}
-        onClose={() => setIsCustomerAuthOpen(false)}
-        initialMode={customerAuthInitialMode}
-        onLoginSuccess={handleCustomerLogin}
-        onShowToast={showToast}
       />
 
       {/* Realtime Order Tracking Modal (Pelacakan Status Pembelian & Keterangan Akun) */}

@@ -154,14 +154,15 @@ export default function Navbar({
             }}
           >
             <img 
-              src="/assets/logo.png" 
+              src="/assets/logo/logoo.png" 
               alt="NilaFarm Logo" 
               className="navbar-brand-logo-img"
               style={{ 
                 height: '38px', 
                 width: 'auto', 
                 objectFit: 'contain',
-                filter: 'drop-shadow(0 2px 8px rgba(33, 150, 243, 0.3))'
+                imageRendering: '-webkit-optimize-contrast',
+                filter: 'drop-shadow(0 2px 10px rgba(33, 150, 243, 0.4))'
               }} 
             />
             <div>

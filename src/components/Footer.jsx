@@ -36,9 +36,15 @@ export default function Footer({
         <div style={{ maxWidth: '320px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
             <img 
-              src="/assets/logo.png" 
+              src="/assets/logo/logoo.png" 
               alt="NilaFarm Logo" 
-              style={{ height: '36px', width: 'auto', objectFit: 'contain' }} 
+              style={{ 
+                height: '38px', 
+                width: 'auto', 
+                objectFit: 'contain',
+                imageRendering: '-webkit-optimize-contrast',
+                filter: 'drop-shadow(0 2px 8px rgba(33, 150, 243, 0.35))'
+              }} 
             />
             <div>
               <div style={{ fontSize: '19px', fontWeight: 800 }}>

@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   ArrowRight, 
   MessageCircle, 
-  Wind, 
-  Droplets, 
-  Thermometer, 
-  Activity, 
   CheckCircle2, 
-  Clock,
-  Sparkles
+  Sparkles,
+  Sun,
+  ShieldCheck,
+  Truck,
+  Droplets,
+  Activity,
+  Wind
 } from 'lucide-react';
 import ShinyText from './ShinyText';
+import OrbitImages from './OrbitImages';
 
 export default function HeroSection({ 
   onNavigate, 
@@ -18,25 +20,7 @@ export default function HeroSection({
   lang = 'id',
   isDark = false 
 }) {
-  const [telemetry, setTelemetry] = useState({
-    do: 6.4,
-    ph: 7.20,
-    temp: 28.4,
-    nh3: 0.12
-  });
-
-  // Simulated live sensor jitter
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTelemetry(prev => ({
-        do: +(prev.do + (Math.random() * 0.2 - 0.1)).toFixed(1),
-        ph: +(prev.ph + (Math.random() * 0.04 - 0.02)).toFixed(2),
-        temp: +(prev.temp + (Math.random() * 0.1 - 0.05)).toFixed(1),
-        nh3: +(Math.max(0.08, prev.nh3 + (Math.random() * 0.02 - 0.01))).toFixed(2)
-      }));
-    }, 2800);
-    return () => clearInterval(interval);
-  }, []);
+  const [activeTrustIndex, setActiveTrustIndex] = useState(0);
 
   const stats = [
     { num: '4', label: lang === 'en' ? 'Active Ponds' : 'Kolam Aktif', sub: '3 Bundar + 1 Kotak' },
@@ -46,10 +30,52 @@ export default function HeroSection({
   ];
 
   const trustItems = [
-    { title: 'Panen Pagi Hari', desc: 'Diserok langsung saat Anda memesan' },
-    { title: '100% Bebas Formalin', desc: 'Air termonitor probe IoT 24 jam' },
-    { title: 'Dibersihkan Gratis', desc: 'Minta sisik / fillet tanpa biaya' },
-    { title: 'Antar Same-Day', desc: 'Area Sumedang & sekitarnya' }
+    { 
+      id: 0,
+      title: 'Panen Pagi Hari', 
+      desc: 'Diserok langsung saat Anda memesan',
+      icon: Sun,
+      color: '#f59e0b',
+      detail: 'Panen pukul 06.00 WIB setiap pagi — ikan masih berenang saat Anda konfirmasi pesanan.',
+      highlight: 'Segar & Berenergi'
+    },
+    { 
+      id: 1,
+      title: '100% Bebas Formalin', 
+      desc: 'Air termonitor probe IoT 24 jam',
+      icon: ShieldCheck,
+      color: '#10b981',
+      detail: 'Kualitas air diukur sensor DO & pH kontinu. Nol obat kimia keras, alami dengan probiotik Bacillus.',
+      highlight: 'Alami & Higienis'
+    },
+    { 
+      id: 2,
+      title: 'Dibersihkan Gratis', 
+      desc: 'Minta sisik / fillet tanpa biaya',
+      icon: Sparkles,
+      color: '#06b6d4',
+      detail: 'Layanan pembersihan higienis tanpa biaya ekstra: buang isi perut, sisik, insang, atau minta fillet bersih.',
+      highlight: 'Siap Masak'
+    },
+    { 
+      id: 3,
+      title: 'Antar Same-Day', 
+      desc: 'Area Sumedang & sekitarnya',
+      icon: Truck,
+      color: '#3b82f6',
+      detail: 'Kurir farm dengan coolbox ber-oksigen menjamin kualitas daging tetap kenyal manis hingga ke dapur Anda.',
+      highlight: 'Cepat & Dingin'
+    }
+  ];
+
+  // Farm orbit showcase images
+  const orbitImages = [
+    '/assets/products/nila-segar.jpg',
+    '/assets/products/nila-fillet.jpg',
+    '/assets/products/kolam-d4.jpg',
+    '/assets/products/pakan-nila.jpg',
+    '/assets/products/sensor-iot.jpg',
+    '/assets/products/nila-bumbu.jpg'
   ];
 
   return (
@@ -60,13 +86,12 @@ export default function HeroSection({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        paddingTop: '96px', 
-        paddingBottom: '32px',
+        paddingTop: '105px', 
+        paddingBottom: '36px',
         overflow: 'hidden',
-        // Background biofloc image with modern gradient overlay
         background: isDark
-          ? `linear-gradient(180deg, rgba(7, 21, 43, 0.93) 0%, rgba(14, 36, 71, 0.84) 45%, rgba(7, 21, 43, 0.97) 88%, var(--bg) 100%), url('/assets/ikan-nila-bioflok.png') center center / cover no-repeat`
-          : `linear-gradient(180deg, rgba(238, 245, 254, 0.90) 0%, rgba(227, 242, 253, 0.78) 45%, rgba(247, 251, 255, 0.95) 85%, var(--bg) 100%), url('/assets/ikan-nila-bioflok.png') center center / cover no-repeat`
+          ? `linear-gradient(180deg, rgba(7, 21, 43, 0.94) 0%, rgba(14, 36, 71, 0.86) 45%, rgba(7, 21, 43, 0.98) 88%, var(--bg) 100%), url('/assets/ikan-nila-bioflok.png') center center / cover no-repeat`
+          : `linear-gradient(180deg, rgba(238, 245, 254, 0.92) 0%, rgba(227, 242, 253, 0.82) 45%, rgba(247, 251, 255, 0.96) 85%, var(--bg) 100%), url('/assets/ikan-nila-bioflok.png') center center / cover no-repeat`
       }}
     >
       <div 
@@ -74,17 +99,18 @@ export default function HeroSection({
           maxWidth: '1240px', 
           margin: '0 auto', 
           padding: '0 20px',
-          width: '100%'
+          width: '100%',
+          boxSizing: 'border-box'
         }}
       >
         <div 
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
             gap: '36px',
             alignItems: 'center',
-            paddingTop: '16px',
-            paddingBottom: '24px'
+            paddingTop: '10px',
+            paddingBottom: '20px'
           }}
         >
           {/* Left Column: Headlines & CTA */}
@@ -107,9 +133,15 @@ export default function HeroSection({
               }}
             >
               <img 
-                src="/assets/logo.png" 
-                alt="Logo" 
-                style={{ width: '18px', height: '18px', objectFit: 'contain' }} 
+                src="/assets/logo/logoo.png" 
+                alt="NilaFarm Logo" 
+                style={{ 
+                  width: '20px', 
+                  height: '20px', 
+                  objectFit: 'contain',
+                  imageRendering: '-webkit-optimize-contrast',
+                  filter: 'drop-shadow(0 2px 6px rgba(33, 150, 243, 0.35))' 
+                }} 
               />
               <span className="pulse-dot" />
               <ShinyText
@@ -219,267 +251,261 @@ export default function HeroSection({
             </div>
           </div>
 
-          {/* Right Column: Live Telemetry Glass Card */}
-          <div style={{ position: 'relative' }}>
-            {/* Floating Top Badge */}
-            <div 
-              style={{
-                position: 'absolute',
-                top: '-14px',
-                right: '16px',
-                background: 'var(--card)',
-                border: '1px solid var(--border)',
-                borderRadius: '14px',
-                padding: '6px 12px',
-                boxShadow: 'var(--shadow-md)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                fontSize: '11.5px',
-                fontWeight: 600,
-                color: 'var(--txt)',
-                zIndex: 10
-              }}
-            >
-              <Wind size={14} color="#2196f3" />
-              <span>Aerator Kolam A1: <b>Menyala (Auto)</b></span>
-            </div>
-
-            {/* Main Interactive Card */}
-            <div 
-              className="glass-panel"
-              style={{
-                padding: '22px',
-                borderRadius: '24px',
-                boxShadow: 'var(--shadow-lg)',
-                border: '1.5px solid var(--border)'
-              }}
-            >
-              {/* Header */}
-              <div 
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: '16px'
-                }}
-              >
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--txt)' }}>
-                      Kolam A1 — Bioflok D4
-                    </h3>
-                    <span className="chip ok" style={{ fontSize: '10px' }}>Live IoT</span>
-                  </div>
-                  <small style={{ color: 'var(--mut)', fontSize: '11.5px' }}>
-                    Node ESP32 • 2.500 Ekor Nila
-                  </small>
-                </div>
-                <button
+          {/* Right Column: OrbitImages Component Integration from React Bits */}
+          <div 
+            style={{ 
+              position: 'relative', 
+              width: '100%',
+              maxWidth: '520px',
+              margin: '0 auto',
+              aspectRatio: '1 / 1',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <OrbitImages
+              images={orbitImages}
+              shape="ellipse"
+              baseWidth={680}
+              radiusX={300}
+              radiusY={95}
+              rotation={-8}
+              duration={30}
+              itemSize={78}
+              responsive={true}
+              showPath={true}
+              pathColor={isDark ? 'rgba(33, 150, 243, 0.28)' : 'rgba(33, 150, 243, 0.22)'}
+              pathWidth={1.5}
+              centerContent={
+                <div
                   onClick={onOpenDashboard}
                   style={{
-                    background: 'var(--card2)',
-                    border: '1px solid var(--border)',
-                    borderRadius: '10px',
-                    padding: '5px 10px',
-                    fontSize: '11.5px',
-                    fontWeight: 600,
-                    color: 'var(--p)',
-                    cursor: 'pointer'
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    userSelect: 'none',
+                    padding: '24px',
+                    borderRadius: '50%',
+                    background: isDark
+                      ? 'radial-gradient(circle, rgba(14, 36, 71, 0.95) 0%, rgba(7, 21, 43, 0.88) 100%)'
+                      : 'radial-gradient(circle, rgba(255, 255, 255, 0.96) 0%, rgba(227, 242, 253, 0.90) 100%)',
+                    border: '2px solid rgba(33, 150, 243, 0.35)',
+                    boxShadow: '0 16px 45px rgba(33, 150, 243, 0.22), inset 0 0 20px rgba(33, 150, 243, 0.1)',
+                    width: '180px',
+                    height: '180px',
+                    boxSizing: 'border-box',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                    e.currentTarget.style.borderColor = '#2196f3';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                    e.currentTarget.style.borderColor = 'rgba(33, 150, 243, 0.35)';
                   }}
                 >
-                  Buka Panel →
-                </button>
-              </div>
-
-              {/* 4 Sensor Gauges Grid */}
-              <div 
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, 1fr)',
-                  gap: '10px',
-                  marginBottom: '16px'
-                }}
-              >
-                {/* Dissolved Oxygen */}
-                <div 
-                  style={{
-                    background: 'var(--card2)',
-                    borderRadius: '14px',
-                    padding: '12px',
-                    border: '1px solid var(--border)'
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                    <span style={{ fontSize: '11px', color: 'var(--mut)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Wind size={12} color="#2196f3" /> Oksigen (DO)
-                    </span>
-                    <span className="chip ok" style={{ fontSize: '9.5px', padding: '1px 5px' }}>Aman</span>
-                  </div>
-                  <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--txt)' }}>
-                    {telemetry.do} <small style={{ fontSize: '11px', fontWeight: 500, color: 'var(--mut)' }}>mg/L</small>
-                  </div>
-                  <div className="bar" style={{ marginTop: '6px' }}>
-                    <i style={{ width: `${Math.min(100, telemetry.do * 10)}%` }} />
-                  </div>
-                </div>
-
-                {/* pH Level */}
-                <div 
-                  style={{
-                    background: 'var(--card2)',
-                    borderRadius: '14px',
-                    padding: '12px',
-                    border: '1px solid var(--border)'
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                    <span style={{ fontSize: '11px', color: 'var(--mut)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Droplets size={12} color="#22c55e" /> Derajat Asam (pH)
-                    </span>
-                    <span className="chip ok" style={{ fontSize: '9.5px', padding: '1px 5px' }}>Optimal</span>
-                  </div>
-                  <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--txt)' }}>
-                    {telemetry.ph}
-                  </div>
-                  <div className="bar" style={{ marginTop: '6px' }}>
-                    <i style={{ width: `${((telemetry.ph - 5.5) / 3.5) * 100}%` }} />
+                  <img 
+                    src="/assets/logo/logoo.png" 
+                    alt="NilaFarm HD" 
+                    style={{ 
+                      width: '54px', 
+                      height: '54px', 
+                      objectFit: 'contain',
+                      imageRendering: '-webkit-optimize-contrast',
+                      filter: 'drop-shadow(0 4px 12px rgba(33, 150, 243, 0.45))',
+                      marginBottom: '6px'
+                    }} 
+                  />
+                  <b style={{ fontSize: '15px', color: 'var(--txt)', lineHeight: 1.1 }}>
+                    NilaFarm IoT
+                  </b>
+                  <span style={{ fontSize: '10.5px', color: 'var(--b)', fontWeight: 700, letterSpacing: '0.8px', marginTop: '3px' }}>
+                    4 KOLAM AKTIF
+                  </span>
+                  <div 
+                    style={{ 
+                      marginTop: '6px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      fontSize: '10px',
+                      color: 'var(--ok)',
+                      fontWeight: 600,
+                      background: 'rgba(16, 185, 129, 0.12)',
+                      padding: '2px 8px',
+                      borderRadius: '9999px'
+                    }}
+                  >
+                    <span className="pulse-dot" style={{ width: '6px', height: '6px' }} />
+                    DO 6.4 mg/L
                   </div>
                 </div>
-
-                {/* Water Temp */}
-                <div 
-                  style={{
-                    background: 'var(--card2)',
-                    borderRadius: '14px',
-                    padding: '12px',
-                    border: '1px solid var(--border)'
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                    <span style={{ fontSize: '11px', color: 'var(--mut)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Thermometer size={12} color="#f59e0b" /> Suhu Air
-                    </span>
-                    <span className="chip ok" style={{ fontSize: '9.5px', padding: '1px 5px' }}>Normal</span>
-                  </div>
-                  <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--txt)' }}>
-                    {telemetry.temp} <small style={{ fontSize: '11px', fontWeight: 500, color: 'var(--mut)' }}>°C</small>
-                  </div>
-                  <div className="bar" style={{ marginTop: '6px' }}>
-                    <i style={{ width: `${((telemetry.temp - 24) / 10) * 100}%` }} />
-                  </div>
-                </div>
-
-                {/* Ammonia */}
-                <div 
-                  style={{
-                    background: 'var(--card2)',
-                    borderRadius: '14px',
-                    padding: '12px',
-                    border: '1px solid var(--border)'
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                    <span style={{ fontSize: '11px', color: 'var(--mut)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Activity size={12} color="#0d47a1" /> Amonia (NH3)
-                    </span>
-                    <span className="chip ok" style={{ fontSize: '9.5px', padding: '1px 5px' }}>Rendah</span>
-                  </div>
-                  <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--txt)' }}>
-                    {telemetry.nh3} <small style={{ fontSize: '11px', fontWeight: 500, color: 'var(--mut)' }}>ppm</small>
-                  </div>
-                  <div className="bar" style={{ marginTop: '6px' }}>
-                    <i style={{ width: `${Math.min(100, telemetry.nh3 * 160)}%` }} />
-                  </div>
-                </div>
-              </div>
-
-              {/* Sparkline status strip */}
-              <div 
-                style={{
-                  background: 'var(--card2)',
-                  borderRadius: '12px',
-                  padding: '10px 14px',
-                  border: '1px solid var(--border)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between'
-                }}
-              >
-                <div style={{ fontSize: '11.5px', color: 'var(--mut)' }}>
-                  Tren Oksigen 24 Jam: <b style={{ color: '#2196f3' }}>Stabil di 6.4 mg/L</b>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Clock size={12} color="var(--mut)" />
-                  <span style={{ fontSize: '10.5px', color: 'var(--mut)' }}>Sinkron Otomatis</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Floating Bottom Badge */}
-            <div 
-              style={{
-                position: 'absolute',
-                bottom: '-14px',
-                left: '16px',
-                background: 'var(--card)',
-                border: '1px solid var(--border)',
-                borderRadius: '14px',
-                padding: '6px 12px',
-                boxShadow: 'var(--shadow-md)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                fontSize: '11.5px',
-                fontWeight: 600,
-                color: 'var(--ok)',
-                zIndex: 10
-              }}
-            >
-              <CheckCircle2 size={14} />
-              <span>Bioflok Matang • Daging Tidak Bau Lumpur</span>
-            </div>
+              }
+            />
           </div>
         </div>
 
-        {/* Trust Strip */}
+        {/* 
+          CARDLESS, INTERACTIVE, AND ELEGANT VALUE PROPOSITION SHOWCASE 
+          Under Hero Section:
+          - Panen Pagi Hari: Diserok langsung saat Anda memesan
+          - 100% Bebas Formalin: Air termonitor probe IoT 24 jam
+          - Dibersihkan Gratis: Minta sisik / fillet tanpa biaya
+          - Antar Same-Day: Area Sumedang & sekitarnya
+        */}
         <div 
-          className="glass-panel"
           style={{
-            padding: '14px 20px',
-            borderRadius: '18px',
-            marginTop: '8px',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
-            gap: '16px',
-            alignItems: 'center'
+            marginTop: '28px',
+            paddingTop: '24px',
+            borderTop: '1px solid var(--border)',
+            position: 'relative'
           }}
         >
-          {trustItems.map((item, idx) => (
-            <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div 
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '9px',
-                  background: 'rgba(33, 150, 243, 0.12)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#2196f3',
-                  flexShrink: 0
-                }}
-              >
-                <CheckCircle2 size={16} />
-              </div>
-              <div>
-                <b style={{ fontSize: '12.5px', color: 'var(--txt)', display: 'block' }}>{item.title}</b>
-                <small style={{ fontSize: '11px', color: 'var(--mut)' }}>{item.desc}</small>
-              </div>
-            </div>
-          ))}
+          {/* Subtle Ambient Backlight Track */}
+          <div 
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))',
+              gap: '24px',
+              position: 'relative',
+              alignItems: 'stretch'
+            }}
+          >
+            {trustItems.map((item, idx) => {
+              const IconComp = item.icon;
+              const isActive = activeTrustIndex === idx;
+
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => setActiveTrustIndex(idx)}
+                  onMouseEnter={() => setActiveTrustIndex(idx)}
+                  style={{
+                    position: 'relative',
+                    padding: '16px 14px',
+                    borderRadius: '16px',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                    background: isActive
+                      ? (isDark ? 'rgba(33, 150, 243, 0.08)' : 'rgba(33, 150, 243, 0.05)')
+                      : 'transparent',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  {/* Glowing Bottom Line Indicator for active item */}
+                  <div 
+                    style={{
+                      position: 'absolute',
+                      bottom: 0,
+                      left: '14px',
+                      right: '14px',
+                      height: '2px',
+                      borderRadius: '2px',
+                      background: isActive ? item.color : 'transparent',
+                      boxShadow: isActive ? `0 0 12px ${item.color}` : 'none',
+                      transition: 'all 0.3s ease'
+                    }}
+                  />
+
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                    {/* Organic Aura Icon without hard card borders */}
+                    <div 
+                      style={{
+                        width: '38px',
+                        height: '38px',
+                        borderRadius: '12px',
+                        background: isActive 
+                          ? `${item.color}22` 
+                          : (isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)'),
+                        color: isActive ? item.color : 'var(--txt)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        transition: 'all 0.3s ease',
+                        transform: isActive ? 'scale(1.08)' : 'scale(1)',
+                        boxShadow: isActive ? `0 4px 14px ${item.color}33` : 'none'
+                      }}
+                    >
+                      <IconComp size={20} />
+                    </div>
+
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
+                        <span 
+                          style={{ 
+                            fontSize: '14.5px', 
+                            fontWeight: 700, 
+                            color: isActive ? 'var(--txt)' : 'var(--txt)',
+                            transition: 'color 0.2s ease',
+                            lineHeight: 1.25
+                          }}
+                        >
+                          {item.title}
+                        </span>
+                        {isActive && (
+                          <span 
+                            style={{
+                              fontSize: '9px',
+                              fontWeight: 800,
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.6px',
+                              padding: '1px 6px',
+                              borderRadius: '9999px',
+                              background: `${item.color}22`,
+                              color: item.color
+                            }}
+                          >
+                            {item.highlight}
+                          </span>
+                        )}
+                      </div>
+
+                      <p 
+                        style={{ 
+                          fontSize: '12.5px', 
+                          color: 'var(--mut)', 
+                          margin: '2px 0 0', 
+                          lineHeight: 1.45 
+                        }}
+                      >
+                        {item.desc}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Dynamic interactive insight that expands smoothly on hover */}
+                  {isActive && (
+                    <div 
+                      style={{
+                        marginTop: '10px',
+                        padding: '8px 10px',
+                        borderRadius: '10px',
+                        background: isDark ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.7)',
+                        fontSize: '11px',
+                        color: 'var(--mut)',
+                        lineHeight: 1.4,
+                        borderLeft: `2.5px solid ${item.color}`,
+                        animation: 'fadeIn 0.25s ease'
+                      }}
+                    >
+                      {item.detail}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
   );
 }
+
