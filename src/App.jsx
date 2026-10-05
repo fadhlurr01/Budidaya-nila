@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from './components/Navbar';
 import CartDrawer from './components/CartDrawer';
 import Footer from './components/Footer';
@@ -222,8 +222,10 @@ export default function App() {
     );
   };
 
-  // Realtime Simulation Ticker for Ponds
+  // Realtime Simulation Ticker for Ponds (Only active on dashboard to keep landing page 100% fluid)
   useEffect(() => {
+    if (currentView !== 'dashboard') return;
+
     const interval = setInterval(() => {
       setPonds(prevPonds => {
         return prevPonds.map(p => {
@@ -261,7 +263,7 @@ export default function App() {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [currentView]);
 
   // Sync hash changes (e.g. browser back/forward buttons)
   useEffect(() => {
@@ -288,7 +290,7 @@ export default function App() {
   }, []);
 
   // Public Multipage Navigation Handler
-  const handleNavigate = (sectionId, extraId) => {
+  const handleNavigate = useCallback((sectionId, extraId) => {
     const target = (sectionId || 'beranda').toLowerCase();
     if (target === 'artikel-detail') {
       if (extraId) {
@@ -309,10 +311,10 @@ export default function App() {
     } catch {}
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }, [currentView]);
 
   // Add To Cart
-  const handleAddToCart = (product) => {
+  const handleAddToCart = useCallback((product) => {
     setCartItems(prev => {
       const existing = prev.find(i => i.id === product.id);
       if (existing) {
@@ -321,7 +323,11 @@ export default function App() {
       return [...prev, { ...product, qty: 1 }];
     });
     showToast(`"${product.nama}" masuk ke keranjang belanja.`, 'ok');
-  };
+  }, []);
+
+  const handleOpenCart = useCallback(() => {
+    setIsCartOpen(true);
+  }, []);
 
   const handleUpdateCartQty = (productId, qty) => {
     if (qty <= 0) {
@@ -363,14 +369,14 @@ export default function App() {
   };
 
   // Open Dashboard (checking auth session)
-  const handleOpenDashboard = () => {
+  const handleOpenDashboard = useCallback(() => {
     if (session) {
       setCurrentView('dashboard');
       window.scrollTo({ top: 0 });
     } else {
       setIsAuthOpen(true);
     }
-  };
+  }, [session]);
 
   const handleLoginSuccess = (userSession) => {
     setSession(userSession);
@@ -530,7 +536,7 @@ export default function App() {
                       products={products}
                       articles={articles}
                       onAddToCart={handleAddToCart}
-                      onOpenCart={() => setIsCartOpen(true)}
+                      onOpenCart={handleOpenCart}
                       onNavigate={handleNavigate}
                       onOpenDashboard={handleOpenDashboard}
                       isDark={isDark}

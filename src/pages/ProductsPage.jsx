@@ -18,47 +18,25 @@ export default function ProductsPage({
   onAddToCart, 
   onOpenCart, 
   onNavigate, 
-  lang = 'id' 
+  lang = 'en' 
 }) {
-  const [selectedCategory, setSelectedCategory] = useState('Semua');
+  const [selectedCategory, setSelectedCategory] = useState('All Plants');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const categories = ['Semua', 'Ikan Konsumsi', 'Olahan Siap Masak', 'Benih Unggul', 'Peralatan Bioflok', 'Perangkat IoT'];
+  const categories = ['Semua Produk', 'Bibit Unggul', 'Ikan Segar Konsumsi', 'Pakan & Nutrisi', 'Peralatan & Kolam'];
 
   const filteredProducts = products.filter(p => {
-    const matchesCat = selectedCategory === 'Semua' || p.kategori === selectedCategory;
+    const matchesCat = selectedCategory === 'Semua Produk' || p.kategori === selectedCategory;
     const matchesSearch = 
       p.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.desk.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCat && matchesSearch;
   });
 
-  const formatRupiah = (val) => {
-    return 'Rp' + Number(val || 0).toLocaleString('id-ID');
-  };
-
-  const handleOrderWhatsApp = (product) => {
-    const text = encodeURIComponent(
-      `Halo Hamdan Russ & Tim NilaFarm, saya ingin memesan "${product.nama}" (${formatRupiah(product.harga)}${product.satuan}). Mohon info stok hari ini dan jadwal pengantaran.`
-    );
-    window.open(`https://wa.me/6281382570406?text=${text}`, '_blank');
-  };
+  const formatPrice = (val) => 'Rp ' + Number(val || 0).toLocaleString('id-ID');
 
   const getProductImage = (p) => {
-    if (p.img) return p.img;
-    const map = {
-      'p1': '/assets/products/nila-segar.jpg',
-      'p2': '/assets/products/nila-fillet.jpg',
-      'p3': '/assets/products/benih-nila.jpg',
-      'p4': '/assets/products/kolam-d4.jpg',
-      'p5': '/assets/products/sensor-iot.jpg',
-      'p6': '/assets/products/auto-feeder.jpg',
-      'p7': '/assets/products/nila-bumbu.jpg',
-      'p8': '/assets/products/pakan-nila.jpg',
-      'p9': '/assets/products/probiotik-bioflok.jpg',
-      'p10': '/assets/products/kolam-d3.jpg'
-    };
-    return map[p.id] || '/assets/products/nila-segar.jpg';
+    return p.img || 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80';
   };
 
   return (
@@ -81,7 +59,7 @@ export default function ProductsPage({
               Beranda
             </button>
             <ChevronRight size={13} />
-            <span style={{ color: 'var(--txt)', fontWeight: 600 }}>Katalog Produk & Bibit</span>
+            <span style={{ color: 'var(--txt)', fontWeight: 600 }}>Katalog Produk Nila</span>
           </div>
 
           <div 
@@ -89,8 +67,8 @@ export default function ProductsPage({
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              background: 'rgba(33, 150, 243, 0.12)',
-              color: 'var(--b)',
+              background: '#e5eff5',
+              color: '#163665',
               padding: '6px 16px',
               borderRadius: '20px',
               fontSize: '12px',
@@ -101,7 +79,7 @@ export default function ProductsPage({
             }}
           >
             <Tag size={14} />
-            <span>Katalog Siap Jual NilaFarm</span>
+            <span>Garansi Ikan Hidup & Panen Segar Setiap Hari</span>
           </div>
 
           <h1 
@@ -113,19 +91,19 @@ export default function ProductsPage({
               marginBottom: '16px'
             }}
           >
-            Panen Segar Setiap Pagi, Siap Kirim
+            Katalog Produk & Budidaya Nila Modern
           </h1>
 
           <p 
             style={{
               fontSize: '16px',
               color: 'var(--mut)',
-              maxWidth: '720px',
+              maxWidth: '680px',
               margin: '0 auto 28px',
               lineHeight: 1.65
             }}
           >
-            Ikan nila hidup langsung dari kolam bioflok Sumedang, fillet vakum higienis, pakan pelet apung FCR 1.2, hingga paket kolam bundar D4/D3 komplit rangka galvanis.
+            Pesan bibit Nila Nirwana bersertifikat, ikan nila merah segar bebas bau lumpur, pelet pakan protein 32%, dan paket kolam bioflok siap pasang.
           </p>
 
           {/* Search Box */}
@@ -133,7 +111,7 @@ export default function ProductsPage({
             <Search size={18} color="var(--mut)" style={{ position: 'absolute', left: '16px', top: '15px' }} />
             <input 
               type="text"
-              placeholder="Cari produk (cth: fillet, benih, pakan, kolam)..."
+              placeholder="Cari produk (misal: Bibit Nirwana, Fillet, Pelet, Kolam D3)..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               style={{
@@ -160,10 +138,10 @@ export default function ProductsPage({
                 style={{
                   fontSize: '12.5px',
                   fontWeight: 600,
-                  padding: '7px 16px',
+                  padding: '7px 18px',
                   borderRadius: '20px',
-                  border: selectedCategory === cat ? '1px solid transparent' : '1px solid var(--border)',
-                  background: selectedCategory === cat ? 'var(--grad)' : 'var(--card)',
+                  border: selectedCategory === cat ? 'none' : '1px solid var(--border)',
+                  background: selectedCategory === cat ? '#144520' : 'var(--card)',
                   color: selectedCategory === cat ? '#ffffff' : 'var(--txt)',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease'
@@ -179,10 +157,10 @@ export default function ProductsPage({
       {/* Trust Badges */}
       <section style={{ maxWidth: '1240px', margin: '0 auto', padding: '30px 20px 0' }}>
         <div 
-          className="glass-panel"
+          className="card-solid"
           style={{
             padding: '16px 24px',
-            borderRadius: '18px',
+            borderRadius: '16px',
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))',
             gap: '16px',
@@ -190,16 +168,16 @@ export default function ProductsPage({
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Fish size={22} color="var(--b)" />
-            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--txt)' }}>Panen Segar Setiap Pagi 06:30</span>
+            <Truck size={22} color="var(--b)" />
+            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--txt)' }}>Free Shipping in Montreal 🚚</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <ShieldCheck size={22} color="#22c55e" />
-            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--txt)' }}>Gratis Bersihkan Sisik & Insang</span>
+            <ShieldCheck size={22} color="#16a34a" />
+            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--txt)' }}>100% Healthy Plant Guarantee</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Truck size={22} color="#f59e0b" />
-            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--txt)' }}>Antar Cepat Area Sumedang & Sekitarnya</span>
+            <Leaf size={22} color="#206d33" />
+            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--txt)' }}>Eco-Friendly Biodegradable Pots</span>
           </div>
         </div>
       </section>
@@ -227,18 +205,16 @@ export default function ProductsPage({
               return (
                 <div 
                   key={p.id}
-                  className="glass-panel product-card-hover"
+                  className="card-solid product-card-hover"
                   style={{
                     padding: '22px',
-                    borderRadius: '24px',
+                    borderRadius: '16px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    border: isPop ? '2px solid var(--b)' : '1px solid var(--border)',
-                    background: isPop 
-                      ? 'linear-gradient(180deg, var(--card2) 0%, var(--card) 40%)' 
-                      : 'var(--card)',
-                    boxShadow: isPop ? '0 12px 34px rgba(33, 150, 243, 0.2)' : 'var(--shadow-sm)',
+                    border: isPop ? '2px solid var(--b)' : '1.5px solid var(--border)',
+                    background: 'var(--card)',
+                    boxShadow: isPop ? '0 10px 24px rgba(36, 131, 179, 0.2)' : 'var(--shadow-sm)',
                     position: 'relative',
                     overflow: 'hidden'
                   }}
@@ -305,9 +281,9 @@ export default function ProductsPage({
                           style={{ 
                             fontSize: '11px', 
                             fontWeight: 700, 
-                            color: '#ffffff',
-                            background: 'rgba(13, 71, 161, 0.88)',
-                            backdropFilter: 'blur(4px)',
+                            color: '#82D7E1',
+                            background: '#163665',
+                            border: '1px solid rgba(130, 215, 225, 0.35)',
                             padding: '3px 10px',
                             borderRadius: '6px'
                           }}
@@ -340,10 +316,7 @@ export default function ProductsPage({
                     {/* Price */}
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '12px' }}>
                       <span style={{ fontSize: '26px', fontWeight: 800, color: 'var(--p)' }}>
-                        {formatRupiah(p.harga)}
-                      </span>
-                      <span style={{ fontSize: '13px', color: 'var(--mut)', fontWeight: 500 }}>
-                        {p.satuan}
+                        {formatPrice(p.harga)}
                       </span>
                     </div>
 
@@ -428,11 +401,11 @@ export default function ProductsPage({
 
         {/* Quick Cart Banner */}
         <div 
-          className="glass-panel"
+          className="card-solid"
           style={{
             marginTop: '40px',
             padding: '24px 28px',
-            borderRadius: '20px',
+            borderRadius: '16px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',

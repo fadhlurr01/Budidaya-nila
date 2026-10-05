@@ -234,15 +234,16 @@ export default function ArticlesPage({ articles, onNavigate, lang = 'id' }) {
             {filteredArticles.map((art) => (
               <article
                 key={art.id}
-                className="glass-panel"
+                className="card-solid"
                 onClick={() => onNavigate('artikel-detail', art.id)}
                 style={{
-                  borderRadius: '22px',
+                  borderRadius: '16px',
+                  border: '1.5px solid var(--border)',
                   overflow: 'hidden',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  transition: 'transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
                   cursor: 'pointer'
                 }}
                 onMouseEnter={e => {

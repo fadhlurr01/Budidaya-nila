@@ -8,11 +8,8 @@ export default function FloatingActionButtons({ isDashboard = false }) {
   // Monitor window scroll to show/hide Scroll to Top button
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 240) {
-        setShowScrollTop(true);
-      } else {
-        setShowScrollTop(false);
-      }
+      const shouldShow = window.scrollY > 240;
+      setShowScrollTop(prev => (prev !== shouldShow ? shouldShow : prev));
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });

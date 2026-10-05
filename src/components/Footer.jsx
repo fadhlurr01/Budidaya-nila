@@ -1,12 +1,25 @@
-import React from 'react';
-import { Fish, ShieldCheck, Heart, Lock, ArrowUp, LayoutDashboard } from 'lucide-react';
+import React, { useState } from 'react';
+import { 
+  ArrowUp
+} from 'lucide-react';
 
 export default function Footer({ 
-  onNavigate, 
-  onOpenDashboard, 
-  onOpenDevModal, 
-  onOpenCorpModal 
+  onNavigate,
+  lang = 'id'
 }) {
+  const [emailInput, setEmailInput] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    if (!emailInput.trim()) return;
+    setSubscribed(true);
+    setTimeout(() => {
+      setEmailInput('');
+      setSubscribed(false);
+    }, 4000);
+  };
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -14,259 +27,389 @@ export default function Footer({
   return (
     <footer 
       style={{
-        background: 'var(--card)',
-        borderTop: '1px solid var(--border)',
-        padding: '60px 20px 30px',
-        color: 'var(--txt)',
+        background: '#0e2440', // Deep Marine Nila Navy
+        color: '#ffffff',
+        padding: '60px 24px 30px',
         position: 'relative',
-        zIndex: 10
+        zIndex: 10,
+        borderTop: '1px solid rgba(130, 215, 225, 0.2)'
       }}
     >
       <div 
         style={{
-          maxWidth: '1240px',
+          maxWidth: '1360px',
           margin: '0 auto',
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
           gap: '40px',
           marginBottom: '50px'
         }}
       >
-        {/* Brand Col */}
-        <div style={{ maxWidth: '320px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
-            <img 
-              src="/assets/logo/logoo.png" 
-              alt="NilaFarm Logo" 
-              style={{ 
-                height: '38px', 
-                width: 'auto', 
-                objectFit: 'contain',
-                imageRendering: '-webkit-optimize-contrast',
-                filter: 'drop-shadow(0 2px 8px rgba(33, 150, 243, 0.35))'
-              }} 
-            />
-            <div>
-              <div style={{ fontSize: '19px', fontWeight: 800 }}>
-                <span style={{ color: '#2196f3' }}>Nila</span>
-                <span style={{ color: 'var(--p)' }}>Farm</span>
-              </div>
-              <small style={{ color: 'var(--mut)', fontSize: '11px', letterSpacing: '1px' }}>
-                SUMEDANG BIOFLOK IOT
-              </small>
-            </div>
-          </div>
-
-          <p style={{ fontSize: '13.5px', color: 'var(--mut)', lineHeight: 1.65, marginBottom: '20px' }}>
-            Usaha budidaya ikan nila keluarga berbasis sistem bioflok modern di Sumedang. Dari kolam sendiri, dipanen pagi hari, diantar segar same-day.
-          </p>
-
-          <div style={{ marginTop: '16px' }}>
-            <button
-              onClick={onOpenDashboard}
-              style={{
-                background: 'linear-gradient(135deg, rgba(33, 150, 243, 0.15) 0%, rgba(13, 71, 161, 0.15) 100%)',
-                border: '1.5px solid var(--b)',
-                color: 'var(--b)',
-                padding: '9px 20px',
-                borderRadius: '9999px',
-                fontSize: '13px',
-                fontWeight: 700,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                boxShadow: '0 4px 12px rgba(33, 150, 243, 0.15)',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              <LayoutDashboard size={15} />
-              <span>Buka Panel Farm & Admin</span>
-            </button>
-            <div style={{ fontSize: '11px', color: 'var(--mut)', marginTop: '6px' }}>
-              Monitoring Sensor IoT Realtime & Kelola Pesanan
-            </div>
-          </div>
-        </div>
-
-        {/* Col 1: Produk */}
+        {/* Column 1: Layanan Pelanggan */}
         <div>
-          <h4 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '16px', color: 'var(--txt)' }}>
-            Katalog Produk
+          <h4 
+            style={{ 
+              fontSize: '15px', 
+              fontWeight: 700, 
+              color: '#ffffff', 
+              marginBottom: '20px'
+            }}
+          >
+            {lang === 'en' ? 'Customer Service' : 'Layanan Pelanggan'}
           </h4>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13.5px', color: 'var(--mut)' }}>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '13.5px', color: '#a6c5de' }}>
             <li>
               <button 
-                onClick={() => onNavigate('produk')}
-                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}
+                onClick={() => onNavigate('beranda')}
+                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, textAlign: 'left', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.target.style.color = '#82D7E1'}
+                onMouseLeave={e => e.target.style.color = '#a6c5de'}
               >
-                Nila Konsumsi Segar (500-800g)
-              </button>
-            </li>
-            <li>
-              <button 
-                onClick={() => onNavigate('produk')}
-                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}
-              >
-                Nila Fillet Premium Vakum
-              </button>
-            </li>
-            <li>
-              <button 
-                onClick={() => onNavigate('produk')}
-                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}
-              >
-                Benih Nila Unggul (5-8 cm)
-              </button>
-            </li>
-            <li>
-              <button 
-                onClick={() => onNavigate('produk')}
-                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}
-              >
-                Paket Kolam Bioflok D4
-              </button>
-            </li>
-            <li>
-              <button 
-                onClick={() => onNavigate('produk')}
-                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}
-              >
-                Smart Auto-Feeder 20kg
-              </button>
-            </li>
-          </ul>
-        </div>
-
-        {/* Col 2: Teknologi & Dev */}
-        <div>
-          <h4 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '16px', color: 'var(--txt)' }}>
-            Teknologi IoT & API
-          </h4>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13.5px', color: 'var(--mut)' }}>
-            <li>
-              <button 
-                onClick={onOpenDashboard}
-                style={{ background: 'none', border: 'none', color: 'var(--b)', cursor: 'pointer', padding: 0, fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}
-              >
-                <LayoutDashboard size={13} />
-                <span>Panel Farm (IoT Dashboard)</span>
-              </button>
-            </li>
-            <li>
-              <button 
-                onClick={() => onOpenDevModal('api')}
-                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}
-              >
-                Dokumentasi REST API Sensor
-              </button>
-            </li>
-            <li>
-              <button 
-                onClick={() => onOpenDevModal('mqtt')}
-                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}
-              >
-                MQTT Broker Telemetri Air
-              </button>
-            </li>
-            <li>
-              <button 
-                onClick={() => onOpenDevModal('firmware')}
-                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}
-              >
-                Firmware ESP32 OTA
-              </button>
-            </li>
-            <li>
-              <button 
-                onClick={() => onOpenDevModal('status')}
-                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}
-              >
-                Status Server & Gateway (99.8%)
-              </button>
-            </li>
-          </ul>
-        </div>
-
-        {/* Col 3: Perusahaan */}
-        <div>
-          <h4 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '16px', color: 'var(--txt)' }}>
-            Tentang Usaha Farm
-          </h4>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13.5px', color: 'var(--mut)' }}>
-            <li>
-              <button 
-                onClick={() => onOpenCorpModal('tentang')}
-                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}
-              >
-                Profil Peternakan Sumedang
+                {lang === 'en' ? 'FAQ & Farming Knowledge' : 'FAQ & Panduan Order'}
               </button>
             </li>
             <li>
               <button 
                 onClick={() => onNavigate('kontak')}
-                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}
+                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, textAlign: 'left', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.target.style.color = '#82D7E1'}
+                onMouseLeave={e => e.target.style.color = '#a6c5de'}
               >
-                Kontak & Lokasi Tambak
+                {lang === 'en' ? 'Contacts & Farm Support' : 'Kontak Layanan'}
               </button>
             </li>
             <li>
               <button 
-                onClick={() => onOpenCorpModal('privasi')}
-                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}
+                onClick={() => onNavigate('kontak')}
+                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, textAlign: 'left', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.target.style.color = '#82D7E1'}
+                onMouseLeave={e => e.target.style.color = '#a6c5de'}
               >
-                Kebijakan Privasi Data
-              </button>
-            </li>
-            <li>
-              <button 
-                onClick={() => onOpenCorpModal('syarat')}
-                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0 }}
-              >
-                Syarat & Ketentuan Layanan
+                {lang === 'en' ? 'Live Arrival Guarantee Policy' : 'Garansi Ikan Hidup'}
               </button>
             </li>
           </ul>
         </div>
+
+        {/* Column 2: Akun & Pesanan */}
+        <div>
+          <h4 
+            style={{ 
+              fontSize: '15px', 
+              fontWeight: 700, 
+              color: '#ffffff', 
+              marginBottom: '20px'
+            }}
+          >
+            {lang === 'en' ? 'My Account' : 'Akun & Pesanan'}
+          </h4>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '13.5px', color: '#a6c5de' }}>
+            <li>
+              <button 
+                onClick={() => onNavigate('produk')}
+                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, textAlign: 'left', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.target.style.color = '#82D7E1'}
+                onMouseLeave={e => e.target.style.color = '#a6c5de'}
+              >
+                {lang === 'en' ? 'My Order' : 'Pesanan Saya'}
+              </button>
+            </li>
+            <li>
+              <button 
+                onClick={() => onNavigate('produk')}
+                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, textAlign: 'left', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.target.style.color = '#82D7E1'}
+                onMouseLeave={e => e.target.style.color = '#a6c5de'}
+              >
+                {lang === 'en' ? 'Track Live Transport' : 'Lacak Pengiriman'}
+              </button>
+            </li>
+            <li>
+              <button 
+                onClick={() => onNavigate('produk')}
+                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, textAlign: 'left', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.target.style.color = '#82D7E1'}
+                onMouseLeave={e => e.target.style.color = '#a6c5de'}
+              >
+                {lang === 'en' ? 'Claim Mortality / Return' : 'Klaim Garansi Kematian'}
+              </button>
+            </li>
+            <li>
+              <button 
+                onClick={() => onNavigate('produk')}
+                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, textAlign: 'left', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.target.style.color = '#82D7E1'}
+                onMouseLeave={e => e.target.style.color = '#a6c5de'}
+              >
+                {lang === 'en' ? 'Feed Subscription' : 'Langganan Pakan Rutin'}
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        {/* Column 3: Tentang Kami */}
+        <div>
+          <h4 
+            style={{ 
+              fontSize: '15px', 
+              fontWeight: 700, 
+              color: '#ffffff', 
+              marginBottom: '20px'
+            }}
+          >
+            {lang === 'en' ? 'About Us' : 'Tentang Kami'}
+          </h4>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '13.5px', color: '#a6c5de' }}>
+            <li>
+              <button 
+                onClick={() => onNavigate('budidaya')}
+                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, textAlign: 'left', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.target.style.color = '#82D7E1'}
+                onMouseLeave={e => e.target.style.color = '#a6c5de'}
+              >
+                {lang === 'en' ? 'Partnership & Careers' : 'Kemitraan Bioflok'}
+              </button>
+            </li>
+            <li>
+              <button 
+                onClick={() => onNavigate('kontak')}
+                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, textAlign: 'left', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.target.style.color = '#82D7E1'}
+                onMouseLeave={e => e.target.style.color = '#a6c5de'}
+              >
+                {lang === 'en' ? 'Farm Location (Sumedang)' : 'Lokasi Farm Sumedang'}
+              </button>
+            </li>
+            <li>
+              <button 
+                onClick={() => onNavigate('budidaya')}
+                style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: 0, textAlign: 'left', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.target.style.color = '#82D7E1'}
+                onMouseLeave={e => e.target.style.color = '#a6c5de'}
+              >
+                {lang === 'en' ? 'Our Story & Philosophy' : 'Kisah NilaFarm'}
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        {/* Column 4: Newsletter & Social */}
+        <div style={{ maxWidth: '380px' }}>
+          <h4 
+            style={{ 
+              fontSize: '15px', 
+              fontWeight: 700, 
+              color: '#ffffff', 
+              marginBottom: '16px'
+            }}
+          >
+            {lang === 'en' ? 'Get harvest alerts and exclusive offers' : 'Dapatkan info jadwal panen & penawaran spesial'}
+          </h4>
+
+          <form 
+            onSubmit={handleSubscribe}
+            style={{
+              display: 'flex',
+              background: '#ffffff',
+              borderRadius: '9999px',
+              padding: '4px',
+              marginBottom: '20px',
+              alignItems: 'center'
+            }}
+          >
+            <input 
+              type="text" 
+              placeholder={lang === 'en' ? 'Enter your email here...' : 'Masukkan email Anda...'}
+              value={emailInput}
+              onChange={e => setEmailInput(e.target.value)}
+              style={{
+                flex: 1,
+                border: 'none',
+                outline: 'none',
+                background: 'transparent',
+                padding: '9px 16px',
+                fontSize: '13px',
+                color: '#163665',
+                minWidth: 0
+              }}
+            />
+            <button
+              type="submit"
+              style={{
+                background: '#2483B3',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '9999px',
+                padding: '9px 20px',
+                fontSize: '12.5px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                transition: 'background 0.2s ease'
+              }}
+              onMouseEnter={e => e.target.style.background = '#1a6b94'}
+              onMouseLeave={e => e.target.style.background = '#2483B3'}
+            >
+              {lang === 'en' ? 'Subscribe' : 'Langganan'}
+            </button>
+          </form>
+
+          {subscribed && (
+            <p style={{ fontSize: '12px', color: '#82D7E1', marginBottom: '16px' }}>
+              ✓ {lang === 'en' ? 'Thank you for subscribing!' : 'Terima kasih telah berlangganan info panen!'}
+            </p>
+          )}
+
+          {/* Social Media Circular Buttons */}
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            {/* Facebook */}
+            <a 
+              href="https://facebook.com" 
+              target="_blank" 
+              rel="noreferrer"
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                border: '1.5px solid #82D7E1',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#82D7E1',
+                textDecoration: 'none',
+                fontSize: '14px',
+                fontWeight: 700,
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = '#2483B3';
+                e.currentTarget.style.borderColor = '#2483B3';
+                e.currentTarget.style.color = '#ffffff';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.borderColor = '#82D7E1';
+                e.currentTarget.style.color = '#82D7E1';
+              }}
+            >
+              f
+            </a>
+
+            {/* Instagram */}
+            <a 
+              href="https://instagram.com" 
+              target="_blank" 
+              rel="noreferrer"
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                border: '1.5px solid #82D7E1',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#82D7E1',
+                textDecoration: 'none',
+                fontSize: '14px',
+                fontWeight: 700,
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = '#2483B3';
+                e.currentTarget.style.borderColor = '#2483B3';
+                e.currentTarget.style.color = '#ffffff';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.borderColor = '#82D7E1';
+                e.currentTarget.style.color = '#82D7E1';
+              }}
+            >
+              📷
+            </a>
+
+            {/* Twitter */}
+            <a 
+              href="https://twitter.com" 
+              target="_blank" 
+              rel="noreferrer"
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                border: '1.5px solid #82D7E1',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#82D7E1',
+                textDecoration: 'none',
+                fontSize: '14px',
+                fontWeight: 700,
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = '#2483B3';
+                e.currentTarget.style.borderColor = '#2483B3';
+                e.currentTarget.style.color = '#ffffff';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.borderColor = '#82D7E1';
+                e.currentTarget.style.color = '#82D7E1';
+              }}
+            >
+              𝕏
+            </a>
+          </div>
+        </div>
       </div>
 
-      {/* Bottom Bar */}
+      {/* Bottom Copyright & Terms */}
       <div 
         style={{
-          maxWidth: '1240px',
+          maxWidth: '1360px',
           margin: '0 auto',
-          paddingTop: '24px',
-          borderTop: '1px solid var(--border)',
+          paddingTop: '20px',
+          borderTop: '1px solid rgba(130, 215, 225, 0.15)',
           display: 'flex',
-          alignItems: 'center',
           justifyContent: 'space-between',
+          alignItems: 'center',
           flexWrap: 'wrap',
-          gap: '16px',
+          gap: '12px',
           fontSize: '12.5px',
-          color: 'var(--mut)'
+          color: '#82D7E1'
         }}
       >
         <div>
-          © 2026 <b>NilaFarm</b> Sumedang. Dikelola oleh keluarga Hamdan Russ untuk akuakultur Indonesia.
+          2026 NilaFarm Indonesia. Privacy • Terms • Sitemap
         </div>
 
         <button
           onClick={scrollToTop}
+          title="Back to Top"
           style={{
-            background: 'var(--card2)',
-            border: '1px solid var(--border)',
-            borderRadius: '9999px',
-            padding: '6px 16px',
-            color: 'var(--txt)',
-            fontSize: '12px',
-            cursor: 'pointer',
+            background: 'transparent',
+            border: '1px solid #82D7E1',
+            color: '#82D7E1',
+            borderRadius: '50%',
+            width: '32px',
+            height: '32px',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px'
+            justifyContent: 'center',
+            cursor: 'pointer',
+            transition: 'all 0.2s'
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.background = '#2483B3';
+            e.currentTarget.style.color = '#ffffff';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.background = 'transparent';
+            e.currentTarget.style.color = '#82D7E1';
           }}
         >
-          <ArrowUp size={14} />
-          <span>Kembali ke Atas</span>
+          <ArrowUp size={16} />
         </button>
       </div>
     </footer>

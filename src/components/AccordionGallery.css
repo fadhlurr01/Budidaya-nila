@@ -32,9 +32,10 @@
   outline: none;
   transform-style: preserve-3d;
   transform-origin: center center;
-  background: #0a0713;
-  box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.8);
-  will-change: flex-grow, transform;
+  background: #163665;
+  box-shadow: 0 10px 30px -18px rgba(12, 22, 38, 0.8);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -52,15 +53,19 @@
 }
 
 .ag-panel__media {
-  --ag-gray: 1;
-  --ag-dim: 0.35;
   position: absolute;
   top: 50%;
   left: 50%;
   width: var(--ag-media-size);
   height: 100%;
-  filter: grayscale(var(--ag-gray));
-  will-change: transform, filter;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.ag-panel--grayscale .ag-panel__media {
+  filter: grayscale(var(--ag-gray, 0));
 }
 
 .accordion-gallery--vertical .ag-panel__media {
@@ -81,9 +86,12 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background:
-    linear-gradient(180deg, transparent 45%, color-mix(in srgb, var(--ag-overlay) 78%, transparent) 100%),
-    color-mix(in srgb, var(--ag-overlay) calc(var(--ag-dim, 0.35) * 100%), transparent);
+  background: linear-gradient(180deg, transparent 40%, rgba(22, 54, 101, 0.92) 100%);
+  opacity: var(--ag-dim, 0.45);
+  transition: opacity 0.3s ease;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .ag-panel__label {

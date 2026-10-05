@@ -136,18 +136,16 @@ export default function ProductsSection({
           return (
             <div 
               key={p.id}
-              className="glass-panel product-card-hover"
+              className="card-solid product-card-hover"
               style={{
                 padding: '22px',
-                borderRadius: '24px',
+                borderRadius: '16px',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                border: isPop ? '2px solid var(--b)' : '1px solid var(--border)',
-                background: isPop 
-                  ? 'linear-gradient(180deg, var(--card2) 0%, var(--card) 40%)' 
-                  : 'var(--card)',
-                boxShadow: isPop ? '0 12px 34px rgba(33, 150, 243, 0.2)' : 'var(--shadow-sm)',
+                border: isPop ? '2px solid var(--b)' : '1.5px solid var(--border)',
+                background: 'var(--card)',
+                boxShadow: isPop ? '0 10px 24px rgba(36, 131, 179, 0.2)' : 'var(--shadow-sm)',
                 position: 'relative',
                 overflow: 'hidden'
               }}
@@ -164,7 +162,7 @@ export default function ProductsSection({
                     fontWeight: 700,
                     padding: '4px 12px',
                     borderRadius: '20px',
-                    boxShadow: '0 4px 12px rgba(33, 150, 243, 0.4)',
+                    boxShadow: '0 4px 12px rgba(36, 131, 179, 0.35)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '4px',
@@ -182,7 +180,7 @@ export default function ProductsSection({
                   style={{
                     width: '100%',
                     height: '190px',
-                    borderRadius: '16px',
+                    borderRadius: '12px',
                     overflow: 'hidden',
                     marginBottom: '16px',
                     background: 'var(--card2)',
@@ -214,9 +212,9 @@ export default function ProductsSection({
                       style={{ 
                         fontSize: '11px', 
                         fontWeight: 700, 
-                        color: '#ffffff',
-                        background: 'rgba(13, 71, 161, 0.85)',
-                        backdropFilter: 'blur(4px)',
+                        color: '#82D7E1',
+                        background: '#163665',
+                        border: '1px solid rgba(130, 215, 225, 0.35)',
                         padding: '3px 10px',
                         borderRadius: '6px'
                       }}

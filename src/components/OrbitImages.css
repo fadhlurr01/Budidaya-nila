@@ -2,12 +2,14 @@
   position: relative;
   margin-left: auto;
   margin-right: auto;
+  contain: layout paint;
 }
 
 .orbit-scaling-container {
   width: 100%;
   height: 100%;
   position: relative;
+  contain: layout paint;
 }
 
 .orbit-scaling-container--responsive {
@@ -22,6 +24,8 @@
   height: 100%;
   transform-origin: center center;
   position: relative;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 .orbit-path-svg {
@@ -34,6 +38,8 @@
   position: absolute;
   will-change: transform;
   user-select: none;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .orbit-center-content {
@@ -44,6 +50,7 @@
   justify-content: center;
   z-index: 10;
   pointer-events: auto;
+  transform: translateZ(0);
 }
 
 .orbit-image {
@@ -51,12 +58,15 @@
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 0 0 2px rgba(33, 150, 243, 0.4);
-  background: var(--card, #0e2447);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(36, 131, 179, 0.35);
+  background: var(--card, #132238);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .orbit-image:hover {
-  transform: scale(1.15);
-  box-shadow: 0 12px 30px rgba(33, 150, 243, 0.5), 0 0 0 3px #2196f3;
+  transform: scale(1.15) translateZ(0);
+  box-shadow: 0 10px 24px rgba(36, 131, 179, 0.45), 0 0 0 3px var(--b, #2483B3);
 }

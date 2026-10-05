@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback, memo } from 'react';
 import { gsap } from 'gsap';
 
 import './AccordionGallery.css';
@@ -36,6 +36,7 @@ const AccordionGallery = ({
   const rootRef = useRef(null);
   const panelRefs = useRef([]);
   const mediaRefs = useRef([]);
+  const overlayRefs = useRef([]);
   const barRefs = useRef([]);
   const textRefs = useRef([]);
   const tlRef = useRef(null);
@@ -68,6 +69,7 @@ const AccordionGallery = ({
         if (!panel) return;
         const isActive = i === active;
         const media = mediaRefs.current[i];
+        const overlay = overlayRefs.current[i];
         const bar = barRefs.current[i];
         const text = textRefs.current[i];
 
@@ -76,24 +78,25 @@ const AccordionGallery = ({
 
         tl.to(panel, { flexGrow: isActive ? grow : 1, ...rotProp, duration: dur, ease }, 0);
 
+        if (overlay) {
+          tl.to(overlay, { opacity: isActive ? 0.25 : 0.65, duration: dur, ease }, 0);
+        }
+
         if (media) {
           const drift = Math.max(-1.5, Math.min(1.5, active - i));
           const shift = drift * parallax * mediaSize * 0.06;
-          const gray = grayscale ? (isActive ? 0 : 1) : 0;
-          tl.to(
-            media,
-            {
-              xPercent: -50,
-              yPercent: -50,
-              x: vertical ? 0 : isActive ? 0 : shift,
-              y: vertical ? (isActive ? 0 : shift) : 0,
-              '--ag-gray': gray,
-              '--ag-dim': isActive ? 0 : 0.35,
-              duration: dur,
-              ease
-            },
-            0
-          );
+          const mediaAnim = {
+            xPercent: -50,
+            yPercent: -50,
+            x: vertical ? 0 : isActive ? 0 : shift,
+            y: vertical ? (isActive ? 0 : shift) : 0,
+            duration: dur,
+            ease
+          };
+          if (grayscale) {
+            mediaAnim['--ag-gray'] = isActive ? 0 : 1;
+          }
+          tl.to(media, mediaAnim, 0);
         }
 
         if (showLabels && bar && text) {
@@ -131,7 +134,8 @@ const AccordionGallery = ({
       const rect = el.getBoundingClientRect();
       const total = vertical ? rect.height : rect.width;
       const usable = Math.max(total - gap * (count - 1), 120);
-      const size = Math.max(140, usable * Math.min(Math.max(expandRatio, 0.2), 0.9) * 1.22);
+      const size = Math.round(Math.max(140, usable * Math.min(Math.max(expandRatio, 0.2), 0.9) * 1.22));
+      if (Math.abs(mediaSizeRef.current - size) < 4) return;
       mediaSizeRef.current = size;
       el.style.setProperty('--ag-media-size', `${size}px`);
       applyLayout(!firstRunRef.current);
@@ -156,7 +160,7 @@ const AccordionGallery = ({
   );
 
   const handleEnter = i => {
-    if (trigger === 'hover') {
+    if (trigger === 'hover' && i !== active) {
       setActive(i);
       onSelect?.(items[i], i);
     }
@@ -227,7 +231,7 @@ const AccordionGallery = ({
               <span className="ag-panel__media" ref={el => (mediaRefs.current[i] = el)}>
                 <img src={item.image} alt={item.alt || item.label || ''} draggable="false" />
               </span>
-              <span className="ag-panel__overlay" aria-hidden="true" />
+              <span className="ag-panel__overlay" ref={el => (overlayRefs.current[i] = el)} aria-hidden="true" />
             </span>
             {showLabels && (
               <span className="ag-panel__label" aria-hidden="true">
@@ -249,4 +253,4 @@ const AccordionGallery = ({
   );
 };
 
-export default AccordionGallery;
+export default memo(AccordionGallery);

@@ -1,179 +1,140 @@
-import React, { useState, useEffect } from 'react';
-import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import React from 'react';
+import { Star } from 'lucide-react';
 import { TESTIMONIALS } from '../data/budidayaData';
 
-export default function TestimonialsSection({ lang = 'id' }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-
-  useEffect(() => {
-    if (isPaused) return;
-    const timer = setInterval(() => {
-      setCurrentIndex(prev => (prev + 1) % TESTIMONIALS.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [isPaused]);
-
-  const handlePrev = () => {
-    setCurrentIndex(prev => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
-  };
-
-  const handleNext = () => {
-    setCurrentIndex(prev => (prev + 1) % TESTIMONIALS.length);
-  };
-
-  const current = TESTIMONIALS[currentIndex];
-
+export default function TestimonialsSection({ isDark = false, lang = 'id' }) {
   return (
     <section 
       style={{ 
-        maxWidth: '1240px', 
+        maxWidth: '1360px', 
         margin: '0 auto', 
-        padding: '50px 20px 40px' 
+        padding: '60px 20px 70px',
+        width: '100%',
+        boxSizing: 'border-box'
       }}
     >
-      <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 36px' }}>
-        <p 
-          style={{ 
-            fontSize: '12.5px', 
-            fontWeight: 800, 
-            letterSpacing: '2px', 
-            textTransform: 'uppercase', 
-            color: 'var(--b)',
-            marginBottom: '8px'
-          }}
-        >
-          {lang === 'en' ? 'Customer Voices' : 'Testimoni Pembeli'}
-        </p>
+      {/* Centered Heading */}
+      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h2 
           style={{ 
-            fontSize: 'clamp(26px, 3.5vw, 38px)', 
+            fontSize: 'clamp(28px, 4vw, 42px)', 
             fontWeight: 800, 
             color: 'var(--txt)',
-            letterSpacing: '-0.5px'
+            letterSpacing: '-0.5px', 
+            margin: 0
           }}
         >
-          {lang === 'en' ? 'Kata Mereka yang Sudah Menikmati' : 'Kata Mereka yang Sudah Memesan'}
+          {lang === 'en' ? 'Customer & Partner Reviews' : 'Ulasan Pembudidaya & Mitra Restoran'}
         </h2>
-        <p style={{ color: 'var(--mut)', fontSize: '15px', marginTop: '12px' }}>
+        <p style={{ color: 'var(--mut)', fontSize: '15px', marginTop: '10px' }}>
           {lang === 'en'
-            ? 'Home cooks, local culinary stalls, to seafood restaurants — always returning for our fresh harvest.'
-            : 'Ibu rumah tangga, pengusaha warung makan, hingga resto keluarga — semuanya kembali repeat order.'}
+            ? 'Real feedback from commercial farmers, restaurant chefs, and regular households.'
+            : 'Pengalaman nyata mitra pembudidaya bioflok, chef restoran, dan keluarga penikmat ikan segar.'}
         </p>
       </div>
 
+      {/* 5-Card Clean Horizontal Grid */}
       <div 
-        className="glass-panel"
         style={{
-          maxWidth: '780px',
-          margin: '0 auto',
-          padding: '36px 30px',
-          borderRadius: '26px',
-          position: 'relative'
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))',
+          gap: '16px',
+          alignItems: 'stretch'
         }}
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
       >
-        <div style={{ display: 'flex', gap: '4px', marginBottom: '16px', color: '#f59e0b' }}>
-          {Array.from({ length: current.rating }).map((_, i) => (
-            <Star key={i} size={18} fill="#f59e0b" stroke="#f59e0b" />
-          ))}
-        </div>
-
-        <p 
-          style={{ 
-            fontSize: '16.5px', 
-            lineHeight: 1.7, 
-            color: 'var(--txt)', 
-            fontStyle: 'italic',
-            marginBottom: '26px' 
-          }}
-        >
-          "{current.teks}"
-        </p>
-
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        {TESTIMONIALS.map((t) => (
+          <div
+            key={t.id}
+            style={{
+              background: isDark ? '#142a47' : '#f0f6fa',
+              border: isDark ? '1px solid rgba(130, 215, 225, 0.25)' : '1px solid #cfe2ec',
+              borderRadius: '16px',
+              padding: '24px 18px',
+              display: 'flex',
+              flexDirection: 'column',
+              boxShadow: 'var(--shadow-sm)',
+              transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.transform = 'translateY(-3px)';
+              e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
+            }}
+          >
+            {/* Circular Avatar at Top Center */}
             <div 
-              style={{
-                width: '44px',
-                height: '44px',
-                borderRadius: '50%',
-                background: 'var(--grad)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#ffffff',
-                fontWeight: 700,
-                fontSize: '15px'
+              style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                marginBottom: '14px' 
               }}
             >
-              {current.avatar}
+              <div 
+                style={{
+                  width: '52px',
+                  height: '52px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #2483B3 0%, #163665 100%)',
+                  color: '#ffffff',
+                  fontWeight: 700,
+                  fontSize: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '2px solid #82D7E1',
+                  boxShadow: '0 4px 12px rgba(36, 131, 179, 0.25)'
+                }}
+              >
+                {t.avatar}
+              </div>
             </div>
-            <div>
-              <b style={{ fontSize: '15px', color: 'var(--txt)', display: 'block' }}>{current.nama}</b>
-              <small style={{ fontSize: '12.5px', color: 'var(--mut)' }}>{current.peran}</small>
+
+            {/* Reviewer Name, 5 Golden Stars & Date */}
+            <div style={{ textAlign: 'center', marginBottom: '14px' }}>
+              <b style={{ fontSize: '15px', color: 'var(--txt)', display: 'block', marginBottom: '2px' }}>
+                {t.nama}
+              </b>
+              <span style={{ fontSize: '11px', color: 'var(--mut)', display: 'block', marginBottom: '6px' }}>
+                {t.peran}
+              </span>
+              <div 
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  gap: '6px',
+                  flexWrap: 'wrap' 
+                }}
+              >
+                <div style={{ display: 'flex', gap: '2px' }}>
+                  {[...Array(t.rating || 5)].map((_, i) => (
+                    <Star key={i} size={13} fill="#eab308" color="#eab308" />
+                  ))}
+                </div>
+                <span style={{ fontSize: '11px', color: 'var(--mut)', fontWeight: 500 }}>
+                  {t.date}
+                </span>
+              </div>
             </div>
-          </div>
 
-          {/* Navigation Controls */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <button
-              onClick={handlePrev}
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                background: 'var(--card2)',
-                border: '1px solid var(--border)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--txt)'
+            {/* Review Quote Text */}
+            <p 
+              style={{ 
+                fontSize: '12.5px', 
+                lineHeight: 1.6, 
+                color: 'var(--mut)', 
+                textAlign: 'left',
+                margin: 0,
+                marginTop: 'auto'
               }}
             >
-              <ChevronLeft size={18} />
-            </button>
-
-            <button
-              onClick={handleNext}
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                background: 'var(--card2)',
-                border: '1px solid var(--border)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--txt)'
-              }}
-            >
-              <ChevronRight size={18} />
-            </button>
+              "{t.teks}"
+            </p>
           </div>
-        </div>
-
-        {/* Dots */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '20px' }}>
-          {TESTIMONIALS.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentIndex(idx)}
-              style={{
-                width: idx === currentIndex ? '24px' : '8px',
-                height: '8px',
-                borderRadius: '4px',
-                background: idx === currentIndex ? 'var(--b)' : 'rgba(13, 71, 161, 0.2)',
-                border: 'none',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease'
-              }}
-            />
-          ))}
-        </div>
+        ))}
       </div>
     </section>
   );

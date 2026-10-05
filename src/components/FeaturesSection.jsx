@@ -31,7 +31,7 @@ export default function FeaturesSection({ lang = 'id', onNavigate }) {
         : 'Ikan diserok langsung dari kolam hidup saat Anda memesan — kesegaran terjaga 100% tanpa simpanan beku lama.',
       metric: '0 Hari Beku',
       metricSub: 'Panen Pagi 06:30',
-      badgeColor: '#f59e0b',
+      badgeColor: '#2483B3',
       ecoFeature: 'Ikan aktif dipanen selektif sesuai bobot konsumsi premium (500–800g)'
     },
     {
@@ -45,7 +45,7 @@ export default function FeaturesSection({ lang = 'id', onNavigate }) {
         : 'Ekosistem air terawat oleh probiotik Bacillus subtilis yang mengurai kotoran amonia jadi protein mikro.',
       metric: 'DO > 5.5 mg/L',
       metricSub: 'Aerasi 24 Jam Nonstop',
-      badgeColor: '#2196f3',
+      badgeColor: '#82D7E1',
       ecoFeature: 'Kadar amonia ditekan < 0.12 ppm, ikan selalu lincah dan berdaya tahan tinggi'
     },
     {
@@ -73,7 +73,7 @@ export default function FeaturesSection({ lang = 'id', onNavigate }) {
         : 'Bebas request dibersihkan sisik, isi perut, insang, atau dipotong fillet bersih siap masak tanpa biaya tambahan.',
       metric: 'Rp 0',
       metricSub: 'Gratis Sisik & Buang Isi Perut',
-      badgeColor: '#8b5cf6',
+      badgeColor: '#906FAC',
       ecoFeature: 'Dibersihkan dengan air mengalir berstandar sanitasi higienis keluarga'
     },
     {
@@ -87,7 +87,7 @@ export default function FeaturesSection({ lang = 'id', onNavigate }) {
         : 'Pengantaran ber-es atau wadah beroksigen khusus area Sumedang & sekitarnya agar kondisi ikan tetap prima.',
       metric: 'Same-Day',
       metricSub: 'Sumedang & Bandung Timur',
-      badgeColor: '#0284c7',
+      badgeColor: '#CB9FBF',
       ecoFeature: 'Dikirim langsung dari tambak tanpa perantara pedagang kotor'
     },
     {
@@ -101,7 +101,7 @@ export default function FeaturesSection({ lang = 'id', onNavigate }) {
         : 'Datang langsung ke kolam kami di Sumedang, lihat sistem bioflok bekerja, dan serok ikan langsung dari kolam bundar D4.',
       metric: '4 Kolam Aktif',
       metricSub: 'Jl. Raya Sumedang - Cimalaka',
-      badgeColor: '#ec4899',
+      badgeColor: '#163665',
       ecoFeature: 'Edukasi terbuka untuk petani pemula dan keluarga penggemar kuliner nila'
     }
   ];
@@ -225,28 +225,14 @@ export default function FeaturesSection({ lang = 'id', onNavigate }) {
       <div 
         style={{
           position: 'relative',
-          borderRadius: '32px',
-          background: 'linear-gradient(180deg, rgba(13, 71, 161, 0.08) 0%, rgba(33, 150, 243, 0.05) 50%, rgba(2, 132, 199, 0.12) 100%)',
-          border: '1.5px solid var(--border-strong)',
+          borderRadius: '20px',
+          background: 'var(--card)',
+          border: '1.5px solid var(--border)',
           padding: 'clamp(20px, 3.5vw, 36px)',
           overflow: 'hidden',
-          boxShadow: '0 20px 48px rgba(13, 71, 161, 0.08)'
+          boxShadow: 'var(--shadow-sm)'
         }}
       >
-        {/* Subtle Water Ripples Visual Background SVG */}
-        <div 
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            opacity: 0.25,
-            pointerEvents: 'none',
-            background: 'radial-gradient(circle at 50% 30%, rgba(33, 150, 243, 0.4) 0%, transparent 65%)'
-          }}
-        />
-
         <div 
           style={{
             display: 'grid',
@@ -261,12 +247,11 @@ export default function FeaturesSection({ lang = 'id', onNavigate }) {
           <div 
             style={{
               position: 'relative',
-              borderRadius: '24px',
+              borderRadius: '16px',
               padding: '24px',
-              background: 'rgba(14, 36, 71, 0.35)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
+              background: '#163665',
+              border: '1.5px solid #2483B3',
+              boxShadow: 'var(--shadow-md)',
               overflow: 'hidden'
             }}
           >
@@ -332,11 +317,10 @@ export default function FeaturesSection({ lang = 'id', onNavigate }) {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '12px',
-                    background: 'rgba(0, 0, 0, 0.35)',
+                    background: 'rgba(0, 0, 0, 0.45)',
                     border: '1px solid rgba(255, 255, 255, 0.25)',
                     padding: '8px 16px',
-                    borderRadius: '9999px',
-                    backdropFilter: 'blur(4px)'
+                    borderRadius: '9999px'
                   }}
                 >
                   <Fish size={22} color="#60a5fa" />
@@ -425,9 +409,9 @@ export default function FeaturesSection({ lang = 'id', onNavigate }) {
                 alignItems: 'flex-start',
                 gap: '12px',
                 padding: '14px 18px',
-                borderRadius: '18px',
+                borderRadius: '14px',
                 background: 'var(--card2)',
-                border: '1px solid var(--border)',
+                border: '1.5px solid var(--border)',
                 marginBottom: '24px'
               }}
             >
@@ -554,9 +538,7 @@ export default function FeaturesSection({ lang = 'id', onNavigate }) {
               bottom: '16px',
               left: '16px',
               right: '16px',
-              background: 'rgba(13, 71, 161, 0.90)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
+              background: 'rgba(13, 71, 161, 0.94)',
               borderRadius: '9999px',
               padding: '10px 18px',
               color: '#ffffff',

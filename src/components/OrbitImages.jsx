@@ -1,7 +1,7 @@
 // Component created by Dominik Koch
 // https://x.com/dominikkoch
 
-import { useMemo, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useMemo, useEffect, useLayoutEffect, useRef, useState, memo } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'motion/react';
 import './OrbitImages.css';
 
@@ -71,7 +71,7 @@ function generateWavePath(cx, cy, w, amplitude, waves) {
   return pts.join(' ') + ' Z';
 }
 
-function OrbitItem({ item, index, totalItems, path, itemSize, rotation, progress, fill }) {
+const OrbitItem = memo(function OrbitItem({ item, index, totalItems, path, itemSize, rotation, progress, fill }) {
   const itemOffset = fill ? (index / totalItems) * 100 : 0;
 
   const offsetDistance = useTransform(progress, (p) => {
@@ -94,7 +94,7 @@ function OrbitItem({ item, index, totalItems, path, itemSize, rotation, progress
       <div style={{ transform: `rotate(${-rotation}deg)` }}>{item}</div>
     </motion.div>
   );
-}
+});
 
 export default function OrbitImages({
   images = [],
@@ -124,7 +124,14 @@ export default function OrbitImages({
   responsive = false,
 }) {
   const containerRef = useRef(null);
-  const [scale, setScale] = useState(null);
+  const [scale, setScale] = useState(() => {
+    if (!responsive) return 1;
+    if (typeof window !== 'undefined') {
+      const w = Math.min(window.innerWidth - 40, 520);
+      return +(w / baseWidth).toFixed(3);
+    }
+    return 1;
+  });
 
   const designCenterX = baseWidth / 2;
   const designCenterY = baseWidth / 2;
@@ -160,7 +167,8 @@ export default function OrbitImages({
     if (!responsive || !containerRef.current) return;
     const updateScale = () => {
       if (!containerRef.current) return;
-      setScale(containerRef.current.clientWidth / baseWidth);
+      const newScale = containerRef.current.clientWidth / baseWidth;
+      setScale(prev => (Math.abs(prev - newScale) > 0.005 ? newScale : prev));
     };
     updateScale();
     const observer = new ResizeObserver(updateScale);
@@ -184,15 +192,18 @@ export default function OrbitImages({
   const containerWidth = responsive ? '100%' : (typeof width === 'number' ? width : '100%');
   const containerHeight = responsive ? 'auto' : (typeof height === 'number' ? height : (typeof width === 'number' ? width : 'auto'));
 
-  const items = images.map((src, index) => (
-    <img
-      key={src}
-      src={src}
-      alt={`${altPrefix} ${index + 1}`}
-      draggable={false}
-      className="orbit-image"
-    />
-  ));
+  const items = useMemo(() => {
+    return images.map((src, index) => (
+      <img
+        key={src}
+        src={src}
+        alt={`${altPrefix} ${index + 1}`}
+        draggable={false}
+        decoding="async"
+        className="orbit-image"
+      />
+    ));
+  }, [images, altPrefix]);
 
   return (
     <div
@@ -225,7 +236,7 @@ export default function OrbitImages({
               viewBox={`0 0 ${baseWidth} ${baseWidth}`}
               className="orbit-path-svg"
             >
-              <path d={path} fill="none" stroke={pathColor} strokeWidth={pathWidth / (scale ?? 1)} />
+              <path d={path} fill="none" stroke={pathColor} strokeWidth={pathWidth} vectorEffect="non-scaling-stroke" />
             </svg>
           )}
 

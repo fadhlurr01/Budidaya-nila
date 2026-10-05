@@ -12,12 +12,17 @@ import {
   Sparkles,
   Waves,
   ShieldCheck,
-  Image as ImageIcon,
-  Cpu,
   Package,
   User,
   LogOut,
-  MessageCircle
+  MessageCircle,
+  Fish,
+  Activity,
+  Calculator,
+  BookOpen,
+  Send,
+  PhoneCall,
+  Search
 } from 'lucide-react';
 
 export default function Navbar({ 
@@ -32,19 +37,21 @@ export default function Navbar({
   onCustomerLogout,
   isDark,
   onToggleTheme,
-  lang,
+  lang = 'id',
   onToggleLang,
   onOpenDevModal,
   onOpenCorpModal
 }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [budidayaDropOpen, setBudidayaDropOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const [openDropdown, setOpenDropdown] = useState(null); // active dropdown id
+  const [mobileExpanded, setMobileExpanded] = useState({}); // accordion state on mobile
+  const dropdownTimeoutRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
+      const scrolled = window.scrollY > 30;
+      setIsScrolled(prev => (prev !== scrolled ? scrolled : prev));
     };
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -54,40 +61,131 @@ export default function Navbar({
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setBudidayaDropOpen(false);
+      if (!e.target.closest('.nav-dropdown-container')) {
+        setOpenDropdown(null);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Check if navbar should seamlessly merge with Hero section (on home page when at top)
-  const isHeroMerge = (activeSection === 'beranda' || !activeSection) && !isScrolled;
-
-  // 5 main multipage views: Beranda, Budidaya, Produk, Artikel, Kontak
+  // 5 Main Menu Items with Rich Dropdowns
   const navItems = [
-    { id: 'beranda', label: lang === 'en' ? 'Home' : 'Beranda' },
-    { id: 'budidaya', label: lang === 'en' ? 'Biofloc Farming' : 'Budidaya' },
-    { id: 'produk', label: lang === 'en' ? 'Products & Seed' : 'Produk' },
-    { id: 'artikel', label: lang === 'en' ? 'Articles' : 'Artikel' },
-    { id: 'kontak', label: lang === 'en' ? 'Contact' : 'Kontak' }
+    { 
+      id: 'beranda', 
+      label: lang === 'en' ? 'Home' : 'Beranda' 
+    },
+    { 
+      id: 'produk', 
+      label: lang === 'en' ? 'Products & Shop' : 'Katalog Produk',
+      badge: lang === 'en' ? 'Popular' : 'Populer',
+      subItems: [
+        { 
+          id: 'produk', 
+          label: lang === 'en' ? 'SKAI Certified Fingerlings' : 'Bibit Nila Nirwana Super', 
+          desc: lang === 'en' ? 'Sizes 3-5cm, 5-7cm, SR > 95%' : 'Ukuran 3-5cm, 5-7cm, Sertifikasi SKAI', 
+          icon: Fish 
+        },
+        { 
+          id: 'produk', 
+          label: lang === 'en' ? 'Fresh Live Tilapia & Fillet' : 'Ikan Nila Segar & Fillet', 
+          desc: lang === 'en' ? 'Mud-free, pan-ready fresh' : 'Bebas bau lumpur & fillet murni tanpa duri', 
+          icon: Sparkles 
+        },
+        { 
+          id: 'produk', 
+          label: lang === 'en' ? 'Feed 32% & Probiotics' : 'Pakan Pelet 32% & Probiotik', 
+          desc: lang === 'en' ? 'High protein & EM biofloc bacteria' : 'Pelet apung grower & EM-Aquatic bioflok', 
+          icon: Activity 
+        },
+        { 
+          id: 'produk', 
+          label: lang === 'en' ? 'Biofloc Round Ponds D2/D3' : 'Paket Kolam Bundar D2/D3/D4', 
+          desc: lang === 'en' ? 'Orchid tarpaulin, wiremesh & aerator' : 'Terpal Orchid Jerman, rangka M6 & uniring', 
+          icon: Package 
+        }
+      ]
+    },
+    { 
+      id: 'budidaya', 
+      label: lang === 'en' ? 'Farming & IoT' : 'Budidaya & IoT',
+      badge: 'IoT',
+      subItems: [
+        { 
+          id: 'budidaya', 
+          label: lang === 'en' ? 'Harvest & FCR Calculator' : 'Kalkulator Panen & FCR Bioflok', 
+          desc: lang === 'en' ? 'Simulate feed budget & profit' : 'Hitung kebutuhan benih, pakan & laba', 
+          icon: Calculator 
+        },
+        { 
+          id: 'budidaya', 
+          label: lang === 'en' ? '5-Stage Biofloc SOP' : 'SOP 5 Tahap Budidaya Bioflok', 
+          desc: lang === 'en' ? 'From pond conditioning to harvest' : 'Persiapan air, flokulasi, hingga panen', 
+          icon: BookOpen 
+        },
+        { 
+          id: 'budidaya', 
+          label: lang === 'en' ? 'Real-Time Water Monitoring' : 'Monitoring Kualitas Air (IoT)', 
+          desc: lang === 'en' ? 'Track pH, DO, Temp, & Ammonia' : 'Sensor pH, Oksigen Terlarut, Suhu & Amonia', 
+          icon: Activity 
+        },
+        { 
+          id: 'budidaya', 
+          label: lang === 'en' ? 'Nila Doctor AI Diagnostics' : 'Diagnosa Nila Doctor AI', 
+          desc: lang === 'en' ? 'Diagnose fish disease from photos' : 'Deteksi penyakit ikan & kualitas air dari foto', 
+          icon: ShieldCheck 
+        }
+      ]
+    },
+    { 
+      id: 'artikel', 
+      label: lang === 'en' ? 'Articles & Guide' : 'Artikel & Edukasi',
+      subItems: [
+        { 
+          id: 'artikel', 
+          label: lang === 'en' ? 'Treating Fish Diseases' : 'Panduan Mengatasi Penyakit Ikan', 
+          desc: lang === 'en' ? 'How to cure Aeromonas & White Spot' : 'Solusi jamur, busuk insang & bintik putih', 
+          icon: BookOpen 
+        },
+        { 
+          id: 'artikel', 
+          label: lang === 'en' ? 'Biofloc FCR Optimization' : 'Tips Menekan FCR Kolam Bioflok', 
+          desc: lang === 'en' ? 'Cut feed costs by utilizing flocs' : 'Tekan modal pakan dengan flok aktif mikroba', 
+          icon: Sparkles 
+        },
+        { 
+          id: 'artikel', 
+          label: lang === 'en' ? 'All Aquaculture Articles' : 'Semua Artikel Edukasi', 
+          desc: lang === 'en' ? 'Browse entire knowledge base' : 'Akses seluruh pustaka panduan akuakultur', 
+          icon: Send 
+        }
+      ]
+    },
+    { 
+      id: 'kontak', 
+      label: lang === 'en' ? 'Contact & Farm' : 'Kontak & Mitra' 
+    }
   ];
 
   const handleLinkClick = (id) => {
     onNavigate(id);
+    setOpenDropdown(null);
     setMobileMenuOpen(false);
-    setBudidayaDropOpen(false);
   };
 
-  const handleDropdownSubClick = (sub) => {
-    if (sub.isModal) {
-      onOpenDevModal('api');
-    } else {
-      onNavigate(sub.id);
-    }
-    setBudidayaDropOpen(false);
-    setMobileMenuOpen(false);
+  const handleDropdownEnter = (id) => {
+    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
+    setOpenDropdown(id);
+  };
+
+  const handleDropdownLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setOpenDropdown(null);
+    }, 200);
+  };
+
+  const toggleMobileAccordion = (id) => {
+    setMobileExpanded(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
   return (
@@ -95,161 +193,311 @@ export default function Navbar({
       className="navbar-fixed-header"
       style={{
         position: 'fixed',
-        top: isHeroMerge ? '0px' : '10px',
+        top: 0,
         left: 0,
         right: 0,
         margin: '0 auto',
-        width: isHeroMerge ? '100%' : 'calc(100% - 24px)',
-        maxWidth: isHeroMerge ? '100%' : '1760px',
+        width: '100%',
         zIndex: 9999,
-        transform: 'translateZ(0)',
-        WebkitTransform: 'translateZ(0)',
-        boxSizing: 'border-box',
-        transition: 'all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1)'
+        boxSizing: 'border-box'
       }}
     >
-      {/* Floating or Seamless Navbar Container */}
+      {/* Top Announcement Bar */}
+      <div 
+        style={{
+          background: '#163665',
+          color: '#ffffff',
+          fontSize: '11.5px',
+          fontWeight: 600,
+          padding: '6px 16px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          letterSpacing: '0.3px',
+          borderBottom: '1px solid rgba(130, 215, 225, 0.25)'
+        }}
+      >
+        <span style={{ color: '#82D7E1' }}>●</span>
+        <span>{lang === 'en' ? 'Live Fresh Tilapia & Fingerlings Delivery Across Java & Bali' : 'Pengiriman Ikan Segar & Bibit Hidup Bergaransi Se-Jawa & Bali'}</span>
+        <span style={{ fontSize: '13px' }}>🚚</span>
+      </div>
+
+      {/* Main Navbar Container */}
       <div 
         className="navbar-main-container"
         style={{
           width: '100%',
-          maxWidth: isHeroMerge ? '1760px' : '100%',
+          maxWidth: '1760px',
           margin: '0 auto',
-          background: isHeroMerge
-            ? 'transparent'
-            : (isDark ? 'rgba(14, 36, 71, 0.92)' : 'rgba(255, 255, 255, 0.94)'),
-          backdropFilter: isHeroMerge ? 'none' : 'blur(24px) saturate(1.8)',
-          WebkitBackdropFilter: isHeroMerge ? 'none' : 'blur(24px) saturate(1.8)',
-          border: isHeroMerge
-            ? '1px solid transparent'
-            : (isDark ? '1px solid rgba(144, 202, 249, 0.22)' : '1px solid rgba(255, 255, 255, 0.9)'),
-          boxShadow: isHeroMerge
-            ? 'none'
-            : (isDark 
-                ? '0 16px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08)' 
-                : '0 14px 38px rgba(13, 71, 161, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9)'),
-          borderRadius: isHeroMerge ? '0px' : '9999px',
-          padding: isHeroMerge 
-            ? '18px clamp(16px, 3.5vw, 36px) 14px clamp(16px, 3.5vw, 36px)' 
-            : '6px 18px 6px 22px',
+          background: isDark ? '#142a47' : '#ffffff',
+          borderBottom: isDark ? '1px solid rgba(130, 215, 225, 0.2)' : '1px solid #cfe2ec',
+          boxShadow: 'var(--shadow-sm)',
+          padding: '12px clamp(16px, 3.5vw, 40px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: '12px',
+          gap: '16px',
           position: 'relative',
-          boxSizing: 'border-box',
-          transition: 'all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1)'
+          boxSizing: 'border-box'
         }}
       >
         {/* Left Side: Brand Logo + Desktop Menu */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '32px', minWidth: 0 }}>
-          {/* Brand Logo with assets/logo.png */}
+          {/* Brand Logo NilaFarm */}
           <div 
             onClick={() => handleLinkClick('beranda')}
             style={{ 
               display: 'flex', 
               alignItems: 'center', 
-              gap: '10px', 
+              gap: '8px', 
               cursor: 'pointer',
               userSelect: 'none',
               flexShrink: 0
             }}
           >
-            <img 
-              src="/assets/logo/logoo.png" 
-              alt="NilaFarm Logo" 
-              className="navbar-brand-logo-img"
-              style={{ 
-                height: '38px', 
-                width: 'auto', 
-                objectFit: 'contain',
-                imageRendering: '-webkit-optimize-contrast',
-                filter: 'drop-shadow(0 2px 10px rgba(33, 150, 243, 0.4))'
-              }} 
-            />
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '2px', lineHeight: 1.1 }}>
-                <span style={{ fontSize: '20px', fontWeight: 800, color: '#2196f3', letterSpacing: '-0.3px' }}>
-                  Nila
-                </span>
-                <span style={{ fontSize: '20px', fontWeight: 800, color: isDark ? '#ffffff' : '#0d47a1', letterSpacing: '-0.3px' }}>
-                  Farm
-                </span>
-              </div>
-              <span 
-                className="brand-subtitle-desk"
-                style={{ 
-                  fontSize: '10px', 
-                  fontWeight: 600, 
-                  color: 'var(--mut)', 
-                  letterSpacing: '1.2px', 
-                  textTransform: 'uppercase',
-                  display: 'block'
-                }}
-              >
-                Smart Bioflok IoT
+            <div 
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '10px',
+                background: 'linear-gradient(135deg, #163665 0%, #2483B3 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: '1.5px solid #82D7E1',
+                boxShadow: '0 4px 12px rgba(36, 131, 179, 0.25)'
+              }}
+            >
+              <Waves size={20} color="#82D7E1" />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
+              <span style={{ fontSize: '24px', fontWeight: 800, color: 'var(--p)', letterSpacing: '-0.5px' }}>
+                Nila
+              </span>
+              <span style={{ fontSize: '24px', fontWeight: 800, color: '#2483B3', letterSpacing: '-0.5px' }}>
+                Farm
               </span>
             </div>
           </div>
 
-          {/* Desktop Navigation Links (Positioned on the Left beside Logo, No Circle/Pill) */}
+          {/* Desktop Navigation Links (Exactly 5 Items with Dropdowns) */}
           <nav 
             className="desktop-floating-menu"
             style={{ 
-              display: 'none', 
+              display: 'flex', 
               alignItems: 'center', 
-              gap: '6px'
+              gap: '4px'
             }}
           >
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
+              const hasSub = item.subItems && item.subItems.length > 0;
+              const isDropdownOpen = openDropdown === item.id;
+
               return (
-                <button
+                <div 
                   key={item.id}
-                  onClick={() => handleLinkClick(item.id)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: isActive ? 'var(--b)' : 'var(--txt)',
-                    fontSize: '14px',
-                    fontWeight: isActive ? 700 : 500,
-                    cursor: 'pointer',
-                    padding: '8px 12px',
-                    position: 'relative',
-                    transition: 'color 0.2s ease',
-                    outline: 'none',
-                    whiteSpace: 'nowrap'
-                  }}
-                  onMouseEnter={e => {
-                    if (!isActive) e.currentTarget.style.color = 'var(--b)';
-                  }}
-                  onMouseLeave={e => {
-                    if (!isActive) e.currentTarget.style.color = 'var(--txt)';
-                  }}
+                  className="nav-dropdown-container"
+                  style={{ position: 'relative' }}
+                  onMouseEnter={() => hasSub && handleDropdownEnter(item.id)}
+                  onMouseLeave={() => hasSub && handleDropdownLeave()}
                 >
-                  {item.label}
-                  {isActive && (
-                    <span 
+                  <button
+                    onClick={() => {
+                      if (hasSub) {
+                        setOpenDropdown(prev => (prev === item.id ? null : item.id));
+                      }
+                      handleLinkClick(item.id);
+                    }}
+                    style={{
+                      background: isDropdownOpen ? 'var(--card2)' : 'none',
+                      border: 'none',
+                      color: isActive ? '#2483B3' : 'var(--txt)',
+                      fontSize: '14.5px',
+                      fontWeight: isActive ? 700 : 600,
+                      cursor: 'pointer',
+                      padding: '8px 14px',
+                      borderRadius: '8px',
+                      position: 'relative',
+                      transition: 'all 0.2s ease',
+                      outline: 'none',
+                      whiteSpace: 'nowrap',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px'
+                    }}
+                    onMouseEnter={e => {
+                      if (!isActive && !isDropdownOpen) e.currentTarget.style.color = '#2483B3';
+                    }}
+                    onMouseLeave={e => {
+                      if (!isActive && !isDropdownOpen) e.currentTarget.style.color = 'var(--txt)';
+                    }}
+                  >
+                    <span>{item.label}</span>
+
+                    {/* Optional Badge */}
+                    {item.badge && (
+                      <span 
+                        style={{
+                          fontSize: '10px',
+                          fontWeight: 700,
+                          padding: '2px 6px',
+                          borderRadius: '6px',
+                          background: item.badge === 'IoT' ? 'rgba(36, 131, 179, 0.15)' : 'rgba(16, 185, 129, 0.15)',
+                          color: item.badge === 'IoT' ? '#2483B3' : '#10b981'
+                        }}
+                      >
+                        {item.badge}
+                      </span>
+                    )}
+
+                    {/* Dropdown Indicator Icon */}
+                    {hasSub && (
+                      <ChevronDown 
+                        size={14} 
+                        style={{
+                          transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                          transition: 'transform 0.25s ease',
+                          color: isDropdownOpen ? '#2483B3' : 'var(--mut)'
+                        }}
+                      />
+                    )}
+
+                    {/* Active Underline Indicator */}
+                    {isActive && (
+                      <span 
+                        style={{
+                          position: 'absolute',
+                          bottom: '-4px',
+                          left: '14px',
+                          right: '14px',
+                          height: '2.5px',
+                          background: '#2483B3',
+                          borderRadius: '2px'
+                        }}
+                      />
+                    )}
+                  </button>
+
+                  {/* Dropdown Menu Window */}
+                  {hasSub && isDropdownOpen && (
+                    <div
                       style={{
                         position: 'absolute',
-                        bottom: '0px',
-                        left: '12px',
-                        right: '12px',
-                        height: '2.5px',
-                        background: 'var(--b)',
-                        borderRadius: '2px'
+                        top: 'calc(100% + 8px)',
+                        left: '0',
+                        minWidth: '320px',
+                        background: isDark ? '#142a47' : '#ffffff',
+                        border: isDark ? '1px solid rgba(130, 215, 225, 0.3)' : '1px solid #cfe2ec',
+                        borderRadius: '16px',
+                        boxShadow: '0 16px 40px rgba(22, 54, 101, 0.18)',
+                        padding: '10px',
+                        zIndex: 99999,
+                        animation: 'fadeInDown 0.2s ease forwards'
                       }}
-                    />
+                    >
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        {item.subItems.map((sub, sIdx) => {
+                          const SubIcon = sub.icon;
+                          return (
+                            <div
+                              key={sIdx}
+                              onClick={() => {
+                                handleLinkClick(sub.id);
+                              }}
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '12px',
+                                padding: '10px 12px',
+                                borderRadius: '12px',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s ease',
+                                background: 'transparent'
+                              }}
+                              onMouseEnter={e => {
+                                e.currentTarget.style.background = isDark ? '#1c3b63' : '#f0f6fa';
+                                e.currentTarget.style.transform = 'translateX(3px)';
+                              }}
+                              onMouseLeave={e => {
+                                e.currentTarget.style.background = 'transparent';
+                                e.currentTarget.style.transform = 'translateX(0)';
+                              }}
+                            >
+                              <div 
+                                style={{
+                                  width: '34px',
+                                  height: '34px',
+                                  borderRadius: '8px',
+                                  background: isDark ? '#163665' : '#e5eff5',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  color: '#2483B3',
+                                  flexShrink: 0
+                                }}
+                              >
+                                <SubIcon size={18} />
+                              </div>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                                <span style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--txt)', lineHeight: 1.2 }}>
+                                  {sub.label}
+                                </span>
+                                <span style={{ fontSize: '11px', color: 'var(--mut)', lineHeight: 1.3 }}>
+                                  {sub.desc}
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Dropdown Footer CTA */}
+                      <div 
+                        style={{
+                          marginTop: '8px',
+                          paddingTop: '8px',
+                          borderTop: isDark ? '1px solid rgba(130, 215, 225, 0.15)' : '1px solid #cfe2ec',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          paddingLeft: '12px',
+                          paddingRight: '12px'
+                        }}
+                      >
+                        <span style={{ fontSize: '11.5px', color: 'var(--mut)', fontWeight: 500 }}>
+                          {item.id === 'produk' ? 'Siap kirim ke lokasi Anda' : 'Bimbingan teknis profesional'}
+                        </span>
+                        <button
+                          onClick={() => handleLinkClick(item.id)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#2483B3',
+                            fontSize: '11.5px',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px'
+                          }}
+                        >
+                          <span>Buka Halaman</span>
+                          <ArrowRight size={12} />
+                        </button>
+                      </div>
+                    </div>
                   )}
-                </button>
+                </div>
               );
             })}
           </nav>
         </div>
 
-        {/* Right Controls & CTA Button (Far Right) */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-          {/* Language Toggle (Desktop Only) */}
+        {/* Right Controls & Utilities */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+          {/* Language Toggle */}
           <button
             onClick={onToggleLang}
             title={lang === 'en' ? 'Ganti ke Bahasa Indonesia' : 'Switch to English'}
@@ -257,18 +505,13 @@ export default function Navbar({
             style={{
               padding: '7px 14px',
               borderRadius: '9999px',
-              background: isHeroMerge
-                ? (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.75)')
-                : 'var(--card2)',
-              border: isHeroMerge
-                ? (isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)')
-                : '1px solid var(--border)',
-              backdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
-              WebkitBackdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
+              background: 'var(--card2)',
+              border: '1px solid var(--border)',
               color: 'var(--txt)',
               cursor: 'pointer',
               fontSize: '12px',
               fontWeight: 700,
+              display: 'inline-flex',
               alignItems: 'center',
               gap: '5px',
               transition: 'all 0.2s ease'
@@ -278,23 +521,16 @@ export default function Navbar({
             <span>{lang.toUpperCase()}</span>
           </button>
 
-          {/* Theme Toggle (Mobile & Desktop) */}
+          {/* Theme Toggle */}
           <button
             onClick={onToggleTheme}
             title={isDark ? 'Mode Terang' : 'Mode Gelap'}
-            className="nav-theme-btn"
             style={{
               width: '36px',
               height: '36px',
               borderRadius: '50%',
-              background: isHeroMerge
-                ? (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.75)')
-                : 'var(--card2)',
-              border: isHeroMerge
-                ? (isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)')
-                : '1px solid var(--border)',
-              backdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
-              WebkitBackdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
+              background: 'var(--card2)',
+              border: '1px solid var(--border)',
               color: 'var(--txt)',
               cursor: 'pointer',
               display: 'flex',
@@ -307,161 +543,37 @@ export default function Navbar({
             {isDark ? <Sun size={16} /> : <Moon size={16} />}
           </button>
 
-          {/* Lacak Pesanan Button (Desktop Only) */}
-          <button
-            onClick={onOpenOrderTracking}
-            title="Lacak Status Pesanan"
-            className="nav-desk-only"
-            style={{
-              alignItems: 'center',
-              gap: '6px',
-              padding: '7px 16px',
-              borderRadius: '9999px',
-              background: isHeroMerge
-                ? (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.75)')
-                : 'var(--card2)',
-              border: isHeroMerge
-                ? (isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)')
-                : '1px solid var(--border)',
-              backdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
-              WebkitBackdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
-              color: 'var(--txt)',
-              cursor: 'pointer',
-              fontSize: '12.5px',
-              fontWeight: 600,
-              transition: 'all 0.2s ease'
-            }}
-          >
-            <Package size={15} color="var(--b)" />
-            <span className="cta-text-desk cta-text-collapse">Lacak Pesanan</span>
-          </button>
-
-          {/* Customer Auth / Profile Pill (Desktop Only) */}
-          {customerUser ? (
-            <div 
-              className="nav-desk-only"
-              style={{
-                alignItems: 'center',
-                gap: '6px',
-                background: 'rgba(33, 150, 243, 0.12)',
-                border: '1px solid rgba(33, 150, 243, 0.3)',
-                padding: '4px 12px 4px 6px',
-                borderRadius: '9999px'
-              }}
-            >
-              <button
-                type="button"
-                onClick={onOpenOrderTracking}
-                title="Lihat Pesanan Saya"
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--b)',
-                  fontSize: '12.5px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: 0
-                }}
-              >
-                <div 
-                  style={{ 
-                    width: '24px', 
-                    height: '24px', 
-                    borderRadius: '50%', 
-                    background: 'var(--b)', 
-                    color: '#fff', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center', 
-                    fontSize: '11px', 
-                    fontWeight: 800 
-                  }}
-                >
-                  {customerUser.name.charAt(0).toUpperCase()}
-                </div>
-                <span>{customerUser.name.split(' ')[0]}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={onCustomerLogout}
-                title="Keluar dari Akun Pembeli"
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--mut)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '2px',
-                  marginLeft: '2px'
-                }}
-              >
-                <LogOut size={13} />
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={onOpenCustomerAuth}
-              title="Masuk atau Daftar Akun Pembeli"
-              className="btn-ghost nav-desk-only"
-              style={{
-                padding: '7px 16px',
-                fontSize: '12.5px',
-                borderRadius: '9999px',
-                background: isHeroMerge
-                  ? (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.75)')
-                  : 'transparent',
-                border: isHeroMerge
-                  ? (isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)')
-                  : '1px solid var(--border)',
-                backdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
-                WebkitBackdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
-              }}
-            >
-              <User size={14} />
-              <span className="cta-text-desk cta-text-collapse">Masuk</span>
-            </button>
-          )}
-
-          {/* Shopping Cart Button (Mobile & Desktop) */}
+          {/* Cart Button */}
           <button
             onClick={onOpenCart}
             title="Keranjang Belanja"
-            className="nav-cart-btn"
             style={{
               position: 'relative',
-              width: '36px',
-              height: '36px',
+              width: '38px',
+              height: '38px',
               borderRadius: '50%',
-              background: isHeroMerge
-                ? (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.75)')
-                : 'var(--card2)',
-              border: isHeroMerge
-                ? (isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)')
-                : '1px solid var(--border)',
-              backdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
-              WebkitBackdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
-              color: 'var(--txt)',
+              background: '#2483B3',
+              color: '#ffffff',
+              border: 'none',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
-              transition: 'all 0.2s ease'
+              boxShadow: '0 4px 12px rgba(36, 131, 179, 0.3)',
+              transition: 'transform 0.2s ease'
             }}
+            onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
           >
             <ShoppingCart size={17} />
             {cartCount > 0 && (
               <span 
                 style={{
                   position: 'absolute',
-                  top: '-2px',
-                  right: '-2px',
-                  background: 'var(--grad)',
+                  top: '-4px',
+                  right: '-4px',
+                  background: '#ef4444',
                   color: '#ffffff',
                   fontSize: '10px',
                   fontWeight: 800,
@@ -471,7 +583,7 @@ export default function Navbar({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 2px 6px rgba(33, 150, 243, 0.5)'
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.3)'
                 }}
               >
                 {cartCount}
@@ -479,328 +591,238 @@ export default function Navbar({
             )}
           </button>
 
-          {/* Konsultasi Kami CTA Button (Desktop Only) */}
+          {/* Order Tracking / Customer Account */}
           <button
-            onClick={() => {
-              if (onOpenCorpModal) {
-                onOpenCorpModal('konsultasi');
-              } else {
-                onNavigate('kontak');
-              }
-            }}
-            className="btn-primary nav-desk-only"
-            style={{ 
-              padding: '8px 18px', 
-              fontSize: '12.5px',
+            onClick={onOpenOrderTracking}
+            title="Lacak Pesanan"
+            className="nav-desk-only"
+            style={{
+              padding: '8px 14px',
               borderRadius: '9999px',
+              background: 'transparent',
+              border: '1.5px solid var(--border)',
+              color: 'var(--txt)',
+              fontSize: '12.5px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              background: 'var(--grad)',
-              boxShadow: '0 4px 14px rgba(33, 150, 243, 0.35)',
-              cursor: 'pointer'
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.borderColor = '#2483B3';
+              e.currentTarget.style.color = '#2483B3';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.borderColor = 'var(--border)';
+              e.currentTarget.style.color = 'var(--txt)';
             }}
           >
-            <MessageCircle size={14} />
-            <span className="cta-text-desk">{lang === 'en' ? 'Consult Us' : 'Konsultasi kami'}</span>
-            <ArrowRight size={12} />
+            <Package size={14} color="#2483B3" />
+            <span>Lacak Order</span>
           </button>
 
-          {/* Mobile Hamburger Toggle */}
+          {/* Mobile Menu Burger Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="mobile-burger-btn"
-            title="Buka Menu"
             style={{
               display: 'none',
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              background: isHeroMerge
-                ? (isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.75)')
-                : 'var(--card2)',
-              border: isHeroMerge
-                ? (isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)')
-                : '1px solid var(--border)',
-              backdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
-              WebkitBackdropFilter: isHeroMerge ? 'blur(10px)' : 'none',
+              width: '38px',
+              height: '38px',
+              borderRadius: '10px',
+              background: 'var(--card2)',
+              border: '1px solid var(--border)',
               color: 'var(--txt)',
               cursor: 'pointer',
               alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-              transition: 'all 0.2s ease'
+              justifyContent: 'center'
             }}
           >
-            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Drawer Menu with Accordion Sub-Menus */}
       {mobileMenuOpen && (
-        <div 
+        <div
           style={{
-            marginTop: '8px',
-            marginRight: isHeroMerge ? '16px' : '0',
-            marginLeft: isHeroMerge ? '16px' : '0',
-            background: isDark ? 'rgba(14, 36, 71, 0.98)' : 'rgba(255, 255, 255, 0.98)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid var(--border)',
-            borderRadius: '20px',
-            padding: '16px',
-            maxHeight: 'calc(100vh - 85px)',
-            overflowY: 'auto',
-            overscrollBehavior: 'contain',
-            boxSizing: 'border-box',
-            boxShadow: 'var(--shadow-lg)',
-            position: 'relative',
-            zIndex: 10000,
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            right: 0,
+            background: isDark ? '#142a47' : '#ffffff',
+            borderBottom: isDark ? '1px solid rgba(130, 215, 225, 0.25)' : '1px solid #cfe2ec',
+            boxShadow: '0 16px 36px rgba(0,0,0,0.2)',
+            padding: '16px 20px 24px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '6px'
+            gap: '8px',
+            maxHeight: 'calc(85vh - 80px)',
+            overflowY: 'auto'
           }}
         >
-          {/* Mobile Language Switcher Row */}
-          <div 
-            style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'space-between', 
-              padding: '8px 14px', 
-              borderRadius: '9999px', 
-              background: 'var(--card2)', 
-              border: '1px solid var(--border)', 
-              marginBottom: '4px' 
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12.5px', fontWeight: 600, color: 'var(--txt)' }}>
-              <Globe size={15} color="var(--b)" />
-              <span>Bahasa / Language</span>
-            </div>
-            <div style={{ display: 'flex', gap: '4px' }}>
-              <button
-                type="button"
-                onClick={() => lang !== 'id' && onToggleLang()}
-                style={{
-                  padding: '4px 12px',
-                  borderRadius: '9999px',
-                  border: 'none',
-                  background: lang === 'id' ? 'var(--b)' : 'transparent',
-                  color: lang === 'id' ? '#fff' : 'var(--mut)',
-                  fontWeight: 700,
-                  fontSize: '11.5px',
-                  cursor: 'pointer'
-                }}
-              >
-                ID
-              </button>
-              <button
-                type="button"
-                onClick={() => lang !== 'en' && onToggleLang()}
-                style={{
-                  padding: '4px 12px',
-                  borderRadius: '9999px',
-                  border: 'none',
-                  background: lang === 'en' ? 'var(--b)' : 'transparent',
-                  color: lang === 'en' ? '#fff' : 'var(--mut)',
-                  fontWeight: 700,
-                  fontSize: '11.5px',
-                  cursor: 'pointer'
-                }}
-              >
-                EN
-              </button>
-            </div>
-          </div>
-
           {navItems.map((item) => {
-            if (item.isDropdown) {
-              return (
-                <div key={item.id} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                  <div style={{ padding: '8px 12px', fontSize: '11.5px', fontWeight: 800, color: 'var(--b)', letterSpacing: '1px', textTransform: 'uppercase' }}>
-                    {item.label}
-                  </div>
-                  {item.children.map(sub => (
-                    <button
-                      key={sub.id}
-                      onClick={() => handleDropdownSubClick(sub)}
-                      style={{
-                        width: '100%',
-                        textAlign: 'left',
-                        padding: '10px 18px',
-                        borderRadius: '9999px',
-                        border: 'none',
-                        background: activeSection === sub.id ? 'var(--card2)' : 'transparent',
-                        color: activeSection === sub.id ? 'var(--b)' : 'var(--txt)',
-                        fontSize: '13.5px',
-                        fontWeight: activeSection === sub.id ? 700 : 500,
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                      }}
-                    >
-                      <sub.icon size={15} color="var(--b)" />
-                      <span>{sub.label}</span>
-                    </button>
-                  ))}
-                  <div style={{ height: '1px', background: 'var(--border)', margin: '4px 0' }} />
-                </div>
-              );
-            }
+            const hasSub = item.subItems && item.subItems.length > 0;
+            const isExp = mobileExpanded[item.id];
+            const isActive = activeSection === item.id;
 
             return (
-              <button
-                key={item.id}
-                onClick={() => handleLinkClick(item.id)}
-                style={{
-                  width: '100%',
-                  textAlign: 'left',
-                  padding: '11px 18px',
-                  borderRadius: '9999px',
-                  border: 'none',
-                  background: activeSection === item.id ? 'var(--card2)' : 'transparent',
-                  color: activeSection === item.id ? 'var(--b)' : 'var(--txt)',
-                  fontSize: '14px',
-                  fontWeight: activeSection === item.id ? 700 : 500,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between'
-                }}
-              >
-                <span>{item.label}</span>
-                {activeSection === item.id && <Sparkles size={16} color="var(--b)" />}
-              </button>
+              <div key={item.id} style={{ display: 'flex', flexDirection: 'column' }}>
+                <div 
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '10px 14px',
+                    borderRadius: '10px',
+                    background: isActive ? 'var(--card2)' : 'transparent',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => {
+                    if (hasSub) {
+                      toggleMobileAccordion(item.id);
+                    } else {
+                      handleLinkClick(item.id);
+                    }
+                  }}
+                >
+                  <span style={{ fontSize: '15px', fontWeight: isActive ? 700 : 600, color: isActive ? '#2483B3' : 'var(--txt)' }}>
+                    {item.label}
+                  </span>
+                  {hasSub ? (
+                    <ChevronDown 
+                      size={16} 
+                      style={{
+                        transform: isExp ? 'rotate(180deg)' : 'rotate(0deg)',
+                        transition: 'transform 0.2s ease',
+                        color: 'var(--mut)'
+                      }} 
+                    />
+                  ) : (
+                    isActive && <Sparkles size={16} color="#2483B3" />
+                  )}
+                </div>
+
+                {/* Sub-Items Accordion */}
+                {hasSub && isExp && (
+                  <div 
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '4px',
+                      paddingLeft: '14px',
+                      marginTop: '4px',
+                      marginBottom: '8px',
+                      borderLeft: '2px solid #2483B3'
+                    }}
+                  >
+                    {item.subItems.map((sub, sIdx) => {
+                      const SubIcon = sub.icon;
+                      return (
+                        <button
+                          key={sIdx}
+                          onClick={() => handleLinkClick(sub.id)}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px',
+                            padding: '9px 12px',
+                            borderRadius: '8px',
+                            background: 'transparent',
+                            border: 'none',
+                            color: 'var(--txt)',
+                            textAlign: 'left',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <SubIcon size={15} color="#2483B3" />
+                          <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <span style={{ fontSize: '13px', fontWeight: 600 }}>{sub.label}</span>
+                            <span style={{ fontSize: '10.5px', color: 'var(--mut)' }}>{sub.desc}</span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             );
           })}
 
           <div style={{ height: '1px', background: 'var(--border)', margin: '8px 0' }} />
 
-          {/* Lacak Pesanan Mobile Link */}
-          <button
-            onClick={() => {
-              setMobileMenuOpen(false);
-              onOpenOrderTracking();
-            }}
-            style={{
-              width: '100%',
-              textAlign: 'left',
-              padding: '11px 18px',
-              borderRadius: '9999px',
-              border: '1px solid var(--border)',
-              background: 'var(--card2)',
-              color: 'var(--txt)',
-              fontSize: '13.5px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}
-          >
-            <Package size={16} color="var(--b)" />
-            <span>Lacak Status Pesanan</span>
-          </button>
-
-          {/* Akun Pembeli Mobile Link */}
-          {customerUser ? (
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenOrderTracking();
-                }}
-                style={{
-                  flex: 1,
-                  textAlign: 'left',
-                  padding: '11px 18px',
-                  borderRadius: '9999px',
-                  border: 'none',
-                  background: 'rgba(33, 150, 243, 0.12)',
-                  color: 'var(--b)',
-                  fontSize: '13px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px'
-                }}
-              >
-                <User size={15} />
-                <span>Akun: {customerUser.name}</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onCustomerLogout();
-                }}
-                className="btn-danger"
-                style={{ padding: '0 14px', borderRadius: '9999px', fontSize: '12px' }}
-                title="Keluar Akun Pembeli"
-              >
-                <LogOut size={14} />
-              </button>
-            </div>
-          ) : (
+          {/* Mobile Utilities */}
+          <div style={{ display: 'flex', gap: '8px' }}>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                onOpenCustomerAuth();
+                onOpenOrderTracking();
               }}
-              className="btn-ghost"
               style={{
-                width: '100%',
-                padding: '11px 18px',
+                flex: 1,
+                padding: '11px',
                 borderRadius: '9999px',
-                fontSize: '13.5px',
-                fontWeight: 600,
+                border: '1px solid var(--border)',
+                background: 'var(--card2)',
+                color: 'var(--txt)',
+                fontSize: '13px',
+                fontWeight: 700,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px'
+                gap: '6px'
               }}
             >
-              <User size={15} />
-              <span>Masuk / Buat Akun Pembeli</span>
+              <Package size={15} color="#2483B3" />
+              <span>Lacak Pesanan</span>
             </button>
-          )}
 
-          {/* Konsultasi Kami Mobile Button */}
-          <button
-            onClick={() => {
-              setMobileMenuOpen(false);
-              if (onOpenCorpModal) {
-                onOpenCorpModal('konsultasi');
-              } else {
-                onNavigate('kontak');
-              }
-            }}
-            className="btn-primary"
-            style={{
-              width: '100%',
-              padding: '11px 18px',
-              borderRadius: '9999px',
-              fontSize: '13.5px',
-              fontWeight: 700,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              background: 'var(--grad)',
-              marginTop: '4px'
-            }}
-          >
-            <MessageCircle size={16} />
-            <span>{lang === 'en' ? 'Consultation' : 'Konsultasi kami'}</span>
-          </button>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (onOpenCorpModal) {
+                  onOpenCorpModal('konsultasi');
+                } else {
+                  onNavigate('kontak');
+                }
+              }}
+              style={{
+                flex: 1,
+                padding: '11px',
+                borderRadius: '9999px',
+                border: 'none',
+                background: '#2483B3',
+                color: '#ffffff',
+                fontSize: '13px',
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px'
+              }}
+            >
+              <MessageCircle size={15} />
+              <span>Konsultasi</span>
+            </button>
+          </div>
         </div>
       )}
 
       {/* Responsiveness overrides */}
       <style>{`
+        @keyframes fadeInDown {
+          from {
+            opacity: 0;
+            transform: translateY(-8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
         @media (min-width: 1024px) {
           .desktop-floating-menu {
             display: flex !important;
@@ -810,11 +832,6 @@ export default function Navbar({
           }
           .nav-desk-only {
             display: inline-flex !important;
-          }
-        }
-        @media (max-width: 1260px) and (min-width: 1024px) {
-          .cta-text-collapse {
-            display: none !important;
           }
         }
         @media (max-width: 1023px) {
@@ -827,24 +844,11 @@ export default function Navbar({
           .mobile-burger-btn {
             display: flex !important;
           }
-          .cta-text-desk {
-            display: none !important;
-          }
         }
         @media (max-width: 640px) {
-          .navbar-fixed-header {
-            width: calc(100% - 16px) !important;
-            top: 8px !important;
-          }
           .navbar-main-container {
-            padding: 6px 12px !important;
-            gap: 6px !important;
-          }
-          .brand-subtitle-desk {
-            display: none !important;
-          }
-          .navbar-brand-logo-img {
-            height: 32px !important;
+            padding: 8px 14px !important;
+            gap: 8px !important;
           }
         }
       `}</style>

@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback, useEffect } from 'react';
+import React, { useRef, useState, useCallback, useEffect, memo } from 'react';
 import './OptionWheel.css';
 
 const DEFAULT_ITEMS = [
@@ -53,6 +53,7 @@ const OptionWheel = ({
   const audioRef = useRef(null);
   const audioUrlRef = useRef('');
   const lastTickRef = useRef(0);
+  const lastEmittedIdxRef = useRef(defaultSelected);
   const [selectedIndex, setSelectedIndex] = useState(defaultSelected);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -109,6 +110,15 @@ const OptionWheel = ({
         if (d > n / 2) d -= n;
       }
       const dist = Math.abs(d);
+      
+      // If outside visible wheel, skip heavy layout to save GPU/paint cycles
+      if (dist > 5.5) {
+        if (el.style.display !== 'none') el.style.display = 'none';
+        continue;
+      } else if (el.style.display === 'none') {
+        el.style.display = '';
+      }
+
       let x = 0;
       let y = d * cfg.rowH;
       let rot = 0;
@@ -120,8 +130,11 @@ const OptionWheel = ({
       }
       el.style.transform = `translate3d(${x.toFixed(1)}px, calc(${y.toFixed(1)}px - 50%), 0) rotate(${rot.toFixed(2)}deg)`;
       el.style.opacity = String(Math.max(cfg.minOpacity, 1 - dist * cfg.fade));
-      el.style.filter = cfg.blur > 0 && dist > 0.1 ? `blur(${(dist * cfg.blur).toFixed(1)}px)` : 'none';
-      el.style.setProperty('--ow-p', Math.max(0, 1 - Math.min(dist, 1)).toFixed(3));
+      if (cfg.blur > 0 && dist > 0.1) {
+        el.style.filter = `blur(${(dist * cfg.blur).toFixed(1)}px)`;
+      } else if (el.style.filter && el.style.filter !== 'none') {
+        el.style.filter = 'none';
+      }
     }
 
     rafRef.current = settled ? null : requestAnimationFrame(runFrame);
@@ -163,6 +176,7 @@ const OptionWheel = ({
       const idx = ((Math.round(v) % cfg.count) + cfg.count) % cfg.count;
       if (idx !== selectedRef.current) {
         selectedRef.current = idx;
+        lastEmittedIdxRef.current = idx;
         setSelectedIndex(idx);
         onChangeRef.current?.(idx, cfg.items[idx]);
         playTick();
@@ -256,14 +270,25 @@ const OptionWheel = ({
     [applyTarget]
   );
 
+  const prevItemsKeyRef = useRef(items.join('|'));
   useEffect(() => {
-    applyTarget(targetRef.current, false);
-  }, [items, fontSize, spacing, curve, tilt, blur, fade, minOpacity, side, loop, smoothing, applyTarget]);
+    const currentKey = items.join('|');
+    if (prevItemsKeyRef.current !== currentKey) {
+      prevItemsKeyRef.current = currentKey;
+      applyTarget(targetRef.current, false);
+    }
+  }, [items, applyTarget]);
 
   useEffect(() => {
-    if (defaultSelected !== undefined && Math.round(targetRef.current) !== defaultSelected) {
-      applyTarget(defaultSelected, true);
-    }
+    applyTarget(targetRef.current, false);
+  }, [fontSize, spacing, curve, tilt, blur, fade, minOpacity, side, loop, smoothing, applyTarget]);
+
+  useEffect(() => {
+    if (dragRef.current) return;
+    if (defaultSelected === undefined) return;
+    if (defaultSelected === lastEmittedIdxRef.current && Math.round(targetRef.current) === defaultSelected) return;
+    lastEmittedIdxRef.current = defaultSelected;
+    applyTarget(defaultSelected, true);
   }, [defaultSelected, applyTarget]);
 
   useEffect(
@@ -312,4 +337,4 @@ const OptionWheel = ({
   );
 };
 
-export default OptionWheel;
+export default memo(OptionWheel);

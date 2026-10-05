@@ -154,7 +154,7 @@ export default function CartDrawer({
   if (!isOpen) return null;
 
   const formatRupiah = (val) => {
-    return 'Rp' + Number(val || 0).toLocaleString('id-ID');
+    return '$' + Number(val || 0);
   };
 
   const totalPrice = cartItems.reduce((acc, item) => acc + (Number(item.harga || 0) * item.qty), 0);
