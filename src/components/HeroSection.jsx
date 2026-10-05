@@ -1,25 +1,15 @@
 import React, { memo } from 'react';
 import { 
   ArrowRight, 
-  Sparkles,
-  ShieldCheck,
-  Truck,
-  Fish,
-  Waves,
-  Activity,
-  Calculator
+  Sparkles, 
+  ShieldCheck, 
+  Truck, 
+  Fish, 
+  Waves, 
+  Activity, 
+  BookOpen,
+  CheckCircle2
 } from 'lucide-react';
-import ShinyText from './ShinyText';
-import OrbitImages from './OrbitImages';
-
-const NILA_ORBIT_IMAGES = [
-  'https://images.unsplash.com/photo-1524704654690-b56c05c78a00?auto=format&fit=crop&w=400&q=80',
-  'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=400&q=80',
-  'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=400&q=80',
-  'https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=400&q=80',
-  'https://images.unsplash.com/photo-1628088062854-d1870b4553da?auto=format&fit=crop&w=400&q=80',
-  'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=400&q=80'
-];
 
 function HeroSection({ 
   onNavigate, 
@@ -28,10 +18,19 @@ function HeroSection({
 }) {
   const stats = React.useMemo(() => [
     { num: '98.2%', label: 'Survival Rate (SR)', sub: 'Strain Nirwana Super' },
-    { num: '1.12', label: 'Rasio FCR Efisien', sub: 'Hemat Pakan Bioflok' },
-    { num: '0%', label: 'Bebas Bau Lumpur', sub: 'Daging Manis Gurih' },
-    { num: 'Same-Day', label: 'Pengiriman Hidup', sub: 'Garansi Sehat Tiba' }
+    { num: '1.12', label: 'Rasio FCR Hemat', sub: 'Efisiensi Pakan Bioflok' },
+    { num: '0%', label: 'Bebas Bau Lumpur', sub: 'Daging Manis Gurih Alami' },
+    { num: 'Same-Day', label: 'Pengiriman Bergaransi', sub: 'Se-Jawa & Bali Aman' }
   ], []);
+
+  const handleScrollToSection = (sectionId) => {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else if (onNavigate) {
+      onNavigate(sectionId);
+    }
+  };
 
   return (
     <section 
@@ -42,38 +41,57 @@ function HeroSection({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: '125px', 
-        paddingBottom: '60px',
+        paddingTop: '135px', 
+        paddingBottom: '70px',
         overflow: 'hidden',
-        /* Latar Background Nila (Deep Ocean Blue & Biofloc Aquatic Caustics) */
-        background: 'radial-gradient(ellipse 90% 70% at 50% 15%, rgba(36, 131, 179, 0.42) 0%, rgba(22, 54, 101, 0.95) 60%, #0d1e34 100%), linear-gradient(180deg, #163665 0%, #0d1e34 100%)',
         color: '#ffffff'
       }}
     >
-      {/* Decorative Aquatic Glow & Water Ripples */}
+      {/* Background Image: assets/products/kolam-d4.jpg with fallback to kolam-d3.jpg */}
       <div 
         style={{
           position: 'absolute',
-          top: '-15%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '720px',
-          height: '420px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(130, 215, 225, 0.22) 0%, transparent 70%)',
-          filter: 'blur(50px)',
-          pointerEvents: 'none'
-        }}
-      />
-      <div 
-        style={{
-          position: 'absolute',
-          bottom: '0',
+          top: 0,
           left: 0,
           right: 0,
-          height: '120px',
-          background: 'linear-gradient(to top, var(--bg) 0%, transparent 100%)',
-          pointerEvents: 'none'
+          bottom: 0,
+          backgroundImage: 'url(/assets/products/kolam-d4.jpg), url(/assets/products/kolam-d3.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 40%',
+          backgroundRepeat: 'no-repeat',
+          zIndex: 0
+        }}
+      />
+
+      {/* Dark & Gradient Overlay (50% - 65% opacity) for Maximum Readability */}
+      <div 
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(180deg, rgba(14, 36, 64, 0.72) 0%, rgba(22, 54, 101, 0.58) 50%, rgba(13, 30, 52, 0.90) 100%)',
+          backdropFilter: 'blur(1.5px)',
+          WebkitBackdropFilter: 'blur(1.5px)',
+          zIndex: 1
+        }}
+      />
+
+      {/* Bio-Luminescent Aquatic Light Accents */}
+      <div 
+        style={{
+          position: 'absolute',
+          top: '15%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '800px',
+          height: '460px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(130, 215, 225, 0.22) 0%, rgba(36, 131, 179, 0.12) 50%, transparent 80%)',
+          filter: 'blur(60px)',
+          pointerEvents: 'none',
+          zIndex: 1
         }}
       />
 
@@ -92,80 +110,73 @@ function HeroSection({
           textAlign: 'center'
         }}
       >
-        {/* Top Centered Pill Badge */}
+        {/* Top Centered Pill Badge: 🐟 100% Organik & Hasil Panen Berkualitas */}
         <div 
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '8px',
-            background: 'rgba(22, 54, 101, 0.75)',
-            backdropFilter: 'blur(10px)',
-            border: '1.5px solid rgba(130, 215, 225, 0.45)',
-            borderRadius: '30px',
-            padding: '7px 20px',
-            fontSize: '13px',
-            fontWeight: 600,
+            gap: '10px',
+            background: 'rgba(14, 36, 64, 0.85)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1.5px solid rgba(130, 215, 225, 0.6)',
+            borderRadius: '9999px',
+            padding: '8px 22px',
+            fontSize: '13.5px',
+            fontWeight: 700,
             color: '#82D7E1',
-            boxShadow: '0 4px 18px rgba(0, 0, 0, 0.25)',
-            marginBottom: '22px'
+            boxShadow: '0 6px 20px rgba(0, 0, 0, 0.35)',
+            marginBottom: '26px'
           }}
         >
-          <Fish size={16} color="#82D7E1" />
-          <span className="pulse-dot" style={{ background: '#82D7E1' }} />
-          <ShinyText
-            text={lang === 'en' ? 'Smart Biofloc Aquaculture • NilaFarm Indonesia' : 'Teknologi Bioflok Cerdas & Akuakultur Modern • NilaFarm'}
-            speed={2.6}
-            delay={0}
-            color="#82D7E1"
-            shineColor="#ffffff"
-            spread={100}
-            direction="left"
+          <span style={{ fontSize: '16px' }}>🐟</span>
+          <span style={{ letterSpacing: '0.4px' }}>
+            100% Organik & Hasil Panen Berkualitas
+          </span>
+          <span 
+            style={{
+              width: '7px',
+              height: '7px',
+              borderRadius: '50%',
+              background: '#10b981',
+              boxShadow: '0 0 10px #10b981',
+              display: 'inline-block'
+            }}
           />
         </div>
 
-        {/* Main Headline (Centered) */}
+        {/* Heading (H1): Panen Nila Lebih Sehat, Padat, dan Cepat dengan Sistem Bioflok */}
         <h1 
           style={{
-            fontSize: 'clamp(36px, 5.5vw, 64px)',
-            lineHeight: 1.15,
+            fontSize: 'clamp(32px, 5.2vw, 58px)',
+            lineHeight: 1.18,
             fontWeight: 800,
-            letterSpacing: '-1.5px',
-            marginBottom: '18px',
-            maxWidth: '920px',
+            letterSpacing: '-1.2px',
+            marginBottom: '20px',
+            maxWidth: '960px',
             color: '#ffffff',
-            textShadow: '0 2px 20px rgba(0,0,0,0.4)'
+            textShadow: '0 3px 20px rgba(0,0,0,0.65)'
           }}
         >
-          {lang === 'en' ? (
-            <>
-              Modern Tilapia Aquaculture & <br />
-              <span style={{ color: '#82D7E1' }}>Sustainable Biofloc Farming</span>
-            </>
-          ) : (
-            <>
-              Budidaya Ikan Nila Modern & <br />
-              <span style={{ color: '#82D7E1' }}>Bioflok Berkelanjutan</span>
-            </>
-          )}
+          Panen Nila Lebih Sehat, Padat, dan Cepat dengan Sistem Bioflok.
         </h1>
 
-        {/* Centered Subtitle */}
+        {/* Sub-heading: Penuhi kebutuhan protein harian dengan ikan nila premium langsung dari peternak. Harga spesial mulai Rp 35.000/kg. */}
         <p 
           style={{
-            fontSize: 'clamp(15px, 2vw, 18px)',
+            fontSize: 'clamp(16px, 2.2vw, 20px)',
             lineHeight: 1.6,
-            color: '#cfe2ec',
-            marginBottom: '32px',
-            maxWidth: '740px',
-            fontWeight: 400
+            color: '#e2e8f0',
+            marginBottom: '36px',
+            maxWidth: '780px',
+            fontWeight: 400,
+            textShadow: '0 2px 10px rgba(0,0,0,0.5)'
           }}
         >
-          {lang === 'en'
-            ? 'Harvest premium freshwater tilapia free from muddy odor. Powered by zero-waste biofloc technology, SKAI-certified Nirwana fingerlings, and real-time smart IoT water monitoring.'
-            : 'Panen ikan nila berkualitas tinggi tanpa bau lumpur. Didukung ekosistem bioflok ramah lingkungan tanpa limbah, bibit Nila Nirwana unggul bergaransi hidup, serta pakan berprotein seimbang.'}
+          Penuhi kebutuhan protein harian dengan ikan nila premium langsung dari peternak. Harga spesial mulai <strong style={{ color: '#82D7E1', fontWeight: 800, background: 'rgba(36, 131, 179, 0.3)', padding: '2px 8px', borderRadius: '6px' }}>Rp 35.000/kg</strong>.
         </p>
 
-        {/* Centered CTA Buttons */}
+        {/* CTA Buttons: Primary "Beli Nila Sekarang" & Secondary "Pelajari Sistem" */}
         <div 
           style={{ 
             display: 'flex', 
@@ -173,203 +184,150 @@ function HeroSection({
             justifyContent: 'center', 
             alignItems: 'center',
             flexWrap: 'wrap', 
-            marginBottom: '36px' 
+            marginBottom: '48px' 
           }}
         >
+          {/* Primary CTA: Beli Nila Sekarang */}
           <button
-            onClick={() => onNavigate('produk')}
+            onClick={() => handleScrollToSection('produk')}
             style={{
-              background: '#2483B3',
+              background: 'linear-gradient(135deg, #2483B3 0%, #163665 100%)',
               color: '#ffffff',
-              border: '1.5px solid rgba(130, 215, 225, 0.5)',
+              border: '2px solid #82D7E1',
               borderRadius: '9999px',
-              padding: '14px 36px',
+              padding: '16px 36px',
+              fontSize: '16px',
+              fontWeight: 800,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              boxShadow: '0 8px 26px rgba(36, 131, 179, 0.45)',
+              transition: 'all 0.25s ease'
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)';
+              e.currentTarget.style.boxShadow = '0 12px 34px rgba(130, 215, 225, 0.55)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = 'translateY(0) scale(1)';
+              e.currentTarget.style.boxShadow = '0 8px 26px rgba(36, 131, 179, 0.45)';
+            }}
+          >
+            <span>Beli Nila Sekarang</span>
+            <ArrowRight size={18} color="#82D7E1" />
+          </button>
+
+          {/* Secondary CTA: Pelajari Sistem */}
+          <button
+            onClick={() => handleScrollToSection('budidaya')}
+            style={{
+              background: 'rgba(14, 36, 64, 0.7)',
+              color: '#ffffff',
+              border: '1.5px solid rgba(255, 255, 255, 0.35)',
+              backdropFilter: 'blur(8px)',
+              borderRadius: '9999px',
+              padding: '16px 32px',
               fontSize: '15px',
               fontWeight: 700,
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '10px',
-              boxShadow: '0 6px 24px rgba(36, 131, 179, 0.4)',
-              transition: 'all 0.25s ease'
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.background = '#1a6b94';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 10px 30px rgba(130, 215, 225, 0.45)';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.background = '#2483B3';
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 6px 24px rgba(36, 131, 179, 0.4)';
-            }}
-          >
-            <span>{lang === 'en' ? 'Shop Fish & Fingerlings' : 'Lihat Produk & Bibit Unggul'}</span>
-            <ArrowRight size={17} />
-          </button>
-
-          <button
-            onClick={() => onNavigate('budidaya')}
-            style={{
-              background: 'rgba(255, 255, 255, 0.08)',
-              color: '#ffffff',
-              border: '1.5px solid rgba(130, 215, 225, 0.35)',
-              borderRadius: '9999px',
-              padding: '14px 28px',
-              fontSize: '15px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              display: 'inline-flex',
-              alignItems: 'center',
               gap: '8px',
-              backdropFilter: 'blur(8px)',
               transition: 'all 0.25s ease'
             }}
             onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
               e.currentTarget.style.borderColor = '#82D7E1';
-              e.currentTarget.style.background = 'rgba(130, 215, 225, 0.18)';
+              e.currentTarget.style.color = '#82D7E1';
               e.currentTarget.style.transform = 'translateY(-2px)';
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.borderColor = 'rgba(130, 215, 225, 0.35)';
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+              e.currentTarget.style.background = 'rgba(14, 36, 64, 0.7)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.35)';
+              e.currentTarget.style.color = '#ffffff';
               e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
-            <Calculator size={16} color="#82D7E1" />
-            <span>{lang === 'en' ? 'Biofloc Calculator' : 'Kalkulator Panen Bioflok'}</span>
+            <BookOpen size={17} />
+            <span>Pelajari Sistem</span>
           </button>
         </div>
 
-        {/* Centered Stats Bar */}
+        {/* Trust Badges Bar (Contech Release Checklist & High Conversion) */}
+        <div 
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '24px',
+            marginBottom: '40px',
+            fontSize: '13px',
+            color: '#a6c5de'
+          }}
+        >
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px' }}>
+            <CheckCircle2 size={16} color="#82D7E1" />
+            <span>Bebas Bau Tanah & Lumpur</span>
+          </div>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px' }}>
+            <CheckCircle2 size={16} color="#82D7E1" />
+            <span>Panen Segar Setiap Pagi</span>
+          </div>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px' }}>
+            <CheckCircle2 size={16} color="#82D7E1" />
+            <span>Garansi Ikan Hidup Sampai Tujuan</span>
+          </div>
+        </div>
+
+        {/* Bottom Key Stats Row */}
         <div 
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-            gap: '20px',
-            maxWidth: '820px',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '16px',
             width: '100%',
-            padding: '20px 24px',
-            borderRadius: '20px',
+            maxWidth: '1080px',
             background: 'rgba(14, 36, 64, 0.65)',
             border: '1px solid rgba(130, 215, 225, 0.25)',
-            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.25)',
-            marginBottom: '40px'
+            borderRadius: '20px',
+            padding: '24px 20px',
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 12px 30px rgba(0,0,0,0.25)'
           }}
         >
-          {stats.map((s, idx) => (
-            <div key={idx} style={{ textAlign: 'center' }}>
+          {stats.map((item, idx) => (
+            <div 
+              key={idx}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+                padding: '4px 10px'
+              }}
+            >
               <div 
                 style={{ 
-                  fontSize: '26px', 
+                  fontSize: 'clamp(24px, 3vw, 32px)', 
                   fontWeight: 800, 
                   color: '#82D7E1', 
-                  lineHeight: 1.1 
+                  lineHeight: 1.1,
+                  letterSpacing: '-0.5px',
+                  marginBottom: '6px'
                 }}
               >
-                {s.num}
+                {item.num}
               </div>
-              <div style={{ fontSize: '13px', fontWeight: 600, color: '#ffffff', marginTop: '4px' }}>
-                {s.label}
+              <div style={{ fontSize: '13.5px', fontWeight: 700, color: '#ffffff', marginBottom: '2px' }}>
+                {item.label}
               </div>
-              <div style={{ fontSize: '11px', color: '#9bb8cc', marginTop: '2px' }}>
-                {s.sub}
+              <div style={{ fontSize: '11.5px', color: '#94a3b8' }}>
+                {item.sub}
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Centered OrbitImages Interactive Showcase */}
-        <div 
-          style={{ 
-            position: 'relative', 
-            width: '100%',
-            maxWidth: '680px',
-            margin: '0 auto',
-            aspectRatio: '16 / 10',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <OrbitImages
-            images={NILA_ORBIT_IMAGES}
-            shape="ellipse"
-            baseWidth={680}
-            radiusX={300}
-            radiusY={95}
-            speed={0.4}
-            centerBadge={
-              <div
-                onClick={() => onNavigate('produk')}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  userSelect: 'none',
-                  padding: '22px',
-                  borderRadius: '50%',
-                  background: '#163665',
-                  border: '2.5px solid #82D7E1',
-                  boxShadow: '0 16px 45px rgba(0, 0, 0, 0.45)',
-                  width: '190px',
-                  height: '190px',
-                  boxSizing: 'border-box',
-                  transition: 'all 0.3s ease'
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'scale(1.05)';
-                  e.currentTarget.style.borderColor = '#ffffff';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.borderColor = '#82D7E1';
-                }}
-              >
-                <div 
-                  style={{
-                    width: '46px',
-                    height: '46px',
-                    borderRadius: '50%',
-                    background: 'rgba(130, 215, 225, 0.15)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '6px'
-                  }}
-                >
-                  <Fish size={26} color="#82D7E1" />
-                </div>
-                <b style={{ fontSize: '15px', color: '#ffffff', lineHeight: 1.1 }}>
-                  NilaFarm
-                </b>
-                <span style={{ fontSize: '10px', color: '#82D7E1', fontWeight: 700, letterSpacing: '1px', marginTop: '3px' }}>
-                  BIOFLOK SUMEDANG
-                </span>
-                <div 
-                  style={{ 
-                    marginTop: '6px',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    fontSize: '9.5px',
-                    color: '#82D7E1',
-                    fontWeight: 700,
-                    background: 'rgba(36, 131, 179, 0.3)',
-                    padding: '3px 8px',
-                    borderRadius: '9999px',
-                    border: '1px solid rgba(130, 215, 225, 0.3)'
-                  }}
-                >
-                  <span className="pulse-dot" style={{ width: '6px', height: '6px', background: '#82D7E1' }} />
-                  100% SEGAR & HIGIENIS
-                </div>
-              </div>
-            }
-          />
         </div>
       </div>
     </section>

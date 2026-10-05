@@ -1,22 +1,301 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { 
   User, 
+  UserCheck, 
+  UserPlus, 
   Mail, 
   Lock, 
   Phone, 
   MapPin, 
   ArrowRight, 
-  CheckCircle2, 
   ArrowLeft,
-  Sparkles,
-  Waves,
+  AlertCircle,
   ShieldCheck,
-  Truck,
-  FileText,
-  AlertCircle
+  CheckCircle2
 } from 'lucide-react';
+import './AuthPage.css';
 
+// CardNav component from frontendjoe (Part 11)
+const CardNav = ({ view, onSelect }) => (
+  <ul className="card-nav">
+    <li>
+      <img 
+        src="/assets/logo/logoo.png" 
+        alt="NilaFarm Logo" 
+        onError={(e) => {
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = '/assets/logo/logo.png';
+        }}
+      />
+      <span className="active-bar"></span>
+    </li>
+    <li>
+      <button
+        type="button"
+        className={`signin ${view === "signin" ? "active" : ""}`}
+        onClick={() => onSelect("signin")}
+      >
+        <UserCheck size={18} />
+        <span>Sign In</span>
+      </button>
+    </li>
+    <li>
+      <button
+        type="button"
+        className={`signup ${view === "signup" ? "active" : ""}`}
+        onClick={() => onSelect("signup")}
+      >
+        <UserPlus size={18} />
+        <span>Sign Up</span>
+      </button>
+    </li>
+  </ul>
+);
+
+// Hero component from frontendjoe (Part 11)
+const Hero = ({ variant, title, subtitle }) => (
+  <div className={`card-hero-content ${variant}`}>
+    <h2>{title}</h2>
+    <h3>{subtitle}</h3>
+    <a 
+      className="terms"
+      onClick={() => alert("Syarat & Ketentuan NilaFarm Indonesia: Pembelian benih bersertifikasi SKAI, pakan berstandar SNI, serta ikan konsumsi segar terlindungi garansi 100% aman se-Jawa & Bali.")}
+    >
+      <span>Terms &amp; Conditions</span>
+      <ArrowRight size={13} />
+    </a>
+  </div>
+);
+
+// Sign In Form
+const SignInForm = ({ 
+  onSwitch, 
+  loginEmail, 
+  setLoginEmail, 
+  loginPassword, 
+  setLoginPassword, 
+  loginError, 
+  onSubmit, 
+  setDemoAdmin,
+  onShowToast 
+}) => {
+  const handleSocialClick = (provider) => {
+    if (onShowToast) {
+      onShowToast(`Login cepat dengan ${provider} siap disinkronkan. Silakan gunakan akun email/admin.`, 'info');
+    }
+  };
+
+  return (
+    <form className="signin signin-form-view" onSubmit={onSubmit}>
+      {/* Social Login Buttons (Google, Facebook, Apple) */}
+      <div className="social-buttons">
+        <button 
+          type="button" 
+          className="social-btn"
+          onClick={() => handleSocialClick('Google')}
+          title="Masuk dengan Google"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.24v3.15C3.26 21.43 7.34 24 12 24z"/>
+            <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.24C.45 8.16 0 9.97 0 12s.45 3.84 1.24 5.42l4.04-3.15z"/>
+            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.57 1.24 6.58l4.04 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+          </svg>
+          <span>Google</span>
+        </button>
+
+        <button 
+          type="button" 
+          className="social-btn"
+          onClick={() => handleSocialClick('Facebook')}
+          title="Masuk dengan Facebook"
+        >
+          <svg width="16" height="16" fill="#1877F2" viewBox="0 0 24 24">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+          <span>Facebook</span>
+        </button>
+
+        <button 
+          type="button" 
+          className="social-btn"
+          onClick={() => handleSocialClick('Apple')}
+          title="Masuk dengan Apple ID"
+        >
+          <svg width="15" height="15" fill="currentColor" viewBox="0 0 170 170">
+            <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.06-7.7-7.85-12.01-14.37-6.03-9.17-10.74-19.8-14.13-31.91-3.39-12.11-5.09-23.6-5.09-34.46 0-14.88 3.73-27.46 11.19-37.74 7.46-10.28 17.06-15.54 28.8-15.79 4.89 0 10.37 1.25 16.44 3.75 6.07 2.5 10.23 3.86 12.48 4.09 1.96-.23 6.3-1.63 13.01-4.2 6.72-2.58 12.14-3.74 16.27-3.48 12.28.76 22.18 5.43 29.7 14.02-10.88 6.53-16.2 15.68-15.96 27.47.24 9.17 3.8 16.94 10.68 23.32 6.89 6.38 15.15 10.05 24.8 11.01-2.18 6.76-4.94 13.43-8.29 20zM119.22 33.15c0-6.76 2.45-13.43 7.35-20.02 4.9-6.59 11.03-11.45 18.39-14.58.44 1.74.66 3.49.66 5.23 0 6.98-2.61 13.88-7.84 20.71-5.23 6.83-11.41 11.41-18.56 13.74z"/>
+          </svg>
+          <span>Apple</span>
+        </button>
+      </div>
+
+      <div className="divider-text">atau dengan kredensial</div>
+
+      {/* Quick Admin Credential Hint */}
+      <div 
+        className="admin-hint-pill"
+        onClick={setDemoAdmin}
+        title="Klik untuk mengisi data demo Admin Farm"
+      >
+        <ShieldCheck size={13} />
+        <span>Demo Admin: Ham@farm.id / admin123 (Klik)</span>
+      </div>
+
+      {loginError && (
+        <div className="auth-error-banner">
+          <AlertCircle size={14} />
+          <span>{loginError}</span>
+        </div>
+      )}
+
+      <div className="form-group">
+        <label className="form-label">Email atau Nomor WhatsApp</label>
+        <div className="input-wrapper">
+          <Mail size={15} className="input-icon" />
+          <input 
+            type="text"
+            required
+            className="form-input"
+            placeholder="nama@email.com / 0812..."
+            value={loginEmail}
+            onChange={(e) => setLoginEmail(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label className="form-label">Kata Sandi</label>
+        <div className="input-wrapper">
+          <Lock size={15} className="input-icon" />
+          <input 
+            type="password"
+            required
+            className="form-input"
+            placeholder="••••••••"
+            value={loginPassword}
+            onChange={(e) => setLoginPassword(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <button type="submit" className="btn-submit">
+        <span>Sign In</span>
+        <ArrowRight size={15} />
+      </button>
+
+      <p>
+        Belum punya akun?
+        <a onClick={onSwitch}>Sign Up</a>
+      </p>
+    </form>
+  );
+};
+
+// Sign Up Form
+const SignUpForm = ({ 
+  onSwitch, 
+  regData, 
+  setRegData, 
+  regError, 
+  onSubmit 
+}) => {
+  return (
+    <form className="signup signup-form-view" onSubmit={onSubmit}>
+      {regError && (
+        <div className="auth-error-banner">
+          <AlertCircle size={14} />
+          <span>{regError}</span>
+        </div>
+      )}
+
+      <div className="form-group">
+        <label className="form-label">Nama Lengkap *</label>
+        <div className="input-wrapper">
+          <User size={15} className="input-icon" />
+          <input 
+            type="text"
+            required
+            className="form-input"
+            placeholder="Nama lengkap Anda..."
+            value={regData.name}
+            onChange={(e) => setRegData({ ...regData, name: e.target.value })}
+          />
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label className="form-label">Nomor WhatsApp Aktif *</label>
+        <div className="input-wrapper">
+          <Phone size={15} className="input-icon" />
+          <input 
+            type="tel"
+            required
+            className="form-input"
+            placeholder="0813xxxxxxxx"
+            value={regData.phone}
+            onChange={(e) => setRegData({ ...regData, phone: e.target.value })}
+          />
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label className="form-label">Email (Opsional)</label>
+        <div className="input-wrapper">
+          <Mail size={15} className="input-icon" />
+          <input 
+            type="email"
+            className="form-input"
+            placeholder="nama@email.com"
+            value={regData.email}
+            onChange={(e) => setRegData({ ...regData, email: e.target.value })}
+          />
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label className="form-label">Kata Sandi (Min. 6 Karakter) *</label>
+        <div className="input-wrapper">
+          <Lock size={15} className="input-icon" />
+          <input 
+            type="password"
+            required
+            className="form-input"
+            placeholder="Minimal 6 karakter"
+            value={regData.password}
+            onChange={(e) => setRegData({ ...regData, password: e.target.value })}
+          />
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label className="form-label">Konfirmasi Kata Sandi *</label>
+        <div className="input-wrapper">
+          <Lock size={15} className="input-icon" />
+          <input 
+            type="password"
+            required
+            className="form-input"
+            placeholder="Ulangi kata sandi"
+            value={regData.confirmPassword}
+            onChange={(e) => setRegData({ ...regData, confirmPassword: e.target.value })}
+          />
+        </div>
+      </div>
+
+      <button type="submit" className="btn-submit">
+        <span>Sign Up</span>
+        <ArrowRight size={15} />
+      </button>
+
+      <p>
+        Sudah memiliki akun?
+        <a onClick={onSwitch}>Sign In</a>
+      </p>
+    </form>
+  );
+};
+
+// Main Export Page
 export default function AuthPage({ 
   initialMode = 'login', // 'login' | 'register'
   onLoginSuccess, 
@@ -25,7 +304,10 @@ export default function AuthPage({
   onShowToast,
   isDark = false 
 }) {
-  const [mode, setMode] = useState(initialMode); // 'login' | 'register'
+  const [view, setView] = useState(
+    initialMode === 'register' || initialMode === 'signup' ? 'signup' : 'signin'
+  );
+
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState('');
@@ -40,24 +322,22 @@ export default function AuthPage({
   });
   const [regError, setRegError] = useState('');
 
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' ? window.innerWidth <= 840 : false
-  );
-
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 840);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  useEffect(() => {
-    setMode(initialMode || 'login');
+    setView(initialMode === 'register' || initialMode === 'signup' ? 'signup' : 'signin');
     setLoginError('');
     setRegError('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [initialMode]);
 
-  // Login handler with real validation
+  const setDemoAdmin = () => {
+    setLoginEmail('Ham@farm.id');
+    setLoginPassword('admin123');
+    if (onShowToast) {
+      onShowToast('Kredensial Admin dimuat: Ham@farm.id (admin123)', 'info');
+    }
+  };
+
+  // Login handler
   const handleLogin = (e) => {
     e.preventDefault();
     setLoginError('');
@@ -69,7 +349,7 @@ export default function AuthPage({
       return;
     }
 
-    // Check if logging in with Admin Account (Ham@farm.id)
+    // Check Admin Login (Ham@farm.id)
     if (inputVal.toLowerCase() === 'ham@farm.id' || inputVal.toLowerCase() === 'admin@nilafarm.id') {
       if (passVal === 'admin123') {
         const adminSession = {
@@ -94,6 +374,7 @@ export default function AuthPage({
       }
     }
 
+    // Customer login check from localStorage
     let savedUsers = [];
     try {
       savedUsers = JSON.parse(localStorage.getItem('nilafarm_users') || '[]');
@@ -121,7 +402,7 @@ export default function AuthPage({
         setLoginError('Kata sandi yang Anda masukkan salah. Silakan periksa kembali.');
         if (onShowToast) onShowToast('Kata sandi tidak sesuai.', 'bad');
       } else {
-        setLoginError('Akun belum terdaftar di sistem NilaFarm. Silakan buat akun baru terlebih dahulu.');
+        setLoginError('Akun belum terdaftar di sistem NilaFarm. Silakan klik Sign Up.');
         if (onShowToast) onShowToast('Akun belum terdaftar. Silakan buat akun baru.', 'bad');
       }
     }
@@ -163,7 +444,7 @@ export default function AuthPage({
     );
 
     if (alreadyRegistered) {
-      setRegError('Nomor WhatsApp atau Email ini sudah terdaftar. Silakan langsung masuk (login).');
+      setRegError('Nomor WhatsApp atau Email ini sudah terdaftar. Silakan Sign In.');
       if (onShowToast) onShowToast('Nomor WhatsApp atau Email sudah terdaftar. Silakan login.', 'bad');
       return;
     }
@@ -188,713 +469,59 @@ export default function AuthPage({
     if (onNavigate) onNavigate('beranda');
   };
 
-  // IDENTITY FRAME (Desktop only)
-  const renderIdentity = () => {
-    if (isMobile) return null;
-
-    return (
-      <motion.div 
-        key={`identity-${mode}`}
-        className="auth-identity-frame"
-        initial={{ opacity: 0, x: mode === 'login' ? -30 : 30 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: mode === 'login' ? 30 : -30 }}
-        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-        style={{
-          flex: '1 1 45%',
-          padding: 'clamp(20px, 3vh, 32px) clamp(22px, 2.5vw, 36px)',
-          background: 'linear-gradient(145deg, rgba(33, 150, 243, 0.14) 0%, rgba(13, 71, 161, 0.22) 100%)',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          boxSizing: 'border-box',
-          overflowY: 'auto',
-          borderRight: mode === 'login' ? '1px solid var(--border)' : 'none',
-          borderLeft: mode === 'register' ? '1px solid var(--border)' : 'none'
-        }}
-      >
-      <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-          <img 
-            src="/assets/logo/logoo.png" 
-            alt="NilaFarm Logo HD" 
-            style={{ 
-              width: '42px', 
-              height: '42px', 
-              objectFit: 'contain',
-              imageRendering: '-webkit-optimize-contrast',
-              filter: 'drop-shadow(0 4px 12px rgba(33, 150, 243, 0.35))' 
-            }} 
-          />
-          <div>
-            <b style={{ fontSize: '20px', color: 'var(--txt)', display: 'block', lineHeight: 1.1 }}>
-              NilaFarm
-            </b>
-            <span style={{ fontSize: '11px', color: 'var(--b)', fontWeight: 800, letterSpacing: '1px' }}>
-              SMART BIOFLOK IOT SUMEDANG
-            </span>
-          </div>
-        </div>
-
-        <h3 style={{ fontSize: 'clamp(22px, 2.8vw, 26px)', fontWeight: 800, color: 'var(--txt)', margin: '0 0 12px', lineHeight: 1.25 }}>
-          {mode === 'login' ? 'Selamat Datang Kembali di NilaFarm' : 'Daftar Akun & Dapatkan Akses Eksklusif'}
-        </h3>
-        
-        <p style={{ fontSize: '13.5px', color: 'var(--mut)', lineHeight: 1.6, margin: '0 0 28px' }}>
-          {mode === 'login'
-            ? 'Masuk ke portal akun Anda untuk memantau status pesanan ikan nila segar, riwayat pembelian, nota digital, dan konsultasi budidaya bioflok secara real-time.'
-            : 'Bergabunglah bersama komunitas pelanggan NilaFarm Sumedang untuk kemudahan belanja ikan segar panen pagi tanpa bau lumpur langsung dari kolam.'}
-        </p>
-
-        {/* Feature Highlights */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-            <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'rgba(33, 150, 243, 0.18)', color: 'var(--b)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <Truck size={17} />
-            </div>
-            <div>
-              <b style={{ fontSize: '13.5px', color: 'var(--txt)', display: 'block' }}>Lacak Posisi Pengiriman Real-time</b>
-              <small style={{ fontSize: '12px', color: 'var(--mut)', lineHeight: 1.4, display: 'block' }}>
-                Pantau armada pickup cold-chain langsung menuju alamat Anda.
-              </small>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-            <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.18)', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <ShieldCheck size={17} />
-            </div>
-            <div>
-              <b style={{ fontSize: '13.5px', color: 'var(--txt)', display: 'block' }}>Garansi 100% Bebas Bau Lumpur</b>
-              <small style={{ fontSize: '12px', color: 'var(--mut)', lineHeight: 1.4, display: 'block' }}>
-                Daging tebal manis gurih dipelihara dengan air terawat micro-bubble.
-              </small>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-            <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'rgba(245, 158, 11, 0.18)', color: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <FileText size={17} />
-            </div>
-            <div>
-              <b style={{ fontSize: '13.5px', color: 'var(--txt)', display: 'block' }}>Riwayat Belanja & Nota Digital</b>
-              <small style={{ fontSize: '12px', color: 'var(--mut)', lineHeight: 1.4, display: 'block' }}>
-                Semua faktur dan pesanan Anda tersimpan rapi dan mudah dicetak.
-              </small>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div style={{ marginTop: '28px', paddingTop: '18px', borderTop: '1px solid var(--border)' }}>
-        <span style={{ fontSize: '11.5px', color: 'var(--mut)', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-          <Sparkles size={14} color="var(--b)" />
-          Layanan Resmi Budidaya Nila Bioflok Modern • Sumedang, Jawa Barat
-        </span>
-      </div>
-    </motion.div>
-  );
-};
-
-  // FORM FRAME
-  const renderForm = () => (
-    <motion.div 
-      key={`form-${mode}`}
-      className="auth-form-frame"
-      initial={{ opacity: 0, x: mode === 'login' ? 30 : -30 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: mode === 'login' ? -30 : 30 }}
-      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-      style={{
-        flex: isMobile ? '1 1 100%' : '1 1 55%',
-        padding: isMobile ? '24px 18px' : 'clamp(18px, 2.6vh, 28px) clamp(22px, 2.6vw, 36px)',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        boxSizing: 'border-box',
-        overflowY: 'auto',
-        width: isMobile ? '100%' : 'auto'
-      }}
-    >
-      <div>
-        {/* Mobile Brand Identity Bar */}
-        {isMobile && (
-          <div 
-            onClick={() => onNavigate && onNavigate('beranda')}
-            style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '10px', 
-              marginBottom: '16px', 
-              cursor: 'pointer',
-              userSelect: 'none'
-            }}
-          >
-            <img 
-              src="/assets/logo/logoo.png" 
-              alt="NilaFarm Logo HD" 
-              style={{ width: '32px', height: '32px', objectFit: 'contain' }} 
-            />
-            <div>
-              <b style={{ fontSize: '16px', color: 'var(--txt)', lineHeight: 1.1, display: 'block' }}>NilaFarm</b>
-              <span style={{ fontSize: '10px', color: 'var(--b)', fontWeight: 800, letterSpacing: '0.8px' }}>SMART BIOFLOK IOT</span>
-            </div>
-          </div>
-        )}
-
-        {/* Top Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-          <div>
-            <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--b)', textTransform: 'uppercase', letterSpacing: '1.2px' }}>
-              {mode === 'login' ? 'Portal Pelanggan' : 'Pendaftaran Anggota'}
-            </span>
-            <h2 style={{ fontSize: 'clamp(20px, 2.6vw, 26px)', fontWeight: 800, color: 'var(--txt)', margin: '3px 0 0' }}>
-              {mode === 'login' ? 'Masuk ke Akun Anda' : 'Buat Akun NilaFarm'}
-            </h2>
-          </div>
-
-          <button 
-            type="button"
-            onClick={() => onNavigate && onNavigate('beranda')}
-            className="btn-ghost"
-            style={{
-              padding: '6px 14px',
-              fontSize: '12px',
-              borderRadius: '9999px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <ArrowLeft size={13} />
-            <span>Beranda</span>
-          </button>
-        </div>
-
-        {/* Tab Pill Switcher with Smooth Swap */}
-        <div 
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            background: 'var(--card2)',
-            borderRadius: '9999px',
-            padding: '4px',
-            gap: '4px',
-            marginBottom: '22px',
-            border: '1px solid var(--border)'
-          }}
-        >
-          <button
-            type="button"
-            onClick={() => {
-              setMode('login');
-              setLoginError('');
-              setRegError('');
-            }}
-            style={{
-              padding: '10px 16px',
-              borderRadius: '9999px',
-              border: 'none',
-              background: mode === 'login' ? 'var(--b)' : 'transparent',
-              color: mode === 'login' ? '#ffffff' : 'var(--mut)',
-              fontSize: '13px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              transition: 'all 0.25s ease'
-            }}
-          >
-            Masuk
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setMode('register');
-              setLoginError('');
-              setRegError('');
-            }}
-            style={{
-              padding: '10px 16px',
-              borderRadius: '9999px',
-              border: 'none',
-              background: mode === 'register' ? 'var(--b)' : 'transparent',
-              color: mode === 'register' ? '#ffffff' : 'var(--mut)',
-              fontSize: '13px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              transition: 'all 0.25s ease'
-            }}
-          >
-            Daftar Akun Baru
-          </button>
-        </div>
-
-        {/* Error Notification if login or register fails */}
-        {mode === 'login' && loginError && (
-          <div 
-            style={{
-              padding: '14px 16px',
-              borderRadius: '16px',
-              background: 'rgba(239, 68, 68, 0.1)',
-              border: '1.5px solid rgba(239, 68, 68, 0.35)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px',
-              marginBottom: '18px'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ef4444', fontSize: '13px', fontWeight: 700 }}>
-              <AlertCircle size={17} flexShrink={0} />
-              <span>{loginError}</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                setLoginError('');
-                setMode('register');
-              }}
-              className="btn-primary"
-              style={{
-                padding: '8px 18px',
-                fontSize: '12.5px',
-                borderRadius: '9999px',
-                alignSelf: 'flex-start'
-              }}
-            >
-              <span>+ Buat Akun Baru Sekarang</span>
-              <ArrowRight size={13} />
-            </button>
-          </div>
-        )}
-
-        {mode === 'register' && regError && (
-          <div 
-            style={{
-              padding: '12px 14px',
-              borderRadius: '14px',
-              background: 'rgba(239, 68, 68, 0.1)',
-              border: '1px solid rgba(239, 68, 68, 0.35)',
-              color: '#ef4444',
-              fontSize: '12.5px',
-              fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              marginBottom: '16px'
-            }}
-          >
-            <AlertCircle size={16} flexShrink={0} />
-            <span>{regError}</span>
-          </div>
-        )}
-
-        {/* 1. FORM LOGIN */}
-        {mode === 'login' && (
-          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 700, color: 'var(--txt)', marginBottom: '6px' }}>
-                Email atau No. WhatsApp
-              </label>
-              <div style={{ position: 'relative' }}>
-                <Mail size={16} color="var(--mut)" style={{ position: 'absolute', left: '14px', top: '13px' }} />
-                <input 
-                  type="text"
-                  required
-                  placeholder="Contoh: 081298452311 atau nama@gmail.com"
-                  value={loginEmail}
-                  onChange={e => setLoginEmail(e.target.value)}
-                  style={{
-                    width: '100%',
-                    boxSizing: 'border-box',
-                    padding: '12px 14px 12px 40px',
-                    borderRadius: '14px',
-                    border: '1px solid var(--border)',
-                    background: 'var(--card2)',
-                    color: 'var(--txt)',
-                    fontSize: '13.5px',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-            </div>
-
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <label style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--txt)' }}>
-                  Kata Sandi
-                </label>
-              </div>
-              <div style={{ position: 'relative' }}>
-                <Lock size={16} color="var(--mut)" style={{ position: 'absolute', left: '14px', top: '13px' }} />
-                <input 
-                  type="password"
-                  required
-                  placeholder="Masukkan kata sandi Anda"
-                  value={loginPassword}
-                  onChange={e => setLoginPassword(e.target.value)}
-                  style={{
-                    width: '100%',
-                    boxSizing: 'border-box',
-                    padding: '12px 14px 12px 40px',
-                    borderRadius: '14px',
-                    border: '1px solid var(--border)',
-                    background: 'var(--card2)',
-                    color: 'var(--txt)',
-                    fontSize: '13.5px',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="btn-primary"
-              style={{
-                padding: '13px',
-                fontSize: '14px',
-                borderRadius: '9999px',
-                marginTop: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px'
-              }}
-            >
-              <span>Masuk ke Akun Saya</span>
-              <ArrowRight size={16} />
-            </button>
-
-            <div style={{ textAlign: 'center', marginTop: '12px' }}>
-              <span style={{ fontSize: '13px', color: 'var(--mut)' }}>
-                Belum pernah mendaftar?{' '}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLoginError('');
-                    setMode('register');
-                  }}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: 'var(--b)',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    padding: 0
-                  }}
-                >
-                  Daftar Akun Baru
-                </button>
-              </span>
-            </div>
-          </form>
-        )}
-
-        {/* 2. FORM REGISTER (BUAT AKUN BARU) */}
-        {mode === 'register' && (
-          <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'var(--txt)', marginBottom: '5px' }}>
-                Nama Lengkap *
-              </label>
-              <div style={{ position: 'relative' }}>
-                <User size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
-                <input 
-                  type="text"
-                  required
-                  placeholder="Contoh: Budi Santoso"
-                  value={regData.name}
-                  onChange={e => setRegData({ ...regData, name: e.target.value })}
-                  style={{
-                    width: '100%',
-                    boxSizing: 'border-box',
-                    padding: '10px 12px 10px 38px',
-                    borderRadius: '12px',
-                    border: '1px solid var(--border)',
-                    background: 'var(--card2)',
-                    color: 'var(--txt)',
-                    fontSize: '13px',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '10px' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'var(--txt)', marginBottom: '5px' }}>
-                  No. WhatsApp *
-                </label>
-                <div style={{ position: 'relative' }}>
-                  <Phone size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
-                  <input 
-                    type="tel"
-                    required
-                    placeholder="081234567890"
-                    value={regData.phone}
-                    onChange={e => setRegData({ ...regData, phone: e.target.value })}
-                    style={{
-                      width: '100%',
-                      boxSizing: 'border-box',
-                      padding: '10px 12px 10px 38px',
-                      borderRadius: '12px',
-                      border: '1px solid var(--border)',
-                      background: 'var(--card2)',
-                      color: 'var(--txt)',
-                      fontSize: '13px',
-                      outline: 'none'
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'var(--txt)', marginBottom: '5px' }}>
-                  Email (Opsional)
-                </label>
-                <div style={{ position: 'relative' }}>
-                  <Mail size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
-                  <input 
-                    type="email"
-                    placeholder="nama@gmail.com"
-                    value={regData.email}
-                    onChange={e => setRegData({ ...regData, email: e.target.value })}
-                    style={{
-                      width: '100%',
-                      boxSizing: 'border-box',
-                      padding: '10px 12px 10px 38px',
-                      borderRadius: '12px',
-                      border: '1px solid var(--border)',
-                      background: 'var(--card2)',
-                      color: 'var(--txt)',
-                      fontSize: '13px',
-                      outline: 'none'
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'var(--txt)', marginBottom: '5px' }}>
-                Alamat Pengiriman Lengkap
-              </label>
-              <div style={{ position: 'relative' }}>
-                <MapPin size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
-                <input 
-                  type="text"
-                  placeholder="Jl. Raya Sumedang No. 12, RT 02/04, Kotakaler"
-                  value={regData.address}
-                  onChange={e => setRegData({ ...regData, address: e.target.value })}
-                  style={{
-                    width: '100%',
-                    boxSizing: 'border-box',
-                    padding: '10px 12px 10px 38px',
-                    borderRadius: '12px',
-                    border: '1px solid var(--border)',
-                    background: 'var(--card2)',
-                    color: 'var(--txt)',
-                    fontSize: '13px',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '10px' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'var(--txt)', marginBottom: '5px' }}>
-                  Kata Sandi *
-                </label>
-                <div style={{ position: 'relative' }}>
-                  <Lock size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
-                  <input 
-                    type="password"
-                    required
-                    placeholder="Min. 6 karakter"
-                    value={regData.password}
-                    onChange={e => setRegData({ ...regData, password: e.target.value })}
-                    style={{
-                      width: '100%',
-                      boxSizing: 'border-box',
-                      padding: '10px 12px 10px 38px',
-                      borderRadius: '12px',
-                      border: '1px solid var(--border)',
-                      background: 'var(--card2)',
-                      color: 'var(--txt)',
-                      fontSize: '13px',
-                      outline: 'none'
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: 'var(--txt)', marginBottom: '5px' }}>
-                  Konfirmasi Sandi *
-                </label>
-                <div style={{ position: 'relative' }}>
-                  <Lock size={15} color="var(--mut)" style={{ position: 'absolute', left: '12px', top: '11px' }} />
-                  <input 
-                    type="password"
-                    required
-                    placeholder="Ulangi kata sandi"
-                    value={regData.confirmPassword}
-                    onChange={e => setRegData({ ...regData, confirmPassword: e.target.value })}
-                    style={{
-                      width: '100%',
-                      boxSizing: 'border-box',
-                      padding: '10px 12px 10px 38px',
-                      borderRadius: '12px',
-                      border: '1px solid var(--border)',
-                      background: 'var(--card2)',
-                      color: 'var(--txt)',
-                      fontSize: '13px',
-                      outline: 'none'
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="btn-primary"
-              style={{
-                padding: '13px',
-                fontSize: '14px',
-                borderRadius: '9999px',
-                marginTop: '4px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px'
-              }}
-            >
-              <span>Daftar Akun Sekarang</span>
-              <CheckCircle2 size={16} />
-            </button>
-
-            <div style={{ textAlign: 'center', marginTop: '10px' }}>
-              <span style={{ fontSize: '13px', color: 'var(--mut)' }}>
-                Sudah memiliki akun?{' '}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setRegError('');
-                    setMode('login');
-                  }}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: 'var(--b)',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    padding: 0
-                  }}
-                >
-                  Masuk di sini
-                </button>
-              </span>
-            </div>
-          </form>
-        )}
-      </div>
-    </motion.div>
-  );
-
   return (
-    <div 
-      className="auth-outer-screen"
-      style={{
-        minHeight: '100vh',
-        height: isMobile ? 'auto' : '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: isMobile ? '16px' : '20px',
-        boxSizing: 'border-box',
-        background: isDark ? 'var(--bg)' : 'linear-gradient(180deg, #f0f6ff 0%, var(--bg) 100%)',
-        overflow: isMobile ? 'auto' : 'hidden'
-      }}
-    >
-      <style>{`
-        @media (max-width: 840px) {
-          .auth-identity-frame {
-            display: none !important;
-          }
-          .auth-form-frame {
-            width: 100% !important;
-            max-width: 100% !important;
-            flex: 1 1 100% !important;
-          }
-          .auth-card-wrapper {
-            max-width: 440px !important;
-            height: auto !important;
-            max-height: none !important;
-            margin: auto !important;
-            border-radius: 20px !important;
-          }
-        }
-        @media (min-width: 841px) {
-          .auth-outer-screen {
-            height: 100vh !important;
-            max-height: 100vh !important;
-            overflow: hidden !important;
-          }
-          .auth-card-wrapper {
-            height: min(580px, 92vh) !important;
-            max-height: min(580px, 92vh) !important;
-          }
-        }
-      `}</style>
-
-      <div 
-        className="auth-card-wrapper"
-        style={{
-          width: '100%',
-          maxWidth: isMobile ? '440px' : '920px',
-          height: isMobile ? 'auto' : 'min(580px, 92vh)',
-          background: 'var(--card)',
-          borderRadius: isMobile ? '20px' : '24px',
-          border: '1.5px solid var(--border)',
-          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.15)',
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column'
-        }}
+    <div className="auth-page-container">
+      {/* Return to Home / Back Nav */}
+      <button 
+        type="button" 
+        onClick={() => onNavigate ? onNavigate('beranda') : window.history.back()}
+        className="auth-back-nav"
       >
-        {/* Elegant Swap Layout:
-            - When desktop & login: Left = Identity, Right = Form
-            - When desktop & register: Left = Form, Right = Identity (Reversed)
-            - When mobile: Exactly 1 Frame (Form Only) for both login and signup
-        */}
-        <div 
-          style={{
-            display: 'flex',
-            flexDirection: isMobile ? 'column' : 'row',
-            alignItems: 'stretch',
-            height: '100%',
-            position: 'relative'
-          }}
-        >
-          <AnimatePresence mode="wait">
-            {isMobile ? (
-              <React.Fragment key={`mobile-${mode}`}>
-                {renderForm()}
-              </React.Fragment>
-            ) : mode === 'login' ? (
-              <React.Fragment key="layout-login">
-                {renderIdentity()}
-                {renderForm()}
-              </React.Fragment>
-            ) : (
-              <React.Fragment key="layout-register">
-                {renderForm()}
-                {renderIdentity()}
-              </React.Fragment>
-            )}
-          </AnimatePresence>
+        <ArrowLeft size={15} />
+        <span>Kembali ke Beranda</span>
+      </button>
+
+      {/* FrontendJoe 3-Column Card Architecture from PDF */}
+      <div className={`card ${view}`}>
+        <CardNav view={view} onSelect={setView} />
+
+        <div className="card-hero">
+          <div className="card-hero-bg"></div>
+          <div className="card-hero-inner">
+            <Hero
+              variant="signin"
+              title="Welcome back"
+              subtitle="Please enter your credentials"
+            />
+            <Hero
+              variant="signup"
+              title="Join us today"
+              subtitle="Creating an account is quick"
+            />
+          </div>
+        </div>
+
+        <div className="card-form">
+          <div className="forms">
+            <SignInForm 
+              onSwitch={() => setView("signup")}
+              loginEmail={loginEmail}
+              setLoginEmail={setLoginEmail}
+              loginPassword={loginPassword}
+              setLoginPassword={setLoginPassword}
+              loginError={loginError}
+              onSubmit={handleLogin}
+              setDemoAdmin={setDemoAdmin}
+              onShowToast={onShowToast}
+            />
+            <SignUpForm 
+              onSwitch={() => setView("signin")}
+              regData={regData}
+              setRegData={setRegData}
+              regError={regError}
+              onSubmit={handleRegister}
+            />
+          </div>
         </div>
       </div>
     </div>

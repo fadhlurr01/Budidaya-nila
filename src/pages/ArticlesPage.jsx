@@ -258,8 +258,12 @@ export default function ArticlesPage({ articles, onNavigate, lang = 'id' }) {
                 <div>
                   <div style={{ height: '210px', overflow: 'hidden', position: 'relative' }}>
                     <img 
-                      src={art.img} 
+                      src={art.img ? (art.img.startsWith('/') ? art.img : `/${art.img}`) : '/assets/products/kolam-d4.jpg'} 
                       alt={art.judul}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = '/assets/products/kolam-d3.jpg';
+                      }}
                       style={{
                         width: '100%',
                         height: '100%',

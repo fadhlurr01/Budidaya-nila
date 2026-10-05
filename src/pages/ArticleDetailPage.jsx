@@ -16,6 +16,8 @@ import {
   Tag
 } from 'lucide-react';
 
+import { useParams } from 'react-router-dom';
+
 export default function ArticleDetailPage({ 
   articleId, 
   articles = [], 
@@ -23,8 +25,10 @@ export default function ArticleDetailPage({
   onShowToast, 
   lang = 'id' 
 }) {
+  const params = useParams ? useParams() : {};
+  const effectiveId = params.id || articleId;
   // Find target article or fallback to first
-  const article = articles.find(a => a.id === articleId) || articles[0];
+  const article = articles.find(a => String(a.id) === String(effectiveId)) || articles[0];
 
   // Forum Comments State (loaded from localStorage or default comments)
   const [comments, setComments] = useState(() => {
@@ -264,8 +268,12 @@ export default function ArticleDetailPage({
           }}
         >
           <img 
-            src={article.img} 
+            src={article.img ? (article.img.startsWith('/') ? article.img : `/${article.img}`) : '/assets/products/kolam-d4.jpg'} 
             alt={article.judul}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = '/assets/products/kolam-d3.jpg';
+            }}
             style={{
               width: '100%',
               maxHeight: '440px',

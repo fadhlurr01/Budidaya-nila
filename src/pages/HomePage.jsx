@@ -1,428 +1,130 @@
-import React, { useState } from 'react';
+import React from 'react';
 import HeroSection from '../components/HeroSection';
+import ProductsSection from '../components/ProductsSection';
+import ArticlesSection from '../components/ArticlesSection';
 import TestimonialsSection from '../components/TestimonialsSection';
 import { 
-  Truck, 
   Waves, 
-  Globe, 
-  ArrowRight, 
-  Check, 
-  Star, 
-  Heart, 
-  Camera, 
-  Sparkles,
-  ShoppingBag,
-  Fish,
-  ShieldCheck,
-  Activity,
-  Layers,
-  Zap
+  Sparkles, 
+  ShieldCheck, 
+  CheckCircle2, 
+  Activity, 
+  TrendingUp, 
+  Droplets, 
+  Award,
+  ArrowRight
 } from 'lucide-react';
-import { PLANT_CATEGORIES } from '../data/budidayaData';
 
 export default function HomePage({ 
   products, 
+  articles, 
   onAddToCart, 
   onNavigate, 
-  isDark = false,
-  lang = 'id'
+  isDark = false, 
+  lang = 'id', 
+  onOpenCart 
 }) {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: 'var(--bg)' }}>
-      {/* 1. HERO SECTION (Centered with Latar Background Nila) */}
+      {/* 1. HERO SECTION (High-Conversion UI with Kolam Background & Rp 35k Highlight) */}
       <HeroSection 
         onNavigate={onNavigate}
         isDark={isDark}
         lang={lang}
       />
 
-      {/* 2. FEATURED NILA CATEGORIES */}
+      {/* 2. VALUE PROPOSITION / TRUST HIGHLIGHTS */}
       <section 
         style={{ 
-          maxWidth: '1360px', 
+          background: isDark ? '#0f243e' : '#f0f6fa',
+          borderTop: '1px solid var(--border)',
+          borderBottom: '1px solid var(--border)',
+          padding: '30px 24px'
+        }}
+      >
+        <div 
+          style={{ 
+            maxWidth: '1280px', 
+            margin: '0 auto', 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', 
+            gap: '24px',
+            alignItems: 'center'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(36, 131, 179, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2483B3', flexShrink: 0 }}>
+              <Droplets size={24} />
+            </div>
+            <div>
+              <h4 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--txt)', margin: '0 0 2px' }}>
+                100% Bebas Bau Lumpur
+              </h4>
+              <p style={{ fontSize: '12.5px', color: 'var(--mut)', margin: 0 }}>
+                Sirkulasi air aerasi mikroba aktif menjaga rasa daging manis gurih alami.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', flexShrink: 0 }}>
+              <Award size={24} />
+            </div>
+            <div>
+              <h4 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--txt)', margin: '0 0 2px' }}>
+                Panen Segar Setiap Pagi
+              </h4>
+              <p style={{ fontSize: '12.5px', color: 'var(--mut)', margin: 0 }}>
+                Ikan ditangkap hidup di hari pengiriman, menjamin kesegaran prima.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(36, 131, 179, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2483B3', flexShrink: 0 }}>
+              <TrendingUp size={24} />
+            </div>
+            <div>
+              <h4 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--txt)', margin: '0 0 2px' }}>
+                Harga Terbaik Peternak
+              </h4>
+              <p style={{ fontSize: '12.5px', color: 'var(--mut)', margin: 0 }}>
+                Langsung dari tambak Sumedang mulai Rp 35.000/kg tanpa perantara.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(130, 215, 225, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2483B3', flexShrink: 0 }}>
+              <ShieldCheck size={24} />
+            </div>
+            <div>
+              <h4 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--txt)', margin: '0 0 2px' }}>
+                Garansi Hidup Sampai
+              </h4>
+              <p style={{ fontSize: '12.5px', color: 'var(--mut)', margin: 0 }}>
+                Pengiriman dengan sistem oksigen murni se-Jawa dan Bali bergaransi.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. PRODUCTS SECTION PREVIEW (With CTA to Dedicated /produk Page) */}
+      <ProductsSection 
+        products={products}
+        onAddToCart={onAddToCart}
+        onOpenCart={onOpenCart}
+        onNavigate={onNavigate}
+        lang={lang}
+      />
+
+      {/* 4. BIOFLOC SUSTAINABILITY & WHY CHOOSE US */}
+      <section 
+        style={{ 
+          maxWidth: '1280px', 
           margin: '0 auto', 
           padding: '60px 24px 40px', 
-          width: '100%', 
-          boxSizing: 'border-box' 
-        }}
-      >
-        <div style={{ textAlign: 'left', marginBottom: '32px' }}>
-          <h2 
-            style={{ 
-              fontSize: 'clamp(28px, 3.6vw, 40px)', 
-              fontWeight: 800, 
-              color: 'var(--txt)', 
-              letterSpacing: '-0.5px', 
-              margin: 0 
-            }}
-          >
-            {lang === 'en' ? 'Featured Aquaculture Categories' : 'Kategori Produk & Budidaya Nila'}
-          </h2>
-          <p style={{ color: 'var(--mut)', fontSize: '15px', marginTop: '8px' }}>
-            {lang === 'en' 
-              ? 'Complete supplies from certified fingerlings to zero-waste biofloc pond equipment.' 
-              : 'Pilihan lengkap mulai dari bibit bersertifikat, ikan konsumsi segar, pakan, hingga kolam terpal bioflok.'}
-          </p>
-        </div>
-
-        <div 
-          style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(270px, 100%), 1fr))', 
-            gap: '24px' 
-          }}
-        >
-          {/* Category 1: Bibit Unggul */}
-          <div 
-            onClick={() => onNavigate('produk')}
-            style={{
-              background: 'var(--card)',
-              border: isDark ? '1px solid rgba(130, 215, 225, 0.25)' : '1px solid #cfe2ec',
-              borderRadius: '16px',
-              overflow: 'hidden',
-              cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'column',
-              boxShadow: 'var(--shadow-sm)',
-              transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.transform = 'translateY(-4px)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
-            }}
-          >
-            <div style={{ height: '260px', overflow: 'hidden', background: '#f0f6fa' }}>
-              <img 
-                src="https://images.unsplash.com/photo-1524704654690-b56c05c78a00?auto=format&fit=crop&w=600&q=80" 
-                alt="Bibit Unggul" 
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            </div>
-            <div style={{ padding: '22px 18px', textAlign: 'center' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--txt)', margin: '0 0 6px' }}>
-                {lang === 'en' ? 'Certified Fingerlings' : 'Bibit Unggul Nirwana'}
-              </h3>
-              <p style={{ fontSize: '12.5px', color: 'var(--mut)', margin: 0 }}>
-                {lang === 'en' ? 'Strain Nirwana & Red Tilapia' : 'Sertifikasi SKAI, SR > 95%'}
-              </p>
-            </div>
-          </div>
-
-          {/* Category 2: Ikan Segar Konsumsi */}
-          <div 
-            onClick={() => onNavigate('produk')}
-            style={{
-              background: 'var(--card)',
-              border: isDark ? '1px solid rgba(130, 215, 225, 0.25)' : '1px solid #cfe2ec',
-              borderRadius: '16px',
-              overflow: 'hidden',
-              cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'column',
-              boxShadow: 'var(--shadow-sm)',
-              transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.transform = 'translateY(-4px)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
-            }}
-          >
-            <div style={{ height: '260px', overflow: 'hidden', background: '#f0f6fa' }}>
-              <img 
-                src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80" 
-                alt="Ikan Segar Konsumsi" 
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            </div>
-            <div style={{ padding: '22px 18px', textAlign: 'center' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--txt)', margin: '0 0 6px' }}>
-                {lang === 'en' ? 'Fresh Harvest Tilapia' : 'Ikan Segar Konsumsi'}
-              </h3>
-              <p style={{ fontSize: '12.5px', color: 'var(--mut)', margin: 0 }}>
-                {lang === 'en' ? 'Zero muddy smell, pan-ready' : 'Bebas bau lumpur & fillet murni'}
-              </p>
-            </div>
-          </div>
-
-          {/* Category 3: Pakan & Nutrisi */}
-          <div 
-            onClick={() => onNavigate('produk')}
-            style={{
-              background: 'var(--card)',
-              border: isDark ? '1px solid rgba(130, 215, 225, 0.25)' : '1px solid #cfe2ec',
-              borderRadius: '16px',
-              overflow: 'hidden',
-              cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'column',
-              boxShadow: 'var(--shadow-sm)',
-              transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.transform = 'translateY(-4px)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
-            }}
-          >
-            <div style={{ height: '260px', overflow: 'hidden', background: '#f0f6fa' }}>
-              <img 
-                src="https://images.unsplash.com/photo-1628088062854-d1870b4553da?auto=format&fit=crop&w=600&q=80" 
-                alt="Pakan & Nutrisi" 
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            </div>
-            <div style={{ padding: '22px 18px', textAlign: 'center' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--txt)', margin: '0 0 6px' }}>
-                {lang === 'en' ? 'Feed & Biofloc Nutrition' : 'Pakan & Nutrisi Bioflok'}
-              </h3>
-              <p style={{ fontSize: '12.5px', color: 'var(--mut)', margin: 0 }}>
-                {lang === 'en' ? '32% Protein & Nitrifying Probiotics' : 'Pelet protein 32% & probiotik pengurai'}
-              </p>
-            </div>
-          </div>
-
-          {/* Category 4: Peralatan & Kolam with 'Lihat Semua' Pill */}
-          <div 
-            onClick={() => onNavigate('produk')}
-            style={{
-              background: 'var(--card)',
-              border: isDark ? '1px solid rgba(130, 215, 225, 0.25)' : '1px solid #cfe2ec',
-              borderRadius: '16px',
-              overflow: 'hidden',
-              cursor: 'pointer',
-              display: 'flex',
-              flexDirection: 'column',
-              boxShadow: 'var(--shadow-sm)',
-              position: 'relative',
-              transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.transform = 'translateY(-4px)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
-            }}
-          >
-            <div style={{ height: '260px', overflow: 'hidden', background: '#f0f6fa', position: 'relative' }}>
-              <img 
-                src="https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=600&q=80" 
-                alt="Peralatan & Kolam" 
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-              {/* Overlaid Pill Button */}
-              <div 
-                style={{
-                  position: 'absolute',
-                  bottom: '18px',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  background: '#2483B3',
-                  color: '#ffffff',
-                  borderRadius: '9999px',
-                  padding: '8px 20px',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  whiteSpace: 'nowrap',
-                  boxShadow: '0 4px 14px rgba(36, 131, 179, 0.45)'
-                }}
-              >
-                {lang === 'en' ? 'See All Equipment' : 'Lihat Semua Paket'}
-              </div>
-            </div>
-            <div style={{ padding: '22px 18px', textAlign: 'center' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--b)', margin: '0 0 6px' }}>
-                {lang === 'en' ? 'Ponds & Aeration Equipment' : 'Peralatan & Kolam Bundar'}
-              </h3>
-              <p style={{ fontSize: '12.5px', color: 'var(--mut)', margin: 0 }}>
-                {lang === 'en' ? 'Round Terpal Orchid D2/D3/D4' : 'Kolam bundar D3 & uniring aerasi'}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. MOST POPULAR NILA PRODUCTS (5 Cards matching clean reference) */}
-      <section 
-        style={{ 
-          maxWidth: '1360px', 
-          margin: '0 auto', 
-          padding: '50px 24px 60px', 
-          width: '100%', 
-          boxSizing: 'border-box' 
-        }}
-      >
-        <div style={{ textAlign: 'left', marginBottom: '32px' }}>
-          <h2 
-            style={{ 
-              fontSize: 'clamp(28px, 3.6vw, 40px)', 
-              fontWeight: 800, 
-              color: 'var(--txt)', 
-              letterSpacing: '-0.5px', 
-              margin: 0 
-            }}
-          >
-            {lang === 'en' ? 'Most Popular Products' : 'Produk Nila Paling Diminati'}
-          </h2>
-          <p style={{ color: 'var(--mut)', fontSize: '15px', marginTop: '8px' }}>
-            {lang === 'en' 
-              ? 'Top selling fingerlings, harvest fish, feed, and biofloc starter kits.' 
-              : 'Paling banyak dipesan peternak mitra dan penikmat kuliner ikan nila segar.'}
-          </p>
-        </div>
-
-        {/* 5 Product Cards */}
-        <div 
-          style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', 
-            gap: '18px' 
-          }}
-        >
-          {products.slice(0, 5).map((p, idx) => {
-            const isFeatured = idx === 1; // Nila Merah Segar as featured highlight
-
-            return (
-              <div
-                key={p.id}
-                style={{
-                  background: 'var(--card)',
-                  border: isFeatured 
-                    ? '2px solid #2483B3' 
-                    : (isDark ? '1px solid rgba(130, 215, 225, 0.25)' : '1px solid #cfe2ec'),
-                  borderRadius: '14px',
-                  overflow: 'hidden',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  boxShadow: 'var(--shadow-sm)',
-                  transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-3px)';
-                  e.currentTarget.style.boxShadow = 'var(--shadow-md)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
-                }}
-              >
-                <div>
-                  {/* Photo */}
-                  <div style={{ height: '210px', overflow: 'hidden', background: '#f0f6fa' }}>
-                    <img 
-                      src={p.img} 
-                      alt={p.nama} 
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                  </div>
-
-                  {/* Title & Specs */}
-                  <div style={{ padding: '16px 14px 8px', textAlign: 'center' }}>
-                    <h3 style={{ fontSize: '15.5px', fontWeight: 700, color: 'var(--txt)', margin: '0 0 10px', minHeight: '44px', lineHeight: 1.3 }}>
-                      {p.nama}
-                    </h3>
-
-                    {/* Feature Badges */}
-                    {isFeatured && (
-                      <div style={{ display: 'flex', justifyContent: 'center', gap: '4px', flexWrap: 'wrap', marginBottom: '8px' }}>
-                        <span style={{ fontSize: '9px', fontWeight: 700, color: '#ffffff', background: '#2483B3', padding: '2px 7px', borderRadius: '4px' }}>
-                          Bebas Lumpur
-                        </span>
-                        <span style={{ fontSize: '9px', fontWeight: 700, color: '#ffffff', background: '#163665', padding: '2px 7px', borderRadius: '4px' }}>
-                          Panen Hidup
-                        </span>
-                        <span style={{ fontSize: '9px', fontWeight: 700, color: '#ffffff', background: '#10b981', padding: '2px 7px', borderRadius: '4px' }}>
-                          Manis Gurih
-                        </span>
-                      </div>
-                    )}
-
-                    {/* Small Icon Indicators */}
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginBottom: '12px' }}>
-                      <span title="Rating Kualitas" style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#e5eff5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', color: '#2483B3' }}>
-                        ★
-                      </span>
-                      <span title="Bioflok Sirkulasi" style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#e5eff5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', color: '#2483B3' }}>
-                        💧
-                      </span>
-                      <span title="Higienis" style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#e5eff5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', color: '#2483B3' }}>
-                        🐟
-                      </span>
-                      <span title="Garansi Sehat" style={{ width: '22px', height: '22px', borderRadius: '50%', background: '#e5eff5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', color: '#2483B3' }}>
-                        🛡️
-                      </span>
-                    </div>
-
-                    {/* Price and Available Sizes */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 4px', marginBottom: '12px' }}>
-                      <span style={{ fontSize: '14px', fontWeight: 800, color: isFeatured ? '#2483B3' : 'var(--txt)' }}>
-                        Rp {p.harga.toLocaleString('id-ID')}{p.satuan || ''}
-                      </span>
-                      <span style={{ fontSize: '11px', color: 'var(--mut)', fontWeight: 500 }}>
-                        {p.sizes?.[0] || 'Tersedia'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Add to Cart / See All Action Button */}
-                <div style={{ padding: '0 14px 16px' }}>
-                  <button
-                    onClick={() => onAddToCart(p)}
-                    style={{
-                      width: '100%',
-                      background: isFeatured ? '#e0f0f7' : 'transparent',
-                      color: isFeatured ? '#163665' : 'var(--txt)',
-                      border: isFeatured ? 'none' : '1.5px solid #cfe2ec',
-                      borderRadius: '8px',
-                      padding: '9px',
-                      fontSize: '12.5px',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '6px'
-                    }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.background = '#2483B3';
-                      e.currentTarget.style.color = '#ffffff';
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.background = isFeatured ? '#e0f0f7' : 'transparent';
-                      e.currentTarget.style.color = isFeatured ? '#163665' : 'var(--txt)';
-                    }}
-                  >
-                    <ShoppingBag size={14} />
-                    <span>{lang === 'en' ? 'Add to Cart' : 'Pesan Sekarang'}</span>
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* 4. NILA DOCTOR & DIAGNOSA PENYAKIT IKAN VIA SMARTPHONE */}
-      <section 
-        style={{ 
-          maxWidth: '1360px', 
-          margin: '0 auto', 
-          padding: '20px 24px 60px', 
           width: '100%', 
           boxSizing: 'border-box' 
         }}
@@ -434,286 +136,201 @@ export default function HomePage({
               : 'linear-gradient(135deg, #f0f7fb 0%, #e2eff7 100%)',
             border: isDark ? '1px solid rgba(130, 215, 225, 0.3)' : '1px solid #cfe2ec',
             borderRadius: '24px',
-            padding: 'clamp(32px, 5vw, 60px)',
+            padding: 'clamp(32px, 5vw, 56px)',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
             gap: '40px',
             alignItems: 'center'
           }}
         >
-          {/* Left Text & QR Code */}
           <div>
-            <div 
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '6px 14px',
-                borderRadius: '30px',
-                background: '#ffffff',
-                border: '1px solid #cfe2ec',
-                fontSize: '12px',
-                fontWeight: 700,
+            <span 
+              style={{ 
+                fontSize: '12px', 
+                fontWeight: 800, 
+                letterSpacing: '1.5px', 
+                textTransform: 'uppercase', 
                 color: '#2483B3',
+                background: 'rgba(36, 131, 179, 0.1)',
+                padding: '4px 12px',
+                borderRadius: '9999px',
+                display: 'inline-block',
+                marginBottom: '12px'
+              }}
+            >
+              Keunggulan Teknologi
+            </span>
+
+            <h3 
+              style={{ 
+                fontSize: 'clamp(26px, 3.5vw, 36px)', 
+                fontWeight: 800, 
+                color: 'var(--txt)', 
+                lineHeight: 1.25,
                 marginBottom: '16px'
               }}
             >
-              <Activity size={15} color="#2483B3" />
-              <span>AI Aquaculture Telemetry & Doctor</span>
-            </div>
+              Mengapa Nila Sistem Bioflok Jauh Lebih Unggul?
+            </h3>
 
-            <h2 
-              style={{ 
-                fontSize: 'clamp(30px, 4.2vw, 46px)', 
-                fontWeight: 800, 
-                lineHeight: 1.15,
-                margin: '0 0 16px',
-                color: 'var(--txt)' 
-              }}
-            >
-              <span style={{ color: '#2483B3' }}>Nila Doctor</span> Melalui Diagnosa Foto Ikan
-            </h2>
-
-            <p 
-              style={{ 
-                fontSize: '16px', 
-                color: 'var(--mut)', 
-                lineHeight: 1.6, 
-                maxWidth: '480px', 
-                margin: '0 0 28px' 
-              }}
-            >
-              Scan QR code di bawah ini, ambil foto ikan atau sampel air kolam Anda, dan sistem AI kami akan mendeteksi kesehatan serta memberikan rekomendasi penanganan seketika.
+            <p style={{ fontSize: '15px', color: 'var(--mut)', lineHeight: 1.6, marginBottom: '24px' }}>
+              Bioflok memanfaatkan bakteri probiotik heterotrof yang mengubah kotoran ikan dan amonia menjadi flok bernutrisi tinggi yang dimakan kembali oleh nila.
             </p>
 
-            {/* Clean QR Code Box */}
-            <div 
-              style={{
-                display: 'inline-flex',
-                background: '#ffffff',
-                padding: '14px',
-                borderRadius: '14px',
-                boxShadow: '0 6px 20px rgba(36, 131, 179, 0.15)',
-                border: '1.5px solid #2483B3'
-              }}
-            >
-              <svg width="120" height="120" viewBox="0 0 100 100" fill="none">
-                <rect width="100" height="100" fill="#ffffff" />
-                <rect x="8" y="8" width="28" height="28" rx="4" fill="#163665" />
-                <rect x="13" y="13" width="18" height="18" rx="2" fill="#ffffff" />
-                <rect x="17" y="17" width="10" height="10" rx="1" fill="#2483B3" />
-                <rect x="64" y="8" width="28" height="28" rx="4" fill="#163665" />
-                <rect x="69" y="13" width="18" height="18" rx="2" fill="#ffffff" />
-                <rect x="73" y="17" width="10" height="10" rx="1" fill="#2483B3" />
-                <rect x="8" y="64" width="28" height="28" rx="4" fill="#163665" />
-                <rect x="13" y="69" width="18" height="18" rx="2" fill="#ffffff" />
-                <rect x="17" y="73" width="10" height="10" rx="1" fill="#2483B3" />
-                <rect x="42" y="10" width="7" height="7" rx="1" fill="#2483B3" />
-                <rect x="52" y="10" width="7" height="7" rx="1" fill="#163665" />
-                <rect x="42" y="24" width="7" height="7" rx="1" fill="#2483B3" />
-                <rect x="42" y="42" width="16" height="16" rx="2" fill="#163665" />
-                <rect x="12" y="44" width="7" height="7" rx="1" fill="#2483B3" />
-                <rect x="24" y="44" width="7" height="7" rx="1" fill="#163665" />
-                <rect x="68" y="44" width="7" height="7" rx="1" fill="#2483B3" />
-                <rect x="80" y="44" width="7" height="7" rx="1" fill="#163665" />
-                <rect x="44" y="68" width="7" height="7" rx="1" fill="#2483B3" />
-                <rect x="54" y="78" width="7" height="7" rx="1" fill="#163665" />
-                <rect x="68" y="68" width="9" height="9" rx="1" fill="#2483B3" />
-                <rect x="82" y="82" width="9" height="9" rx="1" fill="#163665" />
-              </svg>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <CheckCircle2 size={18} color="#10b981" />
+                <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--txt)' }}>
+                  Hemat Air hingga 80% (Sirkulasi tertutup tanpa buang limbah)
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <CheckCircle2 size={18} color="#10b981" />
+                <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--txt)' }}>
+                  FCR Pakan Hemat 1.05 - 1.15 (Flok mikroba menjadi sumber pakan alami)
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <CheckCircle2 size={18} color="#10b981" />
+                <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--txt)' }}>
+                  Kepadatan Tebar Tinggi 100-150 ekor/m³ (Hasil panen padat maksimal)
+                </span>
+              </div>
+            </div>
+
+            {/* CTA to Dedicated /budidaya Page */}
+            <div>
+              <button
+                onClick={() => onNavigate('budidaya')}
+                style={{
+                  background: 'linear-gradient(135deg, #2483B3 0%, #163665 100%)',
+                  color: '#ffffff',
+                  border: '1.5px solid #82D7E1',
+                  borderRadius: '9999px',
+                  padding: '12px 24px',
+                  fontSize: '13.5px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  boxShadow: '0 4px 14px rgba(36, 131, 179, 0.35)',
+                  transition: 'all 0.2s'
+                }}
+              >
+                <span>Pelajari Budidaya Bioflok & Monitoring IoT Lengkap</span>
+                <ArrowRight size={15} color="#82D7E1" />
+              </button>
             </div>
           </div>
 
-          {/* Right Smartphone Screen Mockup */}
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <div 
               style={{
-                width: '100%',
-                maxWidth: '280px',
-                background: '#ffffff',
-                border: '6px solid #163665',
-                borderRadius: '36px',
-                padding: '24px 18px',
-                boxShadow: '0 20px 50px rgba(22, 54, 101, 0.28)',
-                color: '#163665',
-                textAlign: 'center'
+                position: 'relative',
+                borderRadius: '20px',
+                overflow: 'hidden',
+                boxShadow: '0 20px 40px rgba(22, 54, 101, 0.2)',
+                border: '3px solid #82D7E1',
+                maxWidth: '460px',
+                width: '100%'
               }}
             >
-              <div style={{ width: '50px', height: '4px', background: '#cfe2ec', borderRadius: '4px', margin: '0 auto 16px' }} />
-              <b style={{ fontSize: '13px', color: '#163665', display: 'block', marginBottom: '24px' }}>
-                Nila Doctor AI
-              </b>
-
+              <img 
+                src="/assets/products/kolam-d3.jpg" 
+                alt="Kolam Bioflok D3 NilaFarm"
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              />
               <div 
                 style={{
-                  width: '64px',
-                  height: '64px',
-                  borderRadius: '50%',
-                  background: '#2483B3',
-                  color: '#ffffff',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 16px',
-                  boxShadow: '0 6px 18px rgba(36, 131, 179, 0.35)'
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  background: 'linear-gradient(to top, rgba(14, 36, 64, 0.95), transparent)',
+                  padding: '20px',
+                  color: '#ffffff'
                 }}
               >
-                <Camera size={30} />
+                <div style={{ fontSize: '15px', fontWeight: 800 }}>Paket Kolam Bundar Bioflok D3</div>
+                <div style={{ fontSize: '12px', color: '#82D7E1' }}>Kapasitas 1.000 ekor • Rangka Wiremesh Galvanis M6</div>
               </div>
-
-              <b style={{ fontSize: '13.5px', color: '#163665', display: 'block', marginBottom: '10px' }}>
-                Foto Insang, Sisik, atau Air
-              </b>
-
-              <p style={{ fontSize: '11px', color: '#47637e', lineHeight: 1.5, margin: '0 0 24px' }}>
-                Arahkan kamera ke ikan yang kurang aktif atau busa kolam. AI mendeteksi amonia, parasit, & defisiensi oksigen dalam 3 detik.
-              </p>
-
-              <button
-                type="button"
-                onClick={() => onNavigate('budidaya')}
-                style={{
-                  width: '100%',
-                  background: '#2483B3',
-                  color: '#ffffff',
-                  border: 'none',
-                  borderRadius: '9999px',
-                  padding: '10px',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  cursor: 'pointer'
-                }}
-              >
-                Mulai Diagnosa
-              </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. WE RESPECT EARTH BY (Kelestarian Lingkungan Akuakultur) */}
+      {/* 5. EDUCATIONAL ARTICLES PREVIEW (With CTA to Dedicated /artikel Page) */}
+      <ArticlesSection 
+        articles={articles}
+        onNavigate={onNavigate}
+        lang={lang}
+      />
+
+      {/* 6. TESTIMONIALS & REVIEWS SECTION */}
+      <TestimonialsSection 
+        isDark={isDark} 
+        lang={lang} 
+      />
+
+      {/* 7. CONTACT & FARM LOCATION PREVIEW (CTA to Dedicated /kontak Page) */}
       <section 
         style={{ 
-          maxWidth: '1240px', 
+          maxWidth: '1280px', 
           margin: '0 auto', 
-          padding: '40px 24px 60px', 
+          padding: '10px 24px 70px', 
           width: '100%', 
           boxSizing: 'border-box' 
         }}
       >
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h2 
-            style={{ 
-              fontSize: 'clamp(28px, 3.8vw, 42px)', 
-              fontWeight: 800, 
-              color: 'var(--txt)', 
-              letterSpacing: '-0.5px', 
-              margin: 0 
-            }}
-          >
-            {lang === 'en' ? 'We Respect Nature By' : 'Kelestarian Ekosistem yang Kami Junjung'}
-          </h2>
-          <p style={{ color: 'var(--mut)', fontSize: '15px', marginTop: '10px' }}>
-            {lang === 'en'
-              ? 'Our circular zero-waste biofloc technology saves up to 90% water compared to traditional earth ponds.'
-              : 'Teknologi sirkulasi bioflok zero-waste kami menghemat hingga 90% air dibanding tambak konvensional.'}
-          </p>
-        </div>
-
-        {/* 3 Circular Cerulean/Navy Icons */}
         <div 
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))',
-            gap: '36px',
-            textAlign: 'center'
+            background: isDark ? '#142a47' : '#ffffff',
+            border: isDark ? '1px solid rgba(130, 215, 225, 0.25)' : '1px solid #cbd5e1',
+            borderRadius: '24px',
+            padding: '36px 32px',
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: '24px',
+            boxShadow: '0 10px 30px rgba(15, 23, 42, 0.06)'
           }}
         >
-          {/* Circle 1: Zero-Waste Biofloc */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <div 
-              style={{
-                width: '84px',
-                height: '84px',
-                borderRadius: '50%',
-                border: '2.5px solid #2483B3',
-                background: isDark ? '#142a47' : '#f0f6fa',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#2483B3',
-                marginBottom: '18px',
-                boxShadow: '0 6px 18px rgba(36, 131, 179, 0.18)'
-              }}
-            >
-              <Waves size={38} strokeWidth={1.8} />
-            </div>
-            <h3 style={{ fontSize: '16.5px', fontWeight: 800, color: 'var(--txt)', margin: '0 0 6px' }}>
-              Zero-Waste Biofloc System
+          <div>
+            <span style={{ fontSize: '12px', fontWeight: 800, color: '#2483B3', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              Konsultasi & Kemitraan
+            </span>
+            <h3 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--txt)', margin: '6px 0 8px' }}>
+              Ingin Memulai Budidaya atau Pesan Ikan Skala Besar?
             </h3>
-            <p style={{ fontSize: '12.5px', color: 'var(--mut)', margin: 0, maxWidth: '240px' }}>
-              Air disirkulasikan kembali tanpa membuang limbah kotoran ke sungai atau danau umum.
+            <p style={{ fontSize: '14px', color: 'var(--mut)', margin: 0, maxWidth: '640px' }}>
+              Kunjungi kompleks tambak kami di Sumedang atau hubungi tim teknis kami untuk jadwal panen dan slot bibit unggul.
             </p>
           </div>
-
-          {/* Circle 2: Pakan Ramah Lingkungan */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <div 
-              style={{
-                width: '84px',
-                height: '84px',
-                borderRadius: '50%',
-                border: '2.5px solid #2483B3',
-                background: isDark ? '#142a47' : '#f0f6fa',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#2483B3',
-                marginBottom: '18px',
-                boxShadow: '0 6px 18px rgba(36, 131, 179, 0.18)'
-              }}
-            >
-              <Sparkles size={38} strokeWidth={1.8} />
-            </div>
-            <h3 style={{ fontSize: '16.5px', fontWeight: 800, color: 'var(--txt)', margin: '0 0 6px' }}>
-              Pakan Alami & FCR Hemat
-            </h3>
-            <p style={{ fontSize: '12.5px', color: 'var(--mut)', margin: 0, maxWidth: '240px' }}>
-              Flok mikroorganisme mengolah amonia menjadi protein pakan alami tambahan untuk ikan.
-            </p>
-          </div>
-
-          {/* Circle 3: Kemasan Rantai Dingin Higienis */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <div 
-              style={{
-                width: '84px',
-                height: '84px',
-                borderRadius: '50%',
-                border: '2.5px solid #2483B3',
-                background: isDark ? '#142a47' : '#f0f6fa',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#2483B3',
-                marginBottom: '18px',
-                boxShadow: '0 6px 18px rgba(36, 131, 179, 0.18)'
-              }}
-            >
-              <ShieldCheck size={38} strokeWidth={1.8} />
-            </div>
-            <h3 style={{ fontSize: '16.5px', fontWeight: 800, color: 'var(--txt)', margin: '0 0 6px' }}>
-              Rantai Dingin Higienis
-            </h3>
-            <p style={{ fontSize: '12.5px', color: 'var(--mut)', margin: 0, maxWidth: '240px' }}>
-              Ikan dipanen hidup dan dikirim dengan insulasi ramah lingkungan bergaransi kesegaran.
-            </p>
-          </div>
+          <button
+            onClick={() => onNavigate('kontak')}
+            style={{
+              background: '#2483B3',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '9999px',
+              padding: '13px 28px',
+              fontSize: '14px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              boxShadow: '0 4px 14px rgba(36, 131, 179, 0.35)',
+              transition: 'all 0.2s'
+            }}
+          >
+            <span>Buka Halaman Kontak & Lokasi Farm</span>
+            <ArrowRight size={16} />
+          </button>
         </div>
       </section>
-
-      {/* 6. CUSTOMERS & FARMERS REVIEWS */}
-      <TestimonialsSection isDark={isDark} lang={lang} />
     </div>
   );
 }

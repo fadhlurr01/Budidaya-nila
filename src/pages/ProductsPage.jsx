@@ -14,29 +14,36 @@ import {
 } from 'lucide-react';
 
 export default function ProductsPage({ 
-  products, 
+  products = [], 
   onAddToCart, 
   onOpenCart, 
   onNavigate, 
-  lang = 'en' 
+  lang = 'id' 
 }) {
-  const [selectedCategory, setSelectedCategory] = useState('All Plants');
+  const [selectedCategory, setSelectedCategory] = useState('Semua Produk');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const categories = ['Semua Produk', 'Bibit Unggul', 'Ikan Segar Konsumsi', 'Pakan & Nutrisi', 'Peralatan & Kolam'];
+  const categories = ['Semua Produk', 'Ikan Segar Konsumsi', 'Olahan Siap Masak', 'Bibit Unggul', 'Perlengkapan IoT', 'Paket Kolam'];
 
-  const filteredProducts = products.filter(p => {
-    const matchesCat = selectedCategory === 'Semua Produk' || p.kategori === selectedCategory;
+  const filteredProducts = (products || []).filter(p => {
+    const pCategory = p.kategori || p.category || '';
+    const matchesCat = selectedCategory === 'Semua Produk' || 
+      pCategory.toLowerCase().includes(selectedCategory.toLowerCase()) ||
+      (selectedCategory === 'Ikan Segar Konsumsi' && (pCategory.includes('Segar') || pCategory.includes('Konsumsi')));
+    const pName = p.nama || p.name || '';
+    const pDesk = p.desk || p.description || '';
     const matchesSearch = 
-      p.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.desk.toLowerCase().includes(searchQuery.toLowerCase());
+      pName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      pDesk.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCat && matchesSearch;
   });
 
   const formatPrice = (val) => 'Rp ' + Number(val || 0).toLocaleString('id-ID');
 
   const getProductImage = (p) => {
-    return p.img || 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80';
+    if (p.img) return p.img.startsWith('/') ? p.img : `/${p.img}`;
+    if (p.image_url) return p.image_url.startsWith('/') ? p.image_url : `/${p.image_url}`;
+    return '/assets/ikan-nila-bioflok.png';
   };
 
   return (
@@ -140,11 +147,12 @@ export default function ProductsPage({
                   fontWeight: 600,
                   padding: '7px 18px',
                   borderRadius: '20px',
-                  border: selectedCategory === cat ? 'none' : '1px solid var(--border)',
-                  background: selectedCategory === cat ? '#144520' : 'var(--card)',
+                  border: selectedCategory === cat ? '1.5px solid #2483B3' : '1px solid var(--border)',
+                  background: selectedCategory === cat ? '#2483B3' : 'var(--card)',
                   color: selectedCategory === cat ? '#ffffff' : 'var(--txt)',
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease'
+                  transition: 'all 0.2s ease',
+                  boxShadow: selectedCategory === cat ? '0 3px 12px rgba(36, 131, 179, 0.3)' : 'none'
                 }}
               >
                 {cat}
@@ -164,20 +172,22 @@ export default function ProductsPage({
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))',
             gap: '16px',
-            alignItems: 'center'
+            alignItems: 'center',
+            background: 'var(--card2)',
+            border: '1px solid var(--border)'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Truck size={22} color="var(--b)" />
-            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--txt)' }}>Free Shipping in Montreal 🚚</span>
+            <Truck size={22} color="#2483B3" />
+            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--txt)' }}>Pengiriman Bergaransi Hidup Se-Jawa & Bali 🚚</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <ShieldCheck size={22} color="#16a34a" />
-            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--txt)' }}>100% Healthy Plant Guarantee</span>
+            <ShieldCheck size={22} color="#10b981" />
+            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--txt)' }}>100% Organik & Bebas Bau Lumpur</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Leaf size={22} color="#206d33" />
-            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--txt)' }}>Eco-Friendly Biodegradable Pots</span>
+            <Fish size={22} color="#2483B3" />
+            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--txt)' }}>Harga Spesial Mulai Rp 35.000/kg Langsung Peternak</span>
           </div>
         </div>
       </section>
